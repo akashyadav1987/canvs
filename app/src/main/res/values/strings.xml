@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Canvs</string>
+    <string name="google_maps_key">AIzaSyAleduZqpvrBp7q_S8U6ULpyMEJRoaVOVs</string>
+    <string name="no_internet">No Internet Connection</string>
+</resources>

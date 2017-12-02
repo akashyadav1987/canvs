@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/bookmarks"
+        android:enabled="true"
+        android:title="BOOKMARKS"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/seen"
+        android:enabled="true"
+        android:title="SEEN"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/fav"
+        android:enabled="true"
+        android:title="FAVORITES"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/about"
+        android:enabled="true"
+        android:title="ABOUT"
+        app:showAsAction="ifRoom" />
+</menu>
