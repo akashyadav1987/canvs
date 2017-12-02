@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:background="@android:color/transparent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/mural_image"
+        android:background="@android:color/darker_gray"
+        android:layout_width="match_parent"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        android:layout_height="match_parent" />
+     <com.canvas.widget.RobotoMediumTextView
+         android:id="@+id/title"
+         android:textColor="@color/red_"
+         android:padding="2dp"
+         android:text="scsaascsacacascascassacacas"
+         android:textSize="16sp"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content" />
+    <com.canvas.widget.RobotoMediumTextView
+        android:id="@+id/artistname"
+        android:textColor="@color/grey_"
+        android:padding="1dp"
+        android:text="scsaascsacacascascassacacas"
+        android:textSize="13sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</LinearLayout>
