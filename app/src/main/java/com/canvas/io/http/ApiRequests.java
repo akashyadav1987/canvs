@@ -47,7 +47,7 @@ public class ApiRequests {
             String url = Constants.RequestParam.GET_MURALS.getComleteUrl();
             Log.e("Url",url+"");
             String requestTag = "get_active_murals";
-            HttpRequests requests = new HttpRequests(Request.Method.GET, url, requestTag, error, appRequest, mParams);
+            HttpRequestsJsonArray requests = new HttpRequestsJsonArray(Request.Method.GET, url, requestTag, error, appRequest, mParams);
             error.setRequestLister(appRequest, requests, requestParam.getRequestTag());
             if (mRequestQueue != null) {
                 mRequestQueue.cancelAll(requestParam.getRequestTag());

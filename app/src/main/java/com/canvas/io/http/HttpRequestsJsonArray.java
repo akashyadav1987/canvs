@@ -12,23 +12,21 @@ import com.canvas.common.Constants;
 import com.canvas.io.listener.AppRequest;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import java.util.HashMap;
 import java.util.Map;
 
 
-public class HttpRequests extends BaseTask<JSONObject> {
-    private static HttpRequests instance = null;
+public class HttpRequestsJsonArray extends BaseTask<JSONArray> {
+    private static HttpRequestsJsonArray instance = null;
     private Map<String, String> headers = new HashMap<String, String>();
     private Context mContext;
     private AppRequest appRequest;
     private Map<String, String> mParams = new HashMap<String, String>();
     private Constants.RequestParam requestParam;
 
-    public HttpRequests(int method, Constants.RequestParam requestParam, Response.ErrorListener listener,
-                        AppRequest appRequest, Map<String, String> mParams) {
+    public HttpRequestsJsonArray(int method, Constants.RequestParam requestParam, Response.ErrorListener listener,
+                                 AppRequest appRequest, Map<String, String> mParams) {
 
         super(method, requestParam.getComleteUrl(), listener, requestParam.getRequestTag(), mParams);
         this.appRequest = appRequest;
@@ -39,8 +37,8 @@ public class HttpRequests extends BaseTask<JSONObject> {
         this.requestParam = requestParam;
     }
 
-    public HttpRequests(int method, String url,String requestTag, Response.ErrorListener listener,
-                        AppRequest appRequest, Map<String, String> mParams) {
+    public HttpRequestsJsonArray(int method, String url, String requestTag, Response.ErrorListener listener,
+                                 AppRequest appRequest, Map<String, String> mParams) {
 
         super(method, url, listener, requestTag, mParams);
         this.appRequest = appRequest;
@@ -50,10 +48,10 @@ public class HttpRequests extends BaseTask<JSONObject> {
         //setHeaders("authorization", GlobalReferences.getInstance().pref.getAccessToken()+"");
 
     }
-    public static HttpRequests getInstance(int method, Constants.RequestParam requestParam, Response.ErrorListener listener,
-                                           AppRequest appRequest, Map<String, String> mParams, boolean isPayU) {
+    public static HttpRequestsJsonArray getInstance(int method, Constants.RequestParam requestParam, Response.ErrorListener listener,
+                                                    AppRequest appRequest, Map<String, String> mParams, boolean isPayU) {
         if (instance == null) {
-            instance = new HttpRequests(method, requestParam, listener, appRequest, mParams);
+            instance = new HttpRequestsJsonArray(method, requestParam, listener, appRequest, mParams);
         }
         return instance;
     }
@@ -90,12 +88,12 @@ public class HttpRequests extends BaseTask<JSONObject> {
     }
 
     @Override
-    protected void deliverResponse(JSONObject response) {
+    protected void deliverResponse(JSONArray jsonArray) {
         try {
 
-            if(response!=null) {
-        setJsonResponse(response);
-        appRequest.onRequestCompleted(this, requestParam);
+            if(jsonArray!=null) {
+                setJsonArrayResponse(jsonArray);
+                appRequest.onRequestCompleted(this, requestParam);
             }else
                 appRequest.onRequestFailed(this,requestParam);
         } catch (Exception e) {
@@ -103,19 +101,13 @@ public class HttpRequests extends BaseTask<JSONObject> {
         }
     }
 
+
+
     @Override
-    protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
-        JSONObject json = null;
+    protected Response<JSONArray> parseNetworkResponse(NetworkResponse response) {
+        JSONArray json = null;
         try {
-
-            String data = "{ ... }";
-            Object jsonOb = new JSONTokener(data).nextValue();
-            if (jsonOb instanceof JSONObject){
-                json = new JSONObject(new String(response.data));
-            }
-           else if (jsonOb instanceof JSONArray){
-
-            }
+                json = new JSONArray(new String(response.data));
         } catch (final Exception e) {
 
             e.printStackTrace();

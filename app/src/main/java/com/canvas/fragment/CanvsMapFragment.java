@@ -92,7 +92,7 @@ public class CanvsMapFragment extends CommonFragment implements OnMapReadyCallba
     @Override
     public <T> void onRequestCompleted(BaseTask<T> listener, Constants.RequestParam requestParam) {
         try{
-            Log.e("response",listener.getJsonResponse()+"");
+            Log.e("response",listener.getJsonArrayResponse()+"");
             GlobalReferences.getInstance().progresBar.setVisibility(View.GONE);
             Gson gson = new Gson();
             //Murals murals = gson.fromJson();
