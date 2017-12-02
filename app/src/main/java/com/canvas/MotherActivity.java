@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 
 import com.canvas.common.GlobalReferences;
 import com.canvas.fragment.CanvsMapFragment;
+import com.canvas.fragment.FavoritesFragment;
 import com.canvas.utils.BottomNavigationViewHelper;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
@@ -95,6 +96,8 @@ public class MotherActivity extends BaseActivity {
                         about.setIcon(new IconDrawable(getApplicationContext(), FontAwesomeIcons.fa_info_circle)
                                 .colorRes(R.color.grey)
                                 .actionBarSize());
+                        ((BaseActivity)GlobalReferences.getInstance().baseActivity).addFragmentWithBackStack(new FavoritesFragment(),true);
+
                         break;
                     case R.id.about:
                         about.setIcon(new IconDrawable(getApplicationContext(), FontAwesomeIcons.fa_info_circle)

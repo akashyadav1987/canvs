@@ -17,12 +17,14 @@
          android:padding="2dp"
          android:text="scsaascsacacascascassacacas"
          android:textSize="16sp"
+         android:maxLines="1"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content" />
-    <com.canvas.widget.RobotoMediumTextView
+    <com.canvas.widget.RobotoRegularTextView
         android:id="@+id/artistname"
         android:textColor="@color/grey_"
         android:padding="1dp"
+        android:maxLines="1"
         android:text="scsaascsacacascascassacacas"
         android:textSize="13sp"
         android:layout_width="wrap_content"
