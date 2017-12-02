@@ -5,7 +5,7 @@ import static com.android.volley.Request.Method;
 
 public interface Constants {
     public static final boolean DEBUG = true; // true for test env, false for prod env.
-    public static final String BASE_URL_PRODUCTION = "hhttps://canvs.cruxcode.nyc/";
+    public static final String BASE_URL_PRODUCTION = "https://canvs.cruxcode.nyc/";
     public enum RequestParam {
         GET_MURALS(1, Method.GET, "?requestType=sql&query=activeMurals", "get_murals");
         private int id;

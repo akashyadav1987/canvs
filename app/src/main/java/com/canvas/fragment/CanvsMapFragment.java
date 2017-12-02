@@ -40,8 +40,6 @@ public class CanvsMapFragment extends CommonFragment implements OnMapReadyCallba
         mapView = (MapView)mapViewLayout.findViewById(R.id.mapview);
         mapView.onCreate(savedInstanceState);
 
-
-
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap gmap) {
@@ -95,6 +93,7 @@ public class CanvsMapFragment extends CommonFragment implements OnMapReadyCallba
     public <T> void onRequestCompleted(BaseTask<T> listener, Constants.RequestParam requestParam) {
         try{
             Log.e("response",listener.getJsonResponse()+"");
+            GlobalReferences.getInstance().progresBar.setVisibility(View.GONE);
             Gson gson = new Gson();
             //Murals murals = gson.fromJson();
         }catch (Exception e){

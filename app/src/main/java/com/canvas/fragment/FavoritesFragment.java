@@ -17,6 +17,7 @@ import com.canvas.io.http.BaseTask;
 import com.canvas.io.http.BaseTaskJson;
 import com.canvas.io.listener.AppRequest;
 import com.canvas.model.Favorite;
+import com.canvas.utils.SpacesItemDecoration;
 
 import org.json.JSONObject;
 
@@ -33,6 +34,8 @@ public class FavoritesFragment extends CommonFragment implements AppRequest {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View favoritesView = inflater.inflate(R.layout.favorites_fragment,null);
         favorites_list = favoritesView.findViewById(R.id.favorites_list);
+        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
+        favorites_list.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
         GridLayoutManager gridLayoutManager = new GridLayoutManager(GlobalReferences.getInstance().baseActivity,2,GridLayoutManager.HORIZONTAL,false);
         favorites_list.setLayoutManager(gridLayoutManager);
         ArrayList<Favorite> favorites = new ArrayList<>();

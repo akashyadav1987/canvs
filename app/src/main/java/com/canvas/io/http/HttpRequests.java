@@ -31,7 +31,7 @@ public class HttpRequests extends BaseTask<JSONObject> {
         super(method, requestParam.getComleteUrl(), listener, requestParam.getRequestTag(), mParams);
         this.appRequest = appRequest;
         this.mParams = mParams;
-        headers.put("Content-Type","application/json");
+        headers.put("Content-Type","text/plain");
         //setHeaders("authorization", GlobalReferences.getInstance().pref.getAccessToken()+"");
        // headers.put("authorization", GlobalReferences.getInstance().pref.getAccessToken()+"");
         this.requestParam = requestParam;
@@ -43,7 +43,7 @@ public class HttpRequests extends BaseTask<JSONObject> {
         super(method, url, listener, requestTag, mParams);
         this.appRequest = appRequest;
         this.mParams = mParams;
-        headers.put("Content-Type","application/json");
+        headers.put("Content-Type","text/plain");
         this.requestParam = requestParam;
         //setHeaders("authorization", GlobalReferences.getInstance().pref.getAccessToken()+"");
 
@@ -59,14 +59,14 @@ public class HttpRequests extends BaseTask<JSONObject> {
 
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
-        headers.put("Content-Type","application/json");
+        headers.put("Content-Type","text/plain");
        // headers.put("authorization", GlobalReferences.getInstance().pref.getAccessToken()+"");
         return headers;
     }
 
     @Override
     public String getBodyContentType() {
-        return "application/json";
+        return "text/plain";
     }
 
     public void setHeaders(String title, String content) {
