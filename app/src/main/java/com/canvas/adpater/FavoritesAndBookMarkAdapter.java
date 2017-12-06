@@ -9,7 +9,6 @@ import android.widget.TextView;
 import com.canvas.R;
 import com.canvas.common.GlobalReferences;
 import com.canvas.model.Favorite;
-import com.canvas.utils.Utility;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -35,8 +34,11 @@ public class FavoritesAndBookMarkAdapter extends RecyclerView.Adapter<FavoritesA
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try{
             Favorite favorite = favoriteArrayList.get(position);
-            Picasso.with(GlobalReferences.getInstance().baseActivity).load("").placeholder(R.color.grey_).error(R.color.grey_);
-            holder.title.setTypeface(Utility.getFontRobotoMedium());
+            try {
+                Picasso.with(GlobalReferences.getInstance().baseActivity).load("").placeholder(R.color.grey_).error(R.color.grey_);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
             holder.title.setText(favorite.getTitle()+"");
             holder.artistName.setText(favorite.getArtistName()+"");
         }catch (Exception e){
@@ -50,13 +52,14 @@ public class FavoritesAndBookMarkAdapter extends RecyclerView.Adapter<FavoritesA
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public ImageView mural_image;
+        public ImageView mural_image,right_ico;
         public TextView title, artistName;
         public MyViewHolder(View itemView) {
             super(itemView);
             mural_image = itemView.findViewById(R.id.mural_image);
             title = itemView.findViewById(R.id.title);
             artistName = itemView.findViewById(R.id.artistname);
+            right_ico = itemView.findViewById(R.id.right_ico);
         }
     }
 }

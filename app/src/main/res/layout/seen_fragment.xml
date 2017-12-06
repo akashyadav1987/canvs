@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".35"
+        android:background="@color/blue"
+        android:padding="20dp">
+        <!--<SeekBar-->
+        <!--android:id="@+id/seekBar_luminosite"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="35dp"-->
+        <!--android:minHeight="15dp"-->
+        <!--android:maxHeight="15dp"-->
+        <!--android:progress="20"-->
+        <!--android:progressDrawable="@drawable/seekbar_style"-->
+        <!--android:thumb="@drawable/custom_thumb" />-->
+
+        <com.canvas.widget.TextThumbSeekBar
+            android:id="@+id/seek_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="100"
+            android:maxHeight="15dp"
+            android:minHeight="15dp"
+            android:progress="20"
+            android:progressDrawable="@drawable/seekbar_style"
+            android:thumb="@drawable/custom_thumb"
+            android:thumbOffset="4dp" />
+
+        <com.canvas.widget.RobotoRegularTextView
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:layout_below="@+id/seek_bar"
+            android:text="You've already seen 40% of jersy city's murals!Keep going!"
+            android:id="@+id/progress_text_vew"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/seen_images_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="10dp"
+        android:layout_weight="1"></android.support.v7.widget.RecyclerView>
+</LinearLayout>

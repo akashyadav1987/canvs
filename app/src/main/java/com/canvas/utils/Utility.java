@@ -122,9 +122,21 @@ public class Utility {
         Typeface typeface = Typeface.createFromAsset(GlobalReferences.getInstance().baseActivity.getAssets(), "Roboto-Bold.ttf");
         return typeface;
     }
+
+    public static Typeface getFontRobotoCondensedRegular() {
+        Typeface typeface = Typeface.createFromAsset(GlobalReferences.getInstance().baseActivity.getAssets(), "RobotoCondensed-Regular.ttf");
+        return typeface;
+    }
+
+    public static Typeface getFontRobotoCondensedBold() {
+        Typeface typeface = Typeface.createFromAsset(GlobalReferences.getInstance().baseActivity.getAssets(), "RobotoCondensed-Bold.ttf");
+        return typeface;
+    }
     public static int pxToDp(int px) {
         return (int) (px / Resources.getSystem().getDisplayMetrics().density);
     }
+
+
 
     public static int dpToPx(int dp) {
         return (int) (dp * Resources.getSystem().getDisplayMetrics().density);

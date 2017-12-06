@@ -5,15 +5,29 @@
     android:background="@android:color/transparent"
     android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/mural_image"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:adjustViewBounds="true"
-        android:background="@android:color/darker_gray"
-        android:scaleType="centerCrop" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp">
 
-    <com.canvas.widget.RobotoMediumTextView
+        <ImageView
+            android:id="@+id/mural_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:background="@android:color/darker_gray"
+            android:scaleType="centerCrop" />
+
+        <ImageView
+            android:id="@+id/right_ico"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_gravity="bottom|right"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/right_icon" />
+    </FrameLayout>
+
+    <com.canvas.widget.RobotoCondensedBoldTextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,9 +35,9 @@
         android:padding="2dp"
         android:text="scsaascsacacascascassacacas"
         android:textColor="@color/red_"
-        android:textSize="16sp" />
+        android:textSize="18sp" />
 
-    <com.canvas.widget.RobotoRegularTextView
+    <com.canvas.widget.RobotoMediumTextView
         android:id="@+id/artistname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -31,5 +45,5 @@
         android:padding="1dp"
         android:text="scsaascsacacascascassacacas"
         android:textColor="@color/grey_"
-        android:textSize="13sp" />
+        android:textSize="14sp" />
 </LinearLayout>

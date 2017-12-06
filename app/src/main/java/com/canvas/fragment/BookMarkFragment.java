@@ -27,7 +27,7 @@ import java.util.ArrayList;
  * Created by akashyadav on 12/2/17.
  */
 
-public class FavoritesFragment extends CommonFragment implements AppRequest {
+public class BookMarkFragment extends CommonFragment implements AppRequest {
     private RecyclerView favorites_list;
     @Nullable
     @Override
@@ -36,24 +36,24 @@ public class FavoritesFragment extends CommonFragment implements AppRequest {
         favorites_list = favoritesView.findViewById(R.id.favorites_list);
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
         favorites_list.addItemDecoration(new GridInsetDecoration(getActivity()));
-        screenTitle="FAVORITES";
+        screenTitle="BOOKMARKS";
         GridLayoutManager gridLayoutManager = new GridLayoutManager(GlobalReferences.getInstance().baseActivity,2,GridLayoutManager.VERTICAL,false);
         favorites_list.setLayoutManager(gridLayoutManager);
         ArrayList<Favorite> favorites = new ArrayList<>();
         Favorite favorite = new Favorite();
-        favorite.setTitle("The Two Dudes");
-        favorite.setArtistName("Artist Name");
+        favorite.setTitle("The Two Dudes 2");
+        favorite.setArtistName("Artist Name 2");
         favorites.add(favorite);
 
         Favorite favorite1 = new Favorite();
-        favorite1.setTitle("Marry Had a little Lamb anass");
-        favorite1.setArtistName("Artist Name");
+        favorite1.setTitle("Marry Had a little Lamb Whats This");
+        favorite1.setArtistName("Artist Name3");
         favorites.add(favorite1);
 
 
         Favorite favorite2 = new Favorite();
-        favorite2.setTitle("The Two Dudes");
-        favorite2.setArtistName("Artist Name");
+        favorite2.setTitle("The Two Dudes4");
+        favorite2.setArtistName("Artist Name4");
         favorites.add(favorite2);
 
         FavoritesAndBookMarkAdapter favoritesAndBookMarkAdapter = new FavoritesAndBookMarkAdapter(favorites);

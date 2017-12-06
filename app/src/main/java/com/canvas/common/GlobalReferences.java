@@ -1,6 +1,7 @@
 package com.canvas.common;
 
 import android.app.Activity;
+import android.support.v7.widget.Toolbar;
 import android.widget.LinearLayout;
 
 /**
@@ -21,5 +22,6 @@ public class GlobalReferences {
     public CommonFragment mCommonFragment;
     public Activity baseActivity;
     public LinearLayout progresBar;
+    public Toolbar toolbar;
 
 }
