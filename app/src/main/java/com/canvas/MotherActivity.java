@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 
 import com.canvas.common.CommonFragment;
 import com.canvas.common.GlobalReferences;
+import com.canvas.fragment.AboutUsFragment;
 import com.canvas.fragment.BookMarkFragment;
 import com.canvas.fragment.CanvsMapFragment;
 import com.canvas.fragment.FavoritesFragment;
@@ -78,6 +79,9 @@ public class MotherActivity extends BaseActivity {
                         }
                         else if (GlobalReferences.getInstance().mCommonFragment instanceof SeenFragment) {
                             updateTab(R.id.seen);
+                        }
+                        else if (GlobalReferences.getInstance().mCommonFragment instanceof AboutUsFragment) {
+                            updateTab(R.id.about);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -204,6 +208,8 @@ public class MotherActivity extends BaseActivity {
                 fav.setIcon(new IconDrawable(getApplicationContext(), FontAwesomeIcons.fa_heart)
                         .colorRes(R.color.grey)
                         .actionBarSize());
+                ((BaseActivity) GlobalReferences.getInstance().baseActivity).addFragmentWithBackStack(new AboutUsFragment(), true);
+
                 break;
             default:
                 bookmarks.setIcon(new IconDrawable(this, FontAwesomeIcons.fa_bookmark)

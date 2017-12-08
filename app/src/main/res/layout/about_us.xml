@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:fillViewport="true"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/parent_img"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/about" />
+
+        <LinearLayout
+            android:layout_below="@id/parent_img"
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:textColor="@color/red_"
+                android:textSize="15sp"
+                android:text="@string/canvs_top_header_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_marginTop="10dp"
+                android:textColor="#666666"
+                android:textSize="13sp"
+                android:text="@string/canvs_top_header_bottom_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/canvs_tutorials"
+                android:background="@color/green"
+                android:textAllCaps="true"
+                android:layout_marginTop="10dp"
+                android:text="VIEW THE CANVS TOTURIAL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <View
+                android:layout_marginRight="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/grey_"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+            <ImageView
+                android:layout_marginTop="20dp"
+                android:id="@+id/des_mean_img"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/des_mean" />
+
+            <TextView
+                android:layout_marginTop="10dp"
+                android:textColor="#666666"
+                android:textSize="13sp"
+                android:text="@string/designed_by_mean_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <Button
+                android:textColor="#b3b3b3"
+                android:id="@+id/mean_button"
+                android:background="@drawable/button_with_border"
+                android:textAllCaps="false"
+                android:layout_marginTop="10dp"
+                android:text="www.meangenius.com"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:padding="7dp"
+                    android:id="@+id/twitter"
+                    android:layout_width="64dp"
+                    android:layout_weight="1"
+                    android:layout_height="64dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/twi" />
+                <ImageView
+                    android:padding="7dp"
+                    android:id="@+id/facebook"
+                    android:layout_width="64dp"
+                    android:layout_weight="1"
+                    android:layout_height="64dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/facebook" />
+                <ImageView
+                    android:padding="7dp"
+                    android:id="@+id/instagram"
+                    android:layout_width="64dp"
+                    android:layout_weight="1"
+                    android:layout_height="64dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/instaa" />
+
+                <ImageView
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/dev"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/develped_by_crux" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</ScrollView>
