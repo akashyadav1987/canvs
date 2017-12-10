@@ -20,7 +20,8 @@
             android:background="@drawable/toolbar_back"
             android:maxHeight="?attr/actionBarSize"
             android:minHeight="?attr/actionBarSize"
-            app:theme="@style/Widget.AppCompat.Toolbar">
+            app:theme="@style/Widget.AppCompat.Toolbar"
+            android:visibility="gone">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -104,6 +105,8 @@
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="5dp"
             app:elevation="4dp"
+            android:visibility="gone"
+
             app:itemBackground="@android:color/white"
             app:itemIconTint="@color/grey"
             app:itemTextColor="@color/grey"
