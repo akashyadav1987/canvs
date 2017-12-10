@@ -26,6 +26,8 @@ import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 public class MotherActivity extends BaseActivity {
     private MenuItem bookmarks, seen, fav, about;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
