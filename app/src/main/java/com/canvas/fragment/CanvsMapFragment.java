@@ -1,15 +1,17 @@
 package com.canvas.fragment;
 
-import android.app.Activity;
-import android.app.Dialog;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -23,6 +25,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.canvas.BaseActivity;
@@ -39,7 +42,13 @@ import com.canvas.model.MuralsArray;
 import com.canvas.utils.BottomNavigationViewHelper;
 import com.canvas.utils.Utility;
 import com.canvas.widget.CustomAlertDialog;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -72,7 +81,9 @@ import static android.content.ContentValues.TAG;
  * Created by akashyadav on 11/27/17.
  */
 
-public class CanvsMapFragment extends CommonFragment implements OnMapReadyCallback ,AppRequest,GoogleMap.OnMarkerClickListener{
+public class CanvsMapFragment extends CommonFragment implements OnMapReadyCallback ,AppRequest,GoogleMap.OnMarkerClickListener,com.google.android.gms.location.LocationListener,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener
+
+{
     private GoogleMap mMap;
     private MapView mapView;
     GoogleApiClient mGoogleApiClient;
@@ -81,16 +92,21 @@ public class CanvsMapFragment extends CommonFragment implements OnMapReadyCallba
     ImageView imageView_filter;
     private MenuItem bookmarks, seen, fav, about;
     CardView cardView_dialog;
-    TextView textView_title,textView_author,textView_more;
+    TextView textView_title, textView_author, textView_more;
     ImageView imageView;
+    CardView cardView_my_location, cardView_hunt_mode;
+    Location location;
+    LocationRequest mLocationRequest;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View mapViewLayout = inflater.inflate(R.layout.canvs_map_fragment,null);
-        mapView = (MapView)mapViewLayout.findViewById(R.id.mapview);
+        View mapViewLayout = inflater.inflate(R.layout.canvs_map_fragment, null);
+        mapView = (MapView) mapViewLayout.findViewById(R.id.mapview);
         mapView.onCreate(savedInstanceState);
+        screenTitle = "BOOKMARKS";
         builder = new LatLngBounds.Builder();
-        list_murals=new ArrayList<>();
+        list_murals = new ArrayList<>();
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap gmap) {
@@ -98,15 +114,38 @@ public class CanvsMapFragment extends CommonFragment implements OnMapReadyCallba
                 mMap.getUiSettings().setScrollGesturesEnabled(true);
                 mMap.getUiSettings().setTiltGesturesEnabled(true);
                 mMap.getUiSettings().setScrollGesturesEnabled(true);
-                mMap.getUiSettings().setCompassEnabled(true);
+                mMap.getUiSettings().setCompassEnabled(false);
                 mMap.getUiSettings().setScrollGesturesEnabled(true);
                 mMap.getUiSettings().setZoomGesturesEnabled(true);
                 mMap.getUiSettings().setRotateGesturesEnabled(true);
                 mMap.setOnMarkerClickListener(CanvsMapFragment.this);
 
+
             }
         });
-        imageView_filter=mapViewLayout.findViewById(R.id.filter);
+        cardView_my_location = mapViewLayout.findViewById(R.id.my_location);
+        cardView_my_location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (location != null) {
+                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 18);
+                    mMap.animateCamera(cameraUpdate);
+                }
+            }
+        });
+        cardView_hunt_mode = mapViewLayout.findViewById(R.id.hunt_mode);
+        cardView_hunt_mode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CustomAlertDialog customAlertDialog = new CustomAlertDialog(GlobalReferences.getInstance().baseActivity);
+                customAlertDialog.show();
+            }
+        });
+
+
+        imageView_filter = mapViewLayout.findViewById(R.id.filter);
         imageView_filter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,9 +167,9 @@ public class CanvsMapFragment extends CommonFragment implements OnMapReadyCallba
             e.printStackTrace();
         }
         //Call api here
-        if(Utility.isNetworkAvailable(GlobalReferences.getInstance().baseActivity)){
-            ApiRequests.getInstance().get_murals(GlobalReferences.getInstance().baseActivity,this);
-        }else{
+        if (Utility.isNetworkAvailable(GlobalReferences.getInstance().baseActivity)) {
+            ApiRequests.getInstance().get_murals(GlobalReferences.getInstance().baseActivity, this);
+        } else {
             Utility.showNoInternetConnectionToast();
         }
 
@@ -171,14 +210,16 @@ public class CanvsMapFragment extends CommonFragment implements OnMapReadyCallba
         });
 
 
+        textView_title = mapViewLayout.findViewById(R.id.title);
+        imageView = mapViewLayout.findViewById(R.id.iv_map);
+        textView_author = mapViewLayout.findViewById(R.id.author);
+        textView_more = mapViewLayout.findViewById(R.id.tv_more);
+        cardView_dialog = mapViewLayout.findViewById(R.id.card_dialog);
+        GlobalReferences.getInstance().toolbar = (Toolbar) mapViewLayout.findViewById(R.id.toolbar_top);
 
-      textView_title=mapViewLayout.findViewById(R.id.title);
-        imageView=mapViewLayout.findViewById(R.id.iv_map);
-     textView_author=mapViewLayout.findViewById(R.id.author);
-       textView_more=mapViewLayout.findViewById(R.id.tv_more);
-       cardView_dialog=mapViewLayout.findViewById(R.id.card_dialog);
-        GlobalReferences.getInstance().toolbar = (Toolbar)mapViewLayout. findViewById(R.id.toolbar_top);
-
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            checkLocationPermission();
+        }
         return mapViewLayout;
     }
 
@@ -274,35 +315,36 @@ public class CanvsMapFragment extends CommonFragment implements OnMapReadyCallba
 
     @Override
     public <T> void onRequestStarted(BaseTask<T> listener, Constants.RequestParam requestParam) {
-      try{
-          //Request started
-          //GET CALL
+        try {
+            //Request started
+            //GET CALL
 
-          GlobalReferences.getInstance().progresBar.setVisibility(View.VISIBLE);
+            GlobalReferences.getInstance().progresBar.setVisibility(View.VISIBLE);
 
-      }catch (Exception e){
-          e.printStackTrace();
-      }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public <T> void onRequestCompleted(BaseTask<T> listener, Constants.RequestParam requestParam) {
-        try{
-            Log.e("response",listener.getJsonArrayResponse()+"");
+        try {
+            Log.e("response", listener.getJsonArrayResponse() + "");
             GlobalReferences.getInstance().progresBar.setVisibility(View.GONE);
             Gson gson = new Gson();
             //Murals murals = gson.fromJson();
             List<MuralsArray> list = new ArrayList<MuralsArray>();
 
-            Type type = new TypeToken<List<MuralsArray>>() {}.getType();
+            Type type = new TypeToken<List<MuralsArray>>() {
+            }.getType();
             String json = gson.toJson(list, type);
             System.out.println(json);
 
             List<MuralsArray> fromJson = gson.fromJson(json, type);
-            JSONArray jsonArray=listener.getJsonArrayResponse();
-            for (int i=0;i<jsonArray.length();i++){
-                JSONObject object=jsonArray.getJSONObject(i);
-                Murals murals=new Murals();
+            JSONArray jsonArray = listener.getJsonArrayResponse();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject object = jsonArray.getJSONObject(i);
+                Murals murals = new Murals();
                 murals.setActive(object.getInt("id"));
                 murals.setDerelict(object.getInt("derelict"));
                 murals.setActive(object.getInt("active"));
@@ -320,13 +362,13 @@ public class CanvsMapFragment extends CommonFragment implements OnMapReadyCallba
                 murals.setAdditional_link_first(object.getString("additionalLink1"));
                 murals.setAdditional_link_second(object.getString("additionalLink2"));
                 murals.setAdditional_link_third(object.getString("additionalLink3"));
-               // builder.include(new LatLng(object.getDouble("latitude"),object.getDouble("longitude")));
-                mMap.addMarker(new MarkerOptions().position(new LatLng(object.getDouble("latitude"),object.getDouble("longitude"))).icon(BitmapDescriptorFactory.fromResource(R.drawable.murals))).setTag(i);
+                // builder.include(new LatLng(object.getDouble("latitude"),object.getDouble("longitude")));
+                mMap.addMarker(new MarkerOptions().position(new LatLng(object.getDouble("latitude"), object.getDouble("longitude"))).icon(BitmapDescriptorFactory.fromResource(R.drawable.murals))).setTag(i);
                 list_murals.add(murals);
 
 
-                if(i==jsonArray.length()-1){
-                    setCurrentLocation(new LatLng( object.getDouble("latitude"), object.getDouble("longitude")));
+                if (i == jsonArray.length() - 1) {
+                    setCurrentLocation(new LatLng(object.getDouble("latitude"), object.getDouble("longitude")));
 
 
                 }
@@ -335,13 +377,14 @@ public class CanvsMapFragment extends CommonFragment implements OnMapReadyCallba
 
             LatLngBounds bounds = builder.build();
 
-           // mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 20));
+            // mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 20));
 
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
     }
-    public void setCurrentLocation(LatLng latlng){
+
+    public void setCurrentLocation(LatLng latlng) {
 
 
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latlng.latitude, latlng.longitude), 13));
@@ -382,7 +425,7 @@ public class CanvsMapFragment extends CommonFragment implements OnMapReadyCallba
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        final Murals murals=list_murals.get((int)marker.getTag());
+        final Murals murals = list_murals.get((int) marker.getTag());
 //        LayoutInflater inflater = LayoutInflater.from(getContext());
 //        final Dialog dialog1 = new Dialog(getContext());
 //        Window window = dialog1.getWindow();
@@ -402,37 +445,37 @@ public class CanvsMapFragment extends CommonFragment implements OnMapReadyCallba
 //        dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
         cardView_dialog.setVisibility(View.VISIBLE);
 
-        final String image_id=murals.getImage_resource_id().toLowerCase();
-        String image_url="https://canvs.cruxcode.nyc/mural_thumb_"+image_id+".jpg?size=thumb&requestType=image";
+        final String image_id = murals.getImage_resource_id().toLowerCase();
+        String image_url = "https://canvs.cruxcode.nyc/mural_thumb_" + image_id + ".jpg?size=thumb&requestType=image";
         textView_more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                FragmentMuralDetail fragmentMuralDetail=new FragmentMuralDetail();
-                Bundle bundle=new Bundle();
-                bundle.putString("image_id",image_id);
-                bundle.putString("location_text",murals.getLocation_text());
+                FragmentMuralDetail fragmentMuralDetail = new FragmentMuralDetail();
+                Bundle bundle = new Bundle();
+                bundle.putString("image_id", image_id);
+                bundle.putString("location_text", murals.getLocation_text());
 
-                bundle.putString("artist_text",murals.getArtist_text());
-                bundle.putString("about_text",murals.getAbout_text());
-                bundle.putString("tags",murals.getTags());
-                bundle.putString("addlink1",murals.getAdditional_link_first());
-                bundle.putString("addlink2",murals.getAdditional_link_second());
-                bundle.putString("addlink3",murals.getAdditional_limk_third());
-                bundle.putString("artist",murals.getAuthor());
-                bundle.putString("name",murals.getTitle());
-                bundle.putDouble("lat",murals.getLatitude());
-                bundle.putDouble("lon",murals.getLongitude());
+                bundle.putString("artist_text", murals.getArtist_text());
+                bundle.putString("about_text", murals.getAbout_text());
+                bundle.putString("tags", murals.getTags());
+                bundle.putString("addlink1", murals.getAdditional_link_first());
+                bundle.putString("addlink2", murals.getAdditional_link_second());
+                bundle.putString("addlink3", murals.getAdditional_limk_third());
+                bundle.putString("artist", murals.getAuthor());
+                bundle.putString("name", murals.getTitle());
+                bundle.putDouble("lat", murals.getLatitude());
+                bundle.putDouble("lon", murals.getLongitude());
                 fragmentMuralDetail.setArguments(bundle);
                 ((BaseActivity) GlobalReferences.getInstance().baseActivity).addFragmentWithBackStack(fragmentMuralDetail, true);
-               cardView_dialog.setVisibility(View.GONE);
+                cardView_dialog.setVisibility(View.GONE);
             }
         });
         textView_title.setText(murals.getTitle());
 
         textView_author.setText(murals.getAuthor());
 
-         Log.e(TAG, "onCreate: "+image_url );
+        Log.e(TAG, "onCreate: " + image_url);
         Glide.with(GlobalReferences.getInstance().baseActivity).load(image_url)
                 .thumbnail(0.5f)
 //                .placeholder(R.drawable.iv)
@@ -440,7 +483,7 @@ public class CanvsMapFragment extends CommonFragment implements OnMapReadyCallba
                 .into(imageView);
 
 
-       // dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        // dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 //        dialog1.setContentView(view_dialog);
 //        dialog1.show();
 //        Window window1 = dialog1.getWindow();
@@ -449,4 +492,136 @@ public class CanvsMapFragment extends CommonFragment implements OnMapReadyCallba
 //        customAlertDialog.show();
         return false;
     }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+        this.location = location;
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 18);
+        mMap.animateCamera(cameraUpdate);
+
+    }
+
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+
+    public boolean checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(GlobalReferences.getInstance().baseActivity, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // Asking user if explanation is needed
+            if (ActivityCompat.shouldShowRequestPermissionRationale(GlobalReferences.getInstance().baseActivity, android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+                //Prompt the user once explanation has been shown
+                ActivityCompat.requestPermissions(GlobalReferences.getInstance().baseActivity, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(GlobalReferences.getInstance().baseActivity, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
+            }
+            return false;
+        } else {
+            buildGoogleApiClient();
+            return true;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted. Do the
+                    // contacts-related task you need to do.
+                    if (ContextCompat.checkSelfPermission(GlobalReferences.getInstance().baseActivity, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        if (mGoogleApiClient == null) {
+                            buildGoogleApiClient();
+                        }
+                        //  mMap.setMyLocationEnabled(true);
+                    }
+
+                } else {
+                    // Permission denied, Disable the functionality that depends on this permission.
+                    Toast.makeText(GlobalReferences.getInstance().baseActivity, "permission denied", Toast.LENGTH_LONG).show();
+                }
+                return;
+            }
+            // other 'case' lines to check for other permissions this app might request.
+            // You can add here other case statements according to your requirement.
+        }
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(GlobalReferences.getInstance().baseActivity)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(CanvsMapFragment.this)
+                .addApi(LocationServices.API)
+                .build();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(GlobalReferences.getInstance().baseActivity, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+
+                ContextCompat.checkSelfPermission(GlobalReferences.getInstance()
+                        .baseActivity, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            //   Gmap.setMyLocationEnabled(true);
+
+
+        }
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(600000); //1 minute
+        mLocationRequest.setSmallestDisplacement(1f);
+        mLocationRequest.setFastestInterval(5000); //10seconds
+        mLocationRequest.setExpirationDuration(600000);
+
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        PendingResult<Status> pendingResult = LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    private void createLocationRequest() {
+        mLocationRequest = new LocationRequest();
+
+        // Sets the desired interval for active location updates. This interval is
+        // inexact. You may not receive updates at all if no location sources are available, or
+        // you may receive them slower than requested. You may also receive updates faster than
+        // requested if other applications are requesting location at a faster interval.
+        mLocationRequest.setInterval(5000);
+
+        // Sets the fastest rate for active location updates. This interval is exact, and your
+        // application will never receive updates faster than this value.
+        mLocationRequest.setFastestInterval(10000);
+
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    }
+
+    @Override
+    public void onStart() {
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+        }
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.disconnect();
+        }
+        super.onStop();
+    }
 }
+

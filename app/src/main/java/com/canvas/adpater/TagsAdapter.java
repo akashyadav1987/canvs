@@ -1,4 +1,4 @@
-package adapters;
+package com.canvas.adpater;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -10,8 +10,6 @@ import android.widget.TextView;
 
 
 import com.canvas.R;
-
-import java.util.List;
 
 import static android.content.ContentValues.TAG;
 

@@ -21,7 +21,7 @@
             android:maxHeight="?attr/actionBarSize"
             android:minHeight="?attr/actionBarSize"
             app:theme="@style/Widget.AppCompat.Toolbar"
-            android:visibility="gone">
+           >
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -83,10 +83,17 @@
                     android:shadowColor="#22000000"
                     android:shadowDx="3"
                     android:shadowDy="3"
+                    android:visibility="gone"
                     android:shadowRadius="1"
                     android:text="{fa-search}"
                     android:textColor="#FFFFFF"
                     android:textSize="18dp" />
+
+                <com.miguelcatalan.materialsearchview.MaterialSearchView
+                    android:id="@+id/search_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
 

@@ -3,6 +3,7 @@ package com.canvas.common;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.canvas.R;
 import com.canvas.fragment.CanvsMapFragment;
+import com.canvas.fragment.FragmentMuralDetail;
 
 /**
  * Created by akashyadav on 11/27/17.
@@ -18,12 +20,14 @@ import com.canvas.fragment.CanvsMapFragment;
 
 public class CommonFragment extends Fragment {
     protected String screenTitle="";
-    private ImageView toolbarImage;
+    protected ImageView toolbarImage,imageView_back;
     private TextView toolBarText;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //updateToolbarTitle();
+
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -31,10 +35,16 @@ public class CommonFragment extends Fragment {
         try{
             toolbarImage = GlobalReferences.getInstance().toolbar.findViewById(R.id.toolbar_image);
             toolBarText = GlobalReferences.getInstance().toolbar.findViewById(R.id.tool_bar_title);
+            imageView_back=GlobalReferences.getInstance().toolbar.findViewById(R.id.filter);
             if(GlobalReferences.getInstance().mCommonFragment instanceof CanvsMapFragment){
                 toolbarImage.setVisibility(View.VISIBLE);
                 toolBarText.setVisibility(View.GONE);
-            } else{
+            }else if(GlobalReferences.getInstance().mCommonFragment instanceof FragmentMuralDetail){
+                toolbarImage.setVisibility(View.VISIBLE);
+                toolBarText.setVisibility(View.GONE);
+                imageView_back.setImageDrawable(GlobalReferences.getInstance().baseActivity.getResources().getDrawable(R.drawable.ic_left_arrow));
+
+            }else{
                 toolbarImage.setVisibility(View.GONE);
                 toolBarText.setVisibility(View.VISIBLE);
                 toolBarText.setText(screenTitle+"");

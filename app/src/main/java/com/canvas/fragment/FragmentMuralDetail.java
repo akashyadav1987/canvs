@@ -1,13 +1,12 @@
 package com.canvas.fragment;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialog;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,25 +14,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.canvas.R;
-import com.canvas.adpater.FavoritesAndBookMarkAdapter;
 import com.canvas.common.CommonFragment;
 import com.canvas.common.Constants;
 import com.canvas.common.GlobalReferences;
 import com.canvas.io.http.BaseTask;
 import com.canvas.io.http.BaseTaskJson;
 import com.canvas.io.listener.AppRequest;
-import com.canvas.model.Favorite;
-import com.canvas.utils.GridInsetDecoration;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
-import adapters.TagsAdapter;
+import com.canvas.adpater.TagsAdapter;
 
 import static android.content.ContentValues.TAG;
 
@@ -49,7 +44,8 @@ RecyclerView recyclerView_tags;
 TagsAdapter tagsAdapter;
 TextView tv_mural,tv_author;
 double lat,lon;
-
+RelativeLayout relativeLayout_flag;
+String selected_flag;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -62,6 +58,59 @@ double lat,lon;
         Log.e(TAG, "onCreateView: "+img_id );
         Log.e(TAG, "onCreateView: "+location );
         imageView=muralview.findViewById(R.id.iv_image_detail);
+        relativeLayout_flag=muralview.findViewById(R.id.flag);
+        relativeLayout_flag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final BottomSheetDialog mBottomSheetDialog = new BottomSheetDialog(getActivity());
+                View sheetView = getActivity().getLayoutInflater().inflate(R.layout.flag_part_first, null);
+
+                TextView tv_cancel=sheetView.findViewById(R.id.tv_cancel);
+                tv_cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mBottomSheetDialog.dismiss();
+                    }
+                });
+
+                CardView cardView_wrong_info=sheetView.findViewById(R.id.flag_wrong_info);
+                cardView_wrong_info.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        selected_flag="Wrong Information";
+                      showFlagPartSecond();
+                    }
+                });
+                CardView cardView_inaccurate=sheetView.findViewById(R.id.inaccurate_info);
+                cardView_inaccurate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        selected_flag="Inaccurate location";
+                      showFlagPartSecond();
+                    }
+                });
+                CardView cardView_damaged=sheetView.findViewById(R.id.damaged_removed);
+                cardView_damaged.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                     selected_flag=   "Damaged/removed mural";
+                      showFlagPartSecond();
+                    }
+                });
+                CardView cardView_other=sheetView.findViewById(R.id.other);
+                cardView_other.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        selected_flag="Other";
+                      showFlagPartSecond();
+                    }
+                });
+
+
+                mBottomSheetDialog.setContentView(sheetView);
+                mBottomSheetDialog.show();
+            }
+        });
 
         textView_location=muralview.findViewById(R.id.tv_location);
         tv_author=muralview.findViewById(R.id.tv_author);
@@ -151,6 +200,22 @@ double lat,lon;
         recyclerView_tags.setLayoutManager(new LinearLayoutManager(GlobalReferences.getInstance().baseActivity, LinearLayoutManager.HORIZONTAL, false));
         recyclerView_tags.setAdapter(tagsAdapter);
         return muralview;
+    }
+
+    private void showFlagPartSecond(){
+      final  BottomSheetDialog mBottomSheetDialog = new BottomSheetDialog(getActivity());
+        View sheetView = getActivity().getLayoutInflater().inflate(R.layout.flag_part_second, null);
+        TextView tv_cancel=sheetView.findViewById(R.id.tv_cancel);
+        tv_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBottomSheetDialog.dismiss();
+            }
+        });
+        TextView textView=sheetView.findViewById(R.id.selected_flag);
+        textView.setText(selected_flag);
+        mBottomSheetDialog.setContentView(sheetView);
+        mBottomSheetDialog.show();
     }
 
     private void openLink(String link){

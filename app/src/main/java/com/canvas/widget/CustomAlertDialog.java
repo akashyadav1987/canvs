@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,18 +30,13 @@ import static android.content.ContentValues.TAG;
 public class CustomAlertDialog extends Dialog implements android.view.View.OnClickListener {
 
     public Activity activity;
-    public Dialog d;
-    public Button yes, no;
     Murals mMurals;
 
-
-    ListView listView;
-    public CustomAlertDialog(Activity activity, Murals murals) {
+    public CustomAlertDialog(Activity activity) {
         super(activity);
 
         // TODO Auto-generated constructor stub
         this.activity = activity;
-        mMurals=murals;
 
     }
 
@@ -50,21 +46,15 @@ public class CustomAlertDialog extends Dialog implements android.view.View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.map_dialog);
-        TextView textView_title=findViewById(R.id.title);
-        textView_title.setText(mMurals.getTitle());
-        TextView textView_author=findViewById(R.id.author);
-        textView_author.setText(mMurals.getAuthor());
-        ImageView imageView=findViewById(R.id.iv_map);
-        String imge_id=mMurals.getImage_resource_id().toLowerCase();
-        String image_url="https://canvs.cruxcode.nyc/mural_thumb_"+imge_id+".jpg?size=thumb&requestType=image";
-        Log.e(TAG, "onCreate: "+image_url );
-        Glide.with(GlobalReferences.getInstance().baseActivity).load(image_url)
-                .thumbnail(0.5f)
-//                .placeholder(R.drawable.iv)
-//                .error(R.drawable.profile)
-                .into(imageView);
-        TextView textView_more=findViewById(R.id.tv_more);
+        setContentView(R.layout.hunt_dialog);
+        TextView textView=findViewById(R.id.tv_ok);
+        CheckBox checkBox=findViewById(R.id.check_dont_show);
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
 
 
 
