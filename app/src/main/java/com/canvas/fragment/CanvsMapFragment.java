@@ -1,6 +1,7 @@
 package com.canvas.fragment;
 
 
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
@@ -106,6 +107,7 @@ public class CanvsMapFragment extends CommonFragment implements OnMapReadyCallba
         mapView.onCreate(savedInstanceState);
         screenTitle = "BOOKMARKS";
         builder = new LatLngBounds.Builder();
+
         list_murals = new ArrayList<>();
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
@@ -223,6 +225,19 @@ public class CanvsMapFragment extends CommonFragment implements OnMapReadyCallba
         return mapViewLayout;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.e(TAG, "onAttach: "+"call" );
+    }
+
+    @Override
+    public void onRefresh() {
+        super.onRefresh();
+        Log.e(TAG, "onAttach: "+"call" );
+
+    }
+
     public void updateTab(int selectedTab) {
 
         switch (selectedTab) {
@@ -277,6 +292,7 @@ public class CanvsMapFragment extends CommonFragment implements OnMapReadyCallba
 
                 break;
             case R.id.about:
+                ((BaseActivity) GlobalReferences.getInstance().baseActivity).addFragmentWithBackStack(new AboutUsFragment(), true);
                 about.setIcon(new IconDrawable((BaseActivity) GlobalReferences.getInstance().baseActivity, FontAwesomeIcons.fa_info_circle)
                         .colorRes(R.color.red)
                         .actionBarSize());

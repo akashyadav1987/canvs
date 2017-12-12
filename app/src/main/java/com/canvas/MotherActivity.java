@@ -139,8 +139,7 @@ public class MotherActivity extends BaseActivity {
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Snackbar.make(findViewById(R.id.container), "Query: " + query, Snackbar.LENGTH_LONG)
-                        .show();
+
                 return false;
             }
 
@@ -173,10 +172,14 @@ public class MotherActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
+
         if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
             finish();
         } else {
             try {
+                if (searchView.isSearchOpen()) {
+                    searchView.closeSearch();
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -184,12 +187,6 @@ public class MotherActivity extends BaseActivity {
             super.onBackPressed();
         }
 
-
-        if (searchView.isSearchOpen()) {
-            searchView.closeSearch();
-        } else {
-            super.onBackPressed();
-        }
     }
 
     public void updateTab(int selectedTab) {

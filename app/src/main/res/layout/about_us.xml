@@ -114,15 +114,316 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/instaa" />
 
+            </LinearLayout>
+            <View
+                android:layout_marginRight="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/grey_"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+            <ImageView
+                android:layout_marginTop="20dp"
+                android:id="@+id/des_crux_img"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/developed_by_xcode" />
+            <TextView
+                android:layout_marginTop="10dp"
+                android:textColor="#666666"
+                android:textSize="13sp"
+                android:text="@string/designed_by_crux_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <Button
+                android:textColor="#b3b3b3"
+                android:id="@+id/crux_button"
+                android:background="@drawable/button_with_border"
+                android:textAllCaps="false"
+                android:layout_marginTop="10dp"
+                android:text="www.meangenius.com"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
                 <ImageView
-                    android:layout_marginTop="10dp"
-                    android:id="@+id/dev"
-                    android:layout_width="match_parent"
+                    android:padding="7dp"
+                    android:id="@+id/crux_twitter"
+                    android:layout_width="64dp"
+                    android:layout_weight="1"
+                    android:layout_height="64dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/twi" />
+                <ImageView
+                    android:padding="7dp"
+                    android:id="@+id/crux_facebook"
+                    android:layout_width="64dp"
+                    android:layout_weight="1"
+                    android:layout_height="64dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/facebook" />
+                <ImageView
+                    android:padding="7dp"
+                    android:id="@+id/crux_instagram"
+                    android:layout_width="64dp"
+                    android:layout_weight="1"
+                    android:layout_height="64dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/instaa" />
+            </LinearLayout>
+
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal"
+               android:layout_marginTop="20dp">
+               <ImageView
+                   android:padding="7dp"
+                   android:id="@+id/crux_share_feedback"
+                   android:layout_width="0dp"
+                   android:layout_weight="0.5"
+                   android:layout_height="wrap_content"
+                   android:adjustViewBounds="true"
+                   android:scaleType="centerCrop"
+                   android:src="@drawable/feedback" />
+               <LinearLayout
+                   android:layout_width="0dp"
+                   android:layout_height="wrap_content"
+                   android:layout_weight="3.5"
+                   android:orientation="vertical">
+                   <TextView
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:layout_weight="3.5"
+                       android:layout_gravity="center"
+                       android:gravity="center|center_vertical|start"
+                       android:textColor="@color/red"
+                       android:paddingTop="10dp"
+                       android:paddingBottom="10dp"
+                       android:text="Share your feedcack"/>
+                   <View
+                       android:layout_marginRight="5dp"
+                       android:background="@color/grey_"
+                       android:layout_width="match_parent"
+                       android:padding="10dp"
+                       android:layout_height="1dp"/>
+               </LinearLayout>
+           </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:padding="7dp"
+
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/develped_by_crux" />
+                    android:src="@drawable/review_us" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3.5"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3.5"
+                        android:layout_gravity="center"
+                        android:gravity="center|center_vertical|start"
+                        android:textColor="@color/red"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp"
+
+                        android:text="Review us on Google Play"/>
+                    <View
+                        android:layout_marginRight="5dp"
+                        android:background="@color/grey_"
+                        android:layout_width="match_parent"
+                        android:padding="10dp"
+                        android:layout_height="1dp"/>
+                </LinearLayout>
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:padding="7dp"
+
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/instagram" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3.5"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3.5"
+                        android:layout_gravity="center"
+                        android:gravity="center|center_vertical|start"
+                        android:textColor="@color/red"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp"
+
+                        android:text="Follow us on Instagram"/>
+                    <View
+                        android:layout_marginRight="5dp"
+                        android:background="@color/grey_"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:padding="10dp"/>
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:padding="7dp"
+
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/shoutouts" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3.5"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3.5"
+                        android:layout_gravity="center"
+                        android:gravity="center|center_vertical|start"
+                        android:textColor="@color/red"
+                       android:paddingBottom="10dp"
+                        android:paddingTop="10dp"
+                        android:text="Shout outs"/>
+                    <View
+                        android:layout_marginRight="5dp"
+                        android:background="@color/grey_"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:padding="10dp"/>
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:padding="7dp"
+
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/privacy" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3.5"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3.5"
+                        android:layout_gravity="center"
+                        android:gravity="center|center_vertical|start"
+                        android:textColor="@color/red"
+                       android:paddingBottom="10dp"
+                        android:paddingTop="10dp"
+
+                        android:text="Privacy"/>
+                    <View
+                        android:layout_marginRight="5dp"
+                        android:background="@color/grey_"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:padding="10dp"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:padding="7dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/disclamer" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3.5"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3.5"
+                        android:layout_gravity="center"
+                        android:gravity="center|center_vertical|start"
+                        android:textColor="@color/red"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp"
+
+                        android:text="Disclamer"/>
+                    <View
+                        android:layout_marginRight="5dp"
+                        android:background="@color/grey_"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:padding="10dp"/>
+                </LinearLayout>
+            </LinearLayout>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:padding="10dp"
+                android:src="@drawable/title_app"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="www.canvsart.com"
+                android:textColor="@color/red"
+                android:gravity="center"/>
+
         </LinearLayout>
 
     </RelativeLayout>
