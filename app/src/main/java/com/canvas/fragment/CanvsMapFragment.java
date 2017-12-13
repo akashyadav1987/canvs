@@ -38,11 +38,15 @@ import com.canvas.io.http.ApiRequests;
 import com.canvas.io.http.BaseTask;
 import com.canvas.io.http.BaseTaskJson;
 import com.canvas.io.listener.AppRequest;
+import com.canvas.io.listener.HuntListener;
 import com.canvas.model.Murals;
 import com.canvas.model.MuralsArray;
 import com.canvas.utils.BottomNavigationViewHelper;
 import com.canvas.utils.Utility;
 import com.canvas.widget.CustomAlertDialog;
+import com.canvas.widget.RobotoBoldTextView;
+import com.canvas.widget.RobotoMediumTextView;
+import com.canvas.widget.RobotoRegularTextView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -82,7 +86,7 @@ import static android.content.ContentValues.TAG;
  * Created by akashyadav on 11/27/17.
  */
 
-public class CanvsMapFragment extends CommonFragment implements OnMapReadyCallback ,AppRequest,GoogleMap.OnMarkerClickListener,com.google.android.gms.location.LocationListener,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener
+public class CanvsMapFragment extends CommonFragment implements HuntListener, OnMapReadyCallback ,AppRequest,GoogleMap.OnMarkerClickListener,com.google.android.gms.location.LocationListener,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener
 
 {
     private GoogleMap mMap;
@@ -93,11 +97,16 @@ public class CanvsMapFragment extends CommonFragment implements OnMapReadyCallba
     ImageView imageView_filter;
     private MenuItem bookmarks, seen, fav, about;
     CardView cardView_dialog;
-    TextView textView_title, textView_author, textView_more;
+    RobotoBoldTextView textView_title;
+    RobotoMediumTextView textView_author;
+    RobotoRegularTextView textView_more;
     ImageView imageView;
     CardView cardView_my_location, cardView_hunt_mode;
     Location location;
     LocationRequest mLocationRequest;
+   Marker marker_previous;
+   int previous_tag;
+   TextView tv_hunt_mode;
 
     @Nullable
     @Override
@@ -141,10 +150,21 @@ public class CanvsMapFragment extends CommonFragment implements OnMapReadyCallba
         cardView_hunt_mode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CustomAlertDialog customAlertDialog = new CustomAlertDialog(GlobalReferences.getInstance().baseActivity);
+                CustomAlertDialog customAlertDialog = new CustomAlertDialog(GlobalReferences.getInstance().baseActivity,CanvsMapFragment.this);
                 customAlertDialog.show();
             }
         });
+        tv_hunt_mode=mapViewLayout.findViewById(R.id.tv_hunt_mode);
+      boolean isHunton=  GlobalReferences.getInstance().pref.getHuntMode();
+      if(isHunton){
+          cardView_hunt_mode.setBackgroundColor(GlobalReferences.getInstance().baseActivity.getResources().getColor(R.color.orange));
+      tv_hunt_mode.setText("HUNT MODE ON");
+      }else{
+          tv_hunt_mode.setText("HUNT MODE OFF");
+          cardView_hunt_mode.setBackgroundColor(GlobalReferences.getInstance().baseActivity.getResources().getColor(R.color.grey));
+
+      }
+
 
 
         imageView_filter = mapViewLayout.findViewById(R.id.filter);
@@ -441,6 +461,16 @@ public class CanvsMapFragment extends CommonFragment implements OnMapReadyCallba
 
     @Override
     public boolean onMarkerClick(Marker marker) {
+
+
+        if(marker_previous!=null){
+            marker_previous.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.murals));
+        }
+        marker_previous=marker;
+       marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.circular_red));
+
+
+
         final Murals murals = list_murals.get((int) marker.getTag());
 //        LayoutInflater inflater = LayoutInflater.from(getContext());
 //        final Dialog dialog1 = new Dialog(getContext());
@@ -638,6 +668,22 @@ public class CanvsMapFragment extends CommonFragment implements OnMapReadyCallba
             mGoogleApiClient.disconnect();
         }
         super.onStop();
+    }
+
+    @Override
+    public void huntState(boolean huntmode) {
+        if(huntmode){
+            tv_hunt_mode.setText("HUNT MODE ON");
+           // cardView_hunt_mode.setRadius(12f);
+
+            cardView_hunt_mode.setCardBackgroundColor(GlobalReferences.getInstance().baseActivity.getResources().getColor(R.color.orange));
+        }else{
+            tv_hunt_mode.setText("HUNT MODE OFF");
+            cardView_hunt_mode.setCardBackgroundColor(GlobalReferences.getInstance().baseActivity.getResources().getColor(R.color.grey));
+
+        }
+
+
     }
 }
 

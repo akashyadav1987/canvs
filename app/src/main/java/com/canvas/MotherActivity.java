@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 
 import com.canvas.common.CommonFragment;
 import com.canvas.common.GlobalReferences;
+import com.canvas.db.Pref;
 import com.canvas.fragment.AboutUsFragment;
 import com.canvas.fragment.BookMarkFragment;
 import com.canvas.fragment.CanvsMapFragment;
@@ -46,6 +47,7 @@ public class MotherActivity extends BaseActivity {
         Menu menu = bottomNavigationView.getMenu();
         GlobalReferences.getInstance().baseActivity = this;
         GlobalReferences.getInstance().toolbar = (Toolbar) findViewById(R.id.toolbar_top);
+        GlobalReferences.getInstance().pref  = new Pref(this);
         GlobalReferences.getInstance().progresBar = (LinearLayout) findViewById(R.id.linlaHeaderProgress);
         bookmarks = menu.findItem(R.id.bookmarks);
         seen = menu.findItem(R.id.seen);

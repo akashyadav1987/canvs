@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.support.v7.widget.Toolbar;
 import android.widget.LinearLayout;
 
+import com.canvas.db.Pref;
+
 /**
  * Created by akashyadav on 11/27/17.
  */
@@ -23,5 +25,6 @@ public class GlobalReferences {
     public Activity baseActivity;
     public LinearLayout progresBar;
     public Toolbar toolbar;
+    public Pref pref;
 
 }

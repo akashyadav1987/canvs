@@ -98,7 +98,7 @@
             tools:context=".MapsActivity" />
                 <android.support.v7.widget.CardView
                     android:id="@+id/hunt_mode"
-                    android:layout_width="100dp"
+                    android:layout_width="150dp"
                     android:layout_marginRight="12dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -111,11 +111,12 @@
                     android:paddingBottom="15dp"
                     android:clickable="true"
                     android:focusable="true"
-                    app:cardBackgroundColor="#de996c">
+                    app:cardBackgroundColor="@color/grey">
                     <TextView
+                        android:id="@+id/tv_hunt_mode"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="HUNT MODE"
+                        android:text="HUNT MODE OFF"
                         android:gravity="center"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
@@ -143,7 +144,7 @@
                     <ImageView
                         android:layout_height="40dp"
                         android:layout_width="match_parent"
-                        app:srcCompat="@drawable/ic_gps"
+                        app:srcCompat="@drawable/ic_navigation"
                         android:scaleType="center"
                         android:padding="8dp"
                         android:layout_alignParentTop="true"
@@ -165,7 +166,7 @@
             <android.support.v7.widget.CardView
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="130dp"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:orientation="horizontal"
                 app:cardBackgroundColor="@android:color/white"
@@ -193,7 +194,7 @@
                         android:layout_weight="2.5"
                         android:layout_marginTop="8dp"
                         android:orientation="vertical">
-                        <TextView
+                        <com.canvas.widget.RobotoBoldTextView
                             android:id="@+id/title"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -201,8 +202,8 @@
                             android:layout_gravity="center|start"
                             android:gravity="center|start"
                             android:textColor="#db0046"
-                            android:textSize="20sp"/>
-                        <TextView
+                            android:textSize="18sp"/>
+                        <com.canvas.widget.RobotoMediumTextView
                             android:id="@+id/author"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
@@ -211,18 +212,17 @@
                             android:textSize="16sp"
                             android:textColor="@color/grey"/>
 
-                        <TextView
+                        <com.canvas.widget.RobotoRegularTextView
                             android:id="@+id/tv_more"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-
                             android:layout_marginBottom="8dp"
                             android:layout_gravity="bottom"
                             android:text="SEE MORE"
                             android:textColor="@android:color/white"
                             android:background="#33b7a5"
                             android:gravity="center"
-                            android:padding="12dp"
+                            android:padding="8dp"
                             android:layout_marginRight="8dp"
                             />
 

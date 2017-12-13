@@ -17,6 +17,7 @@ import android.widget.Toolbar;
 import com.bumptech.glide.Glide;
 import com.canvas.R;
 import com.canvas.common.GlobalReferences;
+import com.canvas.fragment.CanvsMapFragment;
 import com.canvas.model.Murals;
 
 import java.util.ArrayList;
@@ -31,12 +32,14 @@ public class CustomAlertDialog extends Dialog implements android.view.View.OnCli
 
     public Activity activity;
     Murals mMurals;
+    CanvsMapFragment canvsMapFragment;
 
-    public CustomAlertDialog(Activity activity) {
+    public CustomAlertDialog(Activity activity, CanvsMapFragment fragment) {
         super(activity);
 
         // TODO Auto-generated constructor stub
         this.activity = activity;
+        canvsMapFragment=fragment;
 
     }
 
@@ -52,6 +55,10 @@ public class CustomAlertDialog extends Dialog implements android.view.View.OnCli
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+             boolean isHunt=   GlobalReferences.getInstance().pref.getHuntMode();
+                GlobalReferences.getInstance().pref.setHuntMode(!isHunt);
+                canvsMapFragment.huntState(!isHunt);
                 dismiss();
             }
         });
