@@ -15,7 +15,7 @@
             android:background="@drawable/toolbar_back"
             android:maxHeight="?attr/actionBarSize"
             android:minHeight="?attr/actionBarSize"
-    android:visibility="gone"
+      android:visibility="gone"
             app:theme="@style/Widget.AppCompat.Toolbar">
 
                 <RelativeLayout

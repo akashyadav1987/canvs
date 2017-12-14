@@ -7,21 +7,23 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.canvas.R;
-import com.canvas.adpater.FavoritesAndBookMarkAdapter;
+import com.canvas.adpater.FavoritesAdapter;
 import com.canvas.common.CommonFragment;
 import com.canvas.common.Constants;
 import com.canvas.common.GlobalReferences;
+import com.canvas.controller.RealmController;
 import com.canvas.io.http.BaseTask;
 import com.canvas.io.http.BaseTaskJson;
 import com.canvas.io.listener.AppRequest;
-import com.canvas.model.Favorite;
+import com.canvas.model.FavoriteMural;
 import com.canvas.utils.GridInsetDecoration;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
+import io.realm.RealmResults;
 
 /**
  * Created by akashyadav on 12/2/17.
@@ -29,35 +31,26 @@ import java.util.ArrayList;
 
 public class FavoritesFragment extends CommonFragment implements AppRequest {
     private RecyclerView favorites_list;
+    private TextView no_con;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View favoritesView = inflater.inflate(R.layout.favorites_fragment,null);
         favorites_list = favoritesView.findViewById(R.id.favorites_list);
+        no_con = favoritesView.findViewById(R.id.no_con);
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
         favorites_list.addItemDecoration(new GridInsetDecoration(getActivity()));
         screenTitle="FAVORITES";
         GridLayoutManager gridLayoutManager = new GridLayoutManager(GlobalReferences.getInstance().baseActivity,2,GridLayoutManager.VERTICAL,false);
         favorites_list.setLayoutManager(gridLayoutManager);
-        ArrayList<Favorite> favorites = new ArrayList<>();
-        Favorite favorite = new Favorite();
-        favorite.setTitle("The Two Dudes");
-        favorite.setArtistName("Artist Name");
-        favorites.add(favorite);
-
-        Favorite favorite1 = new Favorite();
-        favorite1.setTitle("Marry Had a little Lamb anass");
-        favorite1.setArtistName("Artist Name");
-        favorites.add(favorite1);
-
-
-        Favorite favorite2 = new Favorite();
-        favorite2.setTitle("The Two Dudes");
-        favorite2.setArtistName("Artist Name");
-        favorites.add(favorite2);
-
-        FavoritesAndBookMarkAdapter favoritesAndBookMarkAdapter = new FavoritesAndBookMarkAdapter(favorites);
-        favorites_list.setAdapter(favoritesAndBookMarkAdapter);
+        RealmResults<FavoriteMural> favorites = RealmController.getInstance().getAllFavoriteMurals();
+        if(favorites.size()==0){
+            no_con.setVisibility(View.VISIBLE);
+        }else {
+            no_con.setVisibility(View.GONE);
+        }
+        FavoritesAdapter favoritesAdapter = new FavoritesAdapter(favorites);
+        favorites_list.setAdapter(favoritesAdapter);
         return favoritesView;
     }
 

@@ -9,6 +9,7 @@ import android.graphics.Typeface;
 import android.support.v7.widget.AppCompatSeekBar;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 
 import com.canvas.R;
 
@@ -57,5 +58,38 @@ public class TextThumbSeekBar extends AppCompatSeekBar {
         float thumbX = progressRatio * width + leftPadding + thumbOffset;
         float thumbY = getHeight() / 2f + bounds.height() / 2f;
         canvas.drawText(progressText+"%", thumbX, thumbY, mTextPaint);
+    }
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                final int width = getWidth();
+                final int available = width - getPaddingLeft() - getPaddingRight();
+                int x = (int) event.getX();
+                float scale;
+                float progress = 0;
+                if (x < getPaddingLeft()) {
+                    scale = 0.0f;
+                } else if (x > width - getPaddingRight()) {
+                    scale = 1.0f;
+                } else {
+                    scale = (float) (x - getPaddingLeft()) / (float) available;
+                }
+                final int max = getMax();
+                progress += scale * max;
+                if (progress < 0) {
+                    progress = 0;
+                } else if (progress > max) {
+                    progress = max;
+                }
+
+                if (Math.abs(progress - getProgress()) < 10)
+                    return super.onTouchEvent(event);
+                else
+                    return false;
+            default:
+                return super.onTouchEvent(event);
+        }
     }
 }

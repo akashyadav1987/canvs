@@ -1,6 +1,8 @@
 package com.canvas.fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,16 +21,20 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.canvas.R;
+import com.canvas.adpater.TagsAdapter;
 import com.canvas.common.CommonFragment;
 import com.canvas.common.Constants;
 import com.canvas.common.GlobalReferences;
+import com.canvas.controller.RealmController;
 import com.canvas.io.http.BaseTask;
 import com.canvas.io.http.BaseTaskJson;
 import com.canvas.io.listener.AppRequest;
+import com.canvas.model.BookmarkedMural;
+import com.canvas.model.FavoriteMural;
+import com.canvas.model.Murals;
+import com.canvas.model.SeenMural;
 
 import org.json.JSONObject;
-
-import com.canvas.adpater.TagsAdapter;
 
 import static android.content.ContentValues.TAG;
 
@@ -37,21 +43,54 @@ import static android.content.ContentValues.TAG;
  */
 
 public class FragmentMuralDetail extends CommonFragment implements AppRequest {
-TextView textView_location,textView_about_mural,textView_about_artist,
-        textView_direction,textView_add_link_first,textView_add_link_second,textView_add_link_third;
-ImageView imageView;
-RecyclerView recyclerView_tags;
-TagsAdapter tagsAdapter;
-TextView tv_mural,tv_author;
-double lat,lon;
+
+
 RelativeLayout relativeLayout_flag;
 String selected_flag;
+    TextView textView_location,textView_about_mural,textView_about_artist,
+        textView_direction,textView_add_link_first,textView_add_link_second,textView_add_link_third;
+    ImageView imageView;
+    RecyclerView recyclerView_tags;
+    TagsAdapter tagsAdapter;
+    TextView tv_mural,tv_author;
+    double lat,lon;
+    private ImageView fav_img,book_img,seen_img;
+    private CardView favoriteCard,bookmarks_btn,seen_btn;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View muralview = inflater.inflate(R.layout.fragment_mural_details,null);
         Bundle bundle=getArguments();
-        String img_id=bundle.getString("image_id");
+        final Murals muralsObject = bundle.getParcelable("mural");
+        final String img_id=bundle.getString("image_id");
+        final String image_url="https://canvs.cruxcode.nyc/mural_large_"+img_id+".jpg?size=large&requestType=image";
+        favoriteCard = muralview.findViewById(R.id.favorite_btn);
+        bookmarks_btn  = muralview.findViewById(R.id.bookmarks_btn);
+        seen_btn = muralview.findViewById(R.id.seen_btn);
+        seen_img = muralview.findViewById(R.id.seen_img);
+
+        fav_img = muralview.findViewById(R.id.fav_img);
+        book_img = muralview.findViewById(R.id.book_img);
+
+        if (RealmController.getInstance().isFavoriteMuralExist(muralsObject.getId())) {
+            fav_img.setColorFilter(Color.parseColor("#5ab3a4"), PorterDuff.Mode.SRC_IN);
+        }else {
+            fav_img.setColorFilter(Color.parseColor("#908B8A89"), PorterDuff.Mode.SRC_IN);
+        }
+
+        if (RealmController.getInstance().isBookMarhedMuralExist(muralsObject.getId())) {
+            book_img.setColorFilter(Color.parseColor("#5ab3a4"), PorterDuff.Mode.SRC_IN);
+        }else {
+            book_img.setColorFilter(Color.parseColor("#908B8A89"), PorterDuff.Mode.SRC_IN);
+        }
+
+        if (RealmController.getInstance().isSeenMuralExist(muralsObject.getId())) {
+            seen_img.setColorFilter(Color.parseColor("#5ab3a4"), PorterDuff.Mode.SRC_IN);
+        }else {
+            seen_img.setColorFilter(Color.parseColor("#908B8A89"), PorterDuff.Mode.SRC_IN);
+        }
+
         String location=bundle.getString("location_text");
         lat=bundle.getDouble("lat");
         lon=bundle.getDouble("lon");
@@ -113,28 +152,115 @@ String selected_flag;
         });
 
         textView_location=muralview.findViewById(R.id.tv_location);
+        //seen_btn = muralview.findViewById(R.id.seen_btn);
+        favoriteCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FavoriteMural favoriteMural = new FavoriteMural();
+                favoriteMural.setId(muralsObject.getId());
+                favoriteMural.setImageResourceID(img_id);
+                favoriteMural.setArtistName(muralsObject.getArtist_text()+"");
+                favoriteMural.setMuralTitle(muralsObject.getTitle()+"");
+                favoriteMural.setActive(muralsObject.getActive()+"");
+                favoriteMural.setLocationText(muralsObject.getLocation_text());
+                favoriteMural.setAboutThisText(muralsObject.getAbout_text());
+                favoriteMural.setTags(muralsObject.getTags());
+                favoriteMural.setAdditionalLink1(muralsObject.getAdditional_link_first());
+                favoriteMural.setAdditionalLink2(muralsObject.getAdditional_link_second());
+                favoriteMural.setAdditionalLink3(muralsObject.getAdditional_limk_third());
+                favoriteMural.setLatitude(muralsObject.getLatitude()+"");
+                favoriteMural.setLongitude(muralsObject.getLongitude()+"");
+
+                if(RealmController.getInstance().isFavoriteMuralExist(muralsObject.getId())){
+                    Log.e("Record exist","Record Exist");
+                    RealmController.getInstance().deleteFavoriteMural(favoriteMural.getId());
+                    fav_img.setColorFilter(Color.parseColor("#908B8A89"), PorterDuff.Mode.SRC_IN);
+                }else{
+                    Log.e("Record exist not ","Record Exist not");
+                    RealmController.getInstance().addFavoriteMural(favoriteMural);
+                    fav_img.setColorFilter(Color.parseColor("#5ab3a4"), PorterDuff.Mode.SRC_IN);
+                }
+            }
+        });
+
+        seen_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SeenMural favoriteMural = new SeenMural();
+                favoriteMural.setId(muralsObject.getId());
+                favoriteMural.setImageResourceID(img_id);
+                favoriteMural.setArtistName(muralsObject.getArtist_text()+"");
+                favoriteMural.setMuralTitle(muralsObject.getTitle()+"");
+                favoriteMural.setActive(muralsObject.getActive()+"");
+                favoriteMural.setLocationText(muralsObject.getLocation_text());
+                favoriteMural.setAboutThisText(muralsObject.getAbout_text());
+                favoriteMural.setTags(muralsObject.getTags());
+                favoriteMural.setAdditionalLink1(muralsObject.getAdditional_link_first());
+                favoriteMural.setAdditionalLink2(muralsObject.getAdditional_link_second());
+                favoriteMural.setAdditionalLink3(muralsObject.getAdditional_limk_third());
+                favoriteMural.setLatitude(muralsObject.getLatitude()+"");
+                favoriteMural.setLongitude(muralsObject.getLongitude()+"");
+
+                if(RealmController.getInstance().isSeenMuralExist(muralsObject.getId())){
+                    Log.e("Record exist","Record Exist");
+                    RealmController.getInstance().deleteSeenMarkedMural(favoriteMural.getId());
+                    seen_img.setColorFilter(Color.parseColor("#908B8A89"), PorterDuff.Mode.SRC_IN);
+                }else{
+                    Log.e("Record exist not ","Record Exist not");
+                    RealmController.getInstance().addSeenMural(favoriteMural);
+                    seen_img.setColorFilter(Color.parseColor("#5ab3a4"), PorterDuff.Mode.SRC_IN);
+                }
+            }
+        });
+        bookmarks_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BookmarkedMural favoriteMural = new BookmarkedMural();
+                favoriteMural.setId(muralsObject.getId());
+                favoriteMural.setImageResourceID(img_id);
+                favoriteMural.setArtistName(muralsObject.getArtist_text()+"");
+                favoriteMural.setMuralTitle(muralsObject.getTitle()+"");
+                favoriteMural.setActive(muralsObject.getActive()+"");
+                favoriteMural.setLocationText(muralsObject.getLocation_text());
+                favoriteMural.setAboutThisText(muralsObject.getAbout_text());
+                favoriteMural.setTags(muralsObject.getTags());
+                favoriteMural.setAdditionalLink1(muralsObject.getAdditional_link_first());
+                favoriteMural.setAdditionalLink2(muralsObject.getAdditional_link_second());
+                favoriteMural.setAdditionalLink3(muralsObject.getAdditional_limk_third());
+                favoriteMural.setLatitude(muralsObject.getLatitude()+"");
+                favoriteMural.setLongitude(muralsObject.getLongitude()+"");
+
+                if(RealmController.getInstance().isBookMarhedMuralExist(muralsObject.getId())){
+                    Log.e("Record exist","Record Exist");
+                    RealmController.getInstance().deleteBookMarkedMural(favoriteMural.getId());
+                    book_img.setColorFilter(Color.parseColor("#908B8A89"), PorterDuff.Mode.SRC_IN);
+                }else{
+                    Log.e("Record exist not ","Record Exist not");
+                    RealmController.getInstance().addBookMarkedMural(favoriteMural);
+                    book_img.setColorFilter(Color.parseColor("#5ab3a4"), PorterDuff.Mode.SRC_IN);
+                }
+            }
+        });
+
+
         tv_author=muralview.findViewById(R.id.tv_author);
         textView_direction=muralview.findViewById(R.id.tv_get_direction);
         textView_direction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String url = "http://maps.google.com/maps?f=d&daddr=" + lat + "," + lon + "&dirflg=d";
-
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
                 startActivity(intent);
             }
         });
         tv_author.setText(bundle.getString("artist"));
-
         tv_mural=muralview.findViewById(R.id.tv_mural);
         tv_mural.setText(bundle.getString("name"));
-
         textView_about_artist=muralview.findViewById(R.id.tv_about_artist);
         textView_about_artist.setText(bundle.getString("artist_text"));
         textView_about_mural=muralview.findViewById(R.id.tv_about_mural);
         textView_about_mural.setText(bundle.getString("about_text"));
-
         textView_add_link_first=muralview.findViewById(R.id.tv_add_link_1);
         textView_add_link_first.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,13 +302,12 @@ String selected_flag;
         }
 
 
-        String image_url="https://canvs.cruxcode.nyc/mural_large_"+img_id+".jpg?size=large&requestType=image";
         Log.e(TAG, "onCreateView: "+image_url );
 
         Glide.with(GlobalReferences.getInstance().baseActivity).load(image_url)
                 .thumbnail(0.5f)
-//                .placeholder(R.drawable.iv)
-//                .error(R.drawable.profile)
+//                .placeholder(R.color.grey_)
+//                .error(R.color.grey_)
                 .into(imageView);
         textView_location.setText(location);
         String tags=bundle.getString("tags");

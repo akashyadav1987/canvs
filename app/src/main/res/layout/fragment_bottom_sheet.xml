@@ -6,21 +6,21 @@
     android:background="#ffffff"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:background="#e5e5e5"
         >
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="FILTERS"
-        android:padding="12dp"
-        android:textColor="#929292"
-        android:gravity="center"
-        android:layout_weight="3"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="FILTERS"
+            android:padding="12dp"
+            android:textColor="#929292"
+            android:gravity="center"
+            android:layout_weight="3"/>
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"

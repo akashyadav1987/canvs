@@ -10,96 +10,96 @@
         android:orientation="vertical"
         >
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_top"
-        android:layout_width="wrap_content"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@drawable/toolbar_back"
-        android:maxHeight="?attr/actionBarSize"
-        android:minHeight="?attr/actionBarSize"
-        android:visibility="gone"
-        app:theme="@style/Widget.AppCompat.Toolbar">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_top"
+            android:layout_width="wrap_content"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@drawable/toolbar_back"
+            android:maxHeight="?attr/actionBarSize"
+            android:minHeight="?attr/actionBarSize"
+            android:visibility="gone"
+            app:theme="@style/Widget.AppCompat.Toolbar">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical">
-
-            <ImageView
-                android:id="@+id/filter"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:adjustViewBounds="true"
-                android:scaleType="fitCenter"
-                android:src="@drawable/equalizer" />
-
-            <FrameLayout
-                android:layout_centerInParent="true"
-                android:layout_centerVertical="true"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <com.canvas.widget.RobotoCondensedBoldTextView
-                    android:id="@+id/tool_bar_title"
-                    android:gravity="center_vertical|center"
-                    android:layout_gravity="center|center_vertical"
-                    android:layout_centerInParent="true"
-                    android:layout_centerVertical="true"
-                    android:layout_width="wrap_content"
-                    android:text="asxaasaxaxsaxa"
-                    android:textColor="@android:color/white"
-                    android:textSize="20sp"
-                    android:visibility="gone"
-                    android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical">
 
                 <ImageView
-                    android:visibility="gone"
-                    android:id="@+id/toolbar_image"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/filter"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/equalizer" />
+
+                <FrameLayout
                     android:layout_centerInParent="true"
                     android:layout_centerVertical="true"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
-                    android:gravity="center_vertical"
-                    android:src="@drawable/title_app" />
-            </FrameLayout>
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-            <com.joanzapata.iconify.widget.IconTextView
-                android:id="@+id/search_box"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="10dp"
-                android:gravity="center|center_vertical"
-                android:paddingRight="10dp"
-                android:shadowColor="#22000000"
-                android:shadowDx="3"
-                android:shadowDy="3"
-                android:shadowRadius="1"
-                android:text="{fa-search}"
-                android:textColor="#FFFFFF"
-                android:textSize="18dp" />
-        </RelativeLayout>
-    </android.support.v7.widget.Toolbar>
+                    <com.canvas.widget.RobotoCondensedBoldTextView
+                        android:id="@+id/tool_bar_title"
+                        android:gravity="center_vertical|center"
+                        android:layout_gravity="center|center_vertical"
+                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true"
+                        android:layout_width="wrap_content"
+                        android:text="asxaasaxaxsaxa"
+                        android:textColor="@android:color/white"
+                        android:textSize="20sp"
+                        android:visibility="gone"
+                        android:layout_height="wrap_content" />
 
-<TextView
-    android:id="@+id/tv_mural"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center|bottom"
-    android:textColor="@color/red_"
-   android:paddingTop="12dp"
-    android:paddingLeft="12dp"
-    android:paddingRight="12dp"
-    android:textSize="20sp"
-    android:layout_marginLeft="20dp"
-    android:layout_marginRight="20dp"
-    />
+                    <ImageView
+                        android:visibility="gone"
+                        android:id="@+id/toolbar_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center_vertical"
+                        android:src="@drawable/title_app" />
+                </FrameLayout>
+
+                <com.joanzapata.iconify.widget.IconTextView
+                    android:id="@+id/search_box"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center|center_vertical"
+                    android:paddingRight="10dp"
+                    android:shadowColor="#22000000"
+                    android:shadowDx="3"
+                    android:shadowDy="3"
+                    android:shadowRadius="1"
+                    android:text="{fa-search}"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18dp" />
+            </RelativeLayout>
+        </android.support.v7.widget.Toolbar>
+
+        <TextView
+            android:id="@+id/tv_mural"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|bottom"
+            android:textColor="@color/red_"
+            android:paddingTop="12dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:textSize="20sp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            />
 
         <TextView
             android:id="@+id/tv_author"
@@ -114,343 +114,345 @@
 
 
 
-    <ImageView
-        android:id="@+id/iv_image_detail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="#fff"
-        android:orientation="vertical"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp">
+        <ImageView
+            android:id="@+id/iv_image_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="#fff"
+            android:orientation="vertical"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp"
+                android:weightSum="3"
+                android:padding="8dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_margin="8dp">
+                    <android.support.v7.widget.CardView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:elevation="12dp"
+                        android:id="@+id/bookmarks_btn"
+                        app:cardCornerRadius="40dp"
+                        app:cardBackgroundColor="#fff"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
+                        android:innerRadius="0dp"
+                        android:shape="ring"
+                        android:thicknessRatio="1.9">
+                        <ImageView
+                            android:layout_height="80dp"
+                            android:layout_width="match_parent"
+                            android:id="@+id/book_img"
+                            android:scaleType="center"
+                            app:srcCompat="@drawable/ic_bookmark"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerHorizontal="true">
+                        </ImageView>
+                    </android.support.v7.widget.CardView>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Bookmarks"
+                        android:gravity="center"
+                        android:textColor="#000"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_margin="8dp">
+                    <android.support.v7.widget.CardView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:elevation="12dp"
+                        android:layout_gravity="center"
+                        android:id="@+id/seen_btn"
+                        app:cardCornerRadius="40dp"
+                        app:cardBackgroundColor="#fff"
+                        android:innerRadius="0dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
+                        android:shape="ring"
+                        android:thicknessRatio="1.9">
+                        <ImageView
+                            android:id="@+id/seen_img"
+                            android:layout_height="80dp"
+                            android:layout_width="match_parent"
+                            app:srcCompat="@drawable/ic_tick"
+                            android:scaleType="center"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerHorizontal="true">
+                        </ImageView>
+                    </android.support.v7.widget.CardView>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Seen"
+                        android:gravity="center"
+                        android:textColor="#000"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_margin="8dp">
+                    <android.support.v7.widget.CardView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:elevation="12dp"
+                        android:layout_marginTop="4dp"
+                        android:id="@+id/favorite_btn"
+                        app:cardBackgroundColor="#fff"
+                        app:cardCornerRadius="40dp"
+                        android:layout_centerHorizontal="true"
+                        android:innerRadius="0dp"
+                        android:shape="ring"
+
+                        android:layout_gravity="end"
+                        android:thicknessRatio="1.9"
+                        android:layout_marginBottom="4dp">
+                        <ImageView
+                            android:id="@+id/fav_img"
+                            android:layout_height="80dp"
+                            android:layout_width="match_parent"
+                            app:srcCompat="@drawable/ic_favorite_heart_button"
+                            android:layout_alignParentTop="true"
+                            android:scaleType="center"
+                            android:layout_centerHorizontal="true">
+                        </ImageView>
+                    </android.support.v7.widget.CardView>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Favorites"
+                        android:gravity="center"
+                        android:textColor="#000"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#ff403b"
+                android:text="Location"
+                android:padding="8dp"/>
+            <TextView
+                android:id="@+id/tv_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:padding="8dp"/>
+
+        </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="12dp"
-            android:weightSum="3"
-            android:padding="8dp">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_margin="8dp">
-                <android.support.v7.widget.CardView
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:elevation="12dp"
-                    android:id="@+id/view2"
-                    app:cardCornerRadius="40dp"
-                    app:cardBackgroundColor="#fff"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="4dp"
-                    android:innerRadius="0dp"
-                    android:shape="ring"
-                    android:thicknessRatio="1.9">
-                    <ImageView
-                        android:layout_height="80dp"
-                        android:layout_width="match_parent"
-                        android:id="@+id/imageView3"
-                        android:scaleType="center"
-                        app:srcCompat="@drawable/ic_bookmark"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true">
-                    </ImageView>
-                </android.support.v7.widget.CardView>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Bookmarks"
-                    android:gravity="center"
-                    android:textColor="#000"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_margin="8dp">
-            <android.support.v7.widget.CardView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:elevation="12dp"
-                android:layout_gravity="center"
-                android:id="@+id/imageView2"
-                app:cardCornerRadius="40dp"
-                app:cardBackgroundColor="#fff"
-                android:innerRadius="0dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
-                android:shape="ring"
-                android:thicknessRatio="1.9">
-                <ImageView
-                    android:layout_height="80dp"
-                    android:layout_width="match_parent"
-                    app:srcCompat="@drawable/ic_tick"
-                    android:scaleType="center"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true">
-                </ImageView>
-            </android.support.v7.widget.CardView>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Seen"
-                    android:gravity="center"
-                    android:textColor="#000"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_margin="8dp">
-            <android.support.v7.widget.CardView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:elevation="12dp"
-                android:layout_marginTop="4dp"
-                android:id="@+id/imageView1"
-                app:cardBackgroundColor="#fff"
-                app:cardCornerRadius="40dp"
-                android:layout_centerHorizontal="true"
-                android:innerRadius="0dp"
-                android:shape="ring"
-
-                android:layout_gravity="end"
-                android:thicknessRatio="1.9"
-                android:layout_marginBottom="4dp">
-                <ImageView
-                    android:layout_height="80dp"
-                    android:layout_width="match_parent"
-                    app:srcCompat="@drawable/ic_favorite_heart_button"
-                    android:layout_alignParentTop="true"
-                    android:scaleType="center"
-                    android:layout_centerHorizontal="true">
-                </ImageView>
-            </android.support.v7.widget.CardView>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Favorites"
-                    android:gravity="center"
-                    android:textColor="#000"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#ff403b"
-            android:text="Location"
-            android:padding="8dp"/>
-        <TextView
-            android:id="@+id/tv_location"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="#000"
-            android:padding="8dp"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp">
-        <TextView
-            android:id="@+id/tv_get_direction"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="GET DIRECTIONS"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:background="@color/green"
-            android:padding="8dp"
-            android:textColor="@android:color/white"
-            />
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#d9d4d4"
-            />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Completion Year"
-            android:textColor="@color/red_"
-            android:padding="8dp"/>
-        <TextView
-            android:id="@+id/tv_completion_year"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="2014"
-            android:textColor="@android:color/black"
-            android:padding="8dp"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#d9d4d4"
-            />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="About this mural"
-            android:textColor="@color/red_"
-            android:layout_marginTop="12dp"
-            android:padding="8dp"/>
-        <TextView
-            android:id="@+id/tv_about_mural"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="@android:color/black"
-            android:padding="8dp"
-            />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#d9d4d4"
-            android:layout_marginTop="8dp"
-            />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="About this artist"
-            android:textColor="@color/red_"
-            android:layout_marginTop="12dp"
-            android:padding="8dp"/>
-
-        <TextView
-            android:id="@+id/tv_about_artist"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-             android:textColor="@android:color/black"
-            android:padding="8dp"
-            />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#d9d4d4"
-            android:layout_marginTop="8dp"
-            />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Tags"
-            android:textColor="@color/red_"
-            android:layout_marginTop="12dp"
-            android:padding="8dp"/>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_tags"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scrollbars="none"
-            app:reverseLayout="true"
-            />
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#d9d4d4"
-            android:layout_marginTop="8dp"
-            />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Additional link"
-            android:textColor="@color/red_"
-            android:layout_marginTop="12dp"
-            android:padding="8dp"/>
-
-        <TextView
-            android:id="@+id/tv_add_link_1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:paddingLeft="8dp"
-              android:textColor="@android:color/black"
-            android:padding="8dp"
-            />
-        <TextView
-            android:id="@+id/tv_add_link_2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:paddingLeft="8dp"
-              android:textColor="@android:color/black"
-            android:padding="8dp"
-            />
-        <TextView
-            android:id="@+id/tv_add_link_3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:paddingLeft="8dp"
-             android:textColor="@android:color/black"
-            android:padding="8dp"
-            />
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#d9d4d4"
-            android:layout_marginTop="8dp"
-            />
-        <RelativeLayout
-            android:id="@+id/flag"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            >
-
-            <ImageView
-                android:id="@+id/iv_flag"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginTop="12dp"
-
-                android:layout_centerVertical="true"
-                app:srcCompat="@drawable/ic_flag"/>
-
-        <TextView
-            android:id="@+id/tv_flag_text"
-            android:layout_toRightOf="@id/iv_flag"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
-            android:text="Flag this mural"
-            android:textColor="@color/red_"
-            android:layout_marginTop="12dp"
-            />
+            android:orientation="vertical"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
             <TextView
-                android:id="@+id/tv_flag_detail"
-                android:layout_toRightOf="@id/iv_flag"
-                android:layout_below="@id/tv_flag_text"
+                android:id="@+id/tv_get_direction"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Contact us if there is any incorrect info?"
-                android:layout_marginLeft="12dp"
+                android:text="GET DIRECTIONS"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:background="@color/green"
+                android:padding="8dp"
+                android:textColor="@android:color/white"
+                />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#d9d4d4"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Completion Year"
+                android:textColor="@color/red_"
+                android:padding="8dp"/>
+            <TextView
+                android:id="@+id/tv_completion_year"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="2014"
                 android:textColor="@android:color/black"
-               />
-        </RelativeLayout>
-    </LinearLayout>
+                android:padding="8dp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#d9d4d4"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="About this mural"
+                android:textColor="@color/red_"
+                android:layout_marginTop="12dp"
+                android:padding="8dp"/>
+            <TextView
+                android:id="@+id/tv_about_mural"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@android:color/black"
+                android:padding="8dp"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#d9d4d4"
+                android:layout_marginTop="8dp"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="About this artist"
+                android:textColor="@color/red_"
+                android:layout_marginTop="12dp"
+                android:padding="8dp"/>
+
+            <TextView
+                android:id="@+id/tv_about_artist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@android:color/black"
+                android:padding="8dp"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#d9d4d4"
+                android:layout_marginTop="8dp"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tags"
+                android:textColor="@color/red_"
+                android:layout_marginTop="12dp"
+                android:padding="8dp"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_tags"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                app:reverseLayout="true"
+                />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#d9d4d4"
+                android:layout_marginTop="8dp"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Additional link"
+                android:textColor="@color/red_"
+                android:layout_marginTop="12dp"
+                android:padding="8dp"/>
+
+            <TextView
+                android:id="@+id/tv_add_link_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:paddingLeft="8dp"
+                android:textColor="@android:color/black"
+                android:padding="8dp"
+                />
+            <TextView
+                android:id="@+id/tv_add_link_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:paddingLeft="8dp"
+                android:textColor="@android:color/black"
+                android:padding="8dp"
+                />
+            <TextView
+                android:id="@+id/tv_add_link_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:paddingLeft="8dp"
+                android:textColor="@android:color/black"
+                android:padding="8dp"
+                />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#d9d4d4"
+                android:layout_marginTop="8dp"
+                />
+            <RelativeLayout
+                android:id="@+id/flag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                >
+
+                <ImageView
+                    android:id="@+id/iv_flag"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginTop="12dp"
+
+                    android:layout_centerVertical="true"
+                    app:srcCompat="@drawable/ic_flag"/>
+
+                <TextView
+                    android:id="@+id/tv_flag_text"
+                    android:layout_toRightOf="@id/iv_flag"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:text="Flag this mural"
+                    android:textColor="@color/red_"
+                    android:layout_marginTop="12dp"
+                    />
+                <TextView
+                    android:id="@+id/tv_flag_detail"
+                    android:layout_toRightOf="@id/iv_flag"
+                    android:layout_below="@id/tv_flag_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Contact us if there is any incorrect info?"
+                    android:layout_marginLeft="12dp"
+                    android:textColor="@android:color/black"
+                    />
+            </RelativeLayout>
+        </LinearLayout>
 
     </LinearLayout>
 

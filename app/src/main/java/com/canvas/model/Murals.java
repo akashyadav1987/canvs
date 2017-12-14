@@ -1,10 +1,18 @@
 package com.canvas.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import io.realm.RealmModel;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * Created by akashyadav on 12/2/17.
  */
 
-public class Murals {
+public class Murals  extends RealmObject implements RealmModel, Parcelable {
+    @PrimaryKey
     private int id;
    private  int active;
    private int derelict;
@@ -14,6 +22,41 @@ public class Murals {
     private String artist_text;
     private String additional_link_first;
     private String additional_link_second;
+
+    public Murals(){
+
+    }
+    public Murals(Parcel in) {
+        id = in.readInt();
+        active = in.readInt();
+        derelict = in.readInt();
+        image_resource_id = in.readString();
+        location_text = in.readString();
+        tags = in.readString();
+        artist_text = in.readString();
+        additional_link_first = in.readString();
+        additional_link_second = in.readString();
+        additional_link_third = in.readString();
+        about_text = in.readString();
+        latitude = in.readDouble();
+        longitude = in.readDouble();
+        title = in.readString();
+        author = in.readString();
+        image_path = in.readString();
+        popularity = in.readInt();
+    }
+
+    public static final Creator<Murals> CREATOR = new Creator<Murals>() {
+        @Override
+        public Murals createFromParcel(Parcel in) {
+            return new Murals(in);
+        }
+
+        @Override
+        public Murals[] newArray(int size) {
+            return new Murals[size];
+        }
+    };
 
     public String getAdditional_limk_third() {
         return additional_link_third;
@@ -159,4 +202,30 @@ public class Murals {
     }
 
   private   int popularity;
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeInt(active);
+        parcel.writeInt(derelict);
+        parcel.writeString(image_resource_id);
+        parcel.writeString(location_text);
+        parcel.writeString(tags);
+        parcel.writeString(artist_text);
+        parcel.writeString(additional_link_first);
+        parcel.writeString(additional_link_second);
+        parcel.writeString(additional_link_third);
+        parcel.writeString(about_text);
+        parcel.writeDouble(latitude);
+        parcel.writeDouble(longitude);
+        parcel.writeString(title);
+        parcel.writeString(author);
+        parcel.writeString(image_path);
+        parcel.writeInt(popularity);
+    }
 }

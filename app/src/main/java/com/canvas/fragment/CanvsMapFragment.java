@@ -9,21 +9,15 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +28,7 @@ import com.canvas.R;
 import com.canvas.common.CommonFragment;
 import com.canvas.common.Constants;
 import com.canvas.common.GlobalReferences;
+import com.canvas.controller.RealmController;
 import com.canvas.io.http.ApiRequests;
 import com.canvas.io.http.BaseTask;
 import com.canvas.io.http.BaseTaskJson;
@@ -59,7 +54,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -71,13 +65,11 @@ import com.google.gson.reflect.TypeToken;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 
-import java.lang.reflect.Type;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
@@ -118,6 +110,11 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
         builder = new LatLngBounds.Builder();
 
         list_murals = new ArrayList<>();
+        try {
+            MapsInitializer.initialize(getActivity());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap gmap) {
@@ -167,27 +164,9 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
 
 
 
-        imageView_filter = mapViewLayout.findViewById(R.id.filter);
-        imageView_filter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                BottomSheetDialogFragment bottomSheetDialogFragment = new BottomSheetDialogFragment();
-//                bottomSheetDialogFragment.show(getFragmentManager(), bottomSheetDialogFragment.getTag());
 
-                BottomSheetDialog mBottomSheetDialog = new BottomSheetDialog(getActivity());
-                View sheetView = getActivity().getLayoutInflater().inflate(R.layout.fragment_bottom_sheet, null);
-                mBottomSheetDialog.setContentView(sheetView);
-                mBottomSheetDialog.show();
-
-
-            }
-        });
         mapView.onResume();
-        try {
-            MapsInitializer.initialize(getActivity());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
         //Call api here
         if (Utility.isNetworkAvailable(GlobalReferences.getInstance().baseActivity)) {
             ApiRequests.getInstance().get_murals(GlobalReferences.getInstance().baseActivity, this);
@@ -237,7 +216,7 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
         textView_author = mapViewLayout.findViewById(R.id.author);
         textView_more = mapViewLayout.findViewById(R.id.tv_more);
         cardView_dialog = mapViewLayout.findViewById(R.id.card_dialog);
-        GlobalReferences.getInstance().toolbar = (Toolbar) mapViewLayout.findViewById(R.id.toolbar_top);
+        //GlobalReferences.getInstance().toolbar = (Toolbar) mapViewLayout.findViewById(R.id.toolbar_top);
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();
@@ -377,11 +356,11 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
             System.out.println(json);
 
             List<MuralsArray> fromJson = gson.fromJson(json, type);
-            JSONArray jsonArray = listener.getJsonArrayResponse();
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject object = jsonArray.getJSONObject(i);
-                Murals murals = new Murals();
-                murals.setActive(object.getInt("id"));
+            JSONArray jsonArray=listener.getJsonArrayResponse();
+            for (int i=0;i<jsonArray.length();i++){
+                JSONObject object=jsonArray.getJSONObject(i);
+                Murals murals=new Murals();
+                murals.setId(object.getInt("id"));
                 murals.setDerelict(object.getInt("derelict"));
                 murals.setActive(object.getInt("active"));
                 murals.setPopularity(object.getInt("popularity"));
@@ -398,6 +377,8 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
                 murals.setAdditional_link_first(object.getString("additionalLink1"));
                 murals.setAdditional_link_second(object.getString("additionalLink2"));
                 murals.setAdditional_link_third(object.getString("additionalLink3"));
+
+                RealmController.getInstance().addMural(murals);
                 // builder.include(new LatLng(object.getDouble("latitude"),object.getDouble("longitude")));
                 mMap.addMarker(new MarkerOptions().position(new LatLng(object.getDouble("latitude"), object.getDouble("longitude"))).icon(BitmapDescriptorFactory.fromResource(R.drawable.murals))).setTag(i);
                 list_murals.add(murals);
@@ -411,12 +392,12 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
             }
 
 
-            LatLngBounds bounds = builder.build();
+           // LatLngBounds bounds = builder.build();
 
             // mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 20));
 
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -490,52 +471,57 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
 //        View view_dialog = inflater.inflate(R.layout.map_dialog, null);
 //        dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
         cardView_dialog.setVisibility(View.VISIBLE);
-
-        final String image_id = murals.getImage_resource_id().toLowerCase();
-        String image_url = "https://canvs.cruxcode.nyc/mural_thumb_" + image_id + ".jpg?size=thumb&requestType=image";
-        textView_more.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                FragmentMuralDetail fragmentMuralDetail = new FragmentMuralDetail();
-                Bundle bundle = new Bundle();
-                bundle.putString("image_id", image_id);
-                bundle.putString("location_text", murals.getLocation_text());
-
-                bundle.putString("artist_text", murals.getArtist_text());
-                bundle.putString("about_text", murals.getAbout_text());
-                bundle.putString("tags", murals.getTags());
-                bundle.putString("addlink1", murals.getAdditional_link_first());
-                bundle.putString("addlink2", murals.getAdditional_link_second());
-                bundle.putString("addlink3", murals.getAdditional_limk_third());
-                bundle.putString("artist", murals.getAuthor());
-                bundle.putString("name", murals.getTitle());
-                bundle.putDouble("lat", murals.getLatitude());
-                bundle.putDouble("lon", murals.getLongitude());
-                fragmentMuralDetail.setArguments(bundle);
-                ((BaseActivity) GlobalReferences.getInstance().baseActivity).addFragmentWithBackStack(fragmentMuralDetail, true);
-                cardView_dialog.setVisibility(View.GONE);
-            }
-        });
-        textView_title.setText(murals.getTitle());
-
-        textView_author.setText(murals.getAuthor());
-
-        Log.e(TAG, "onCreate: " + image_url);
-        Glide.with(GlobalReferences.getInstance().baseActivity).load(image_url)
-                .thumbnail(0.5f)
-//                .placeholder(R.drawable.iv)
-//                .error(R.drawable.profile)
-                .into(imageView);
+try {
+    final String image_id = murals.getImage_resource_id().toLowerCase();
+    String image_url = "https://canvs.cruxcode.nyc/mural_thumb_" + image_id.toLowerCase() + ".jpg?size=thumb&requestType=image";
+    textView_more.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
 
 
-        // dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            FragmentMuralDetail fragmentMuralDetail = new FragmentMuralDetail();
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("mural", murals);
+            bundle.putString("image_id", image_id);
+            bundle.putString("location_text", murals.getLocation_text());
+
+            bundle.putString("artist_text", murals.getArtist_text());
+            bundle.putString("about_text", murals.getAbout_text());
+            bundle.putString("tags", murals.getTags());
+            bundle.putString("addlink1", murals.getAdditional_link_first());
+            bundle.putString("addlink2", murals.getAdditional_link_second());
+            bundle.putString("addlink3", murals.getAdditional_limk_third());
+            bundle.putString("artist", murals.getAuthor());
+            bundle.putString("name", murals.getTitle());
+            bundle.putDouble("lat", murals.getLatitude());
+            bundle.putDouble("lon", murals.getLongitude());
+            fragmentMuralDetail.setArguments(bundle);
+            ((BaseActivity) GlobalReferences.getInstance().baseActivity).addFragmentWithBackStack(fragmentMuralDetail, true);
+            cardView_dialog.setVisibility(View.GONE);
+        }
+    });
+    textView_title.setText(murals.getTitle());
+
+    textView_author.setText(murals.getAuthor());
+
+    Log.e(TAG, "onCreate: " + image_url);
+    Glide.with(GlobalReferences.getInstance().baseActivity).load(image_url)
+            .thumbnail(1)
+            .placeholder(R.color.grey_)
+            .error(R.color.grey_)
+            .into(imageView);
+
+
+    // dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 //        dialog1.setContentView(view_dialog);
 //        dialog1.show();
 //        Window window1 = dialog1.getWindow();
 //        window1.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 //        CustomAlertDialog customAlertDialog =new CustomAlertDialog(getActivity(),murals);
 //        customAlertDialog.show();
+}catch (Exception e){
+    e.printStackTrace();
+}
         return false;
     }
 

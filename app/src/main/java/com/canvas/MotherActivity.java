@@ -6,9 +6,9 @@ import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -18,7 +18,11 @@ import android.widget.LinearLayout;
 
 import com.canvas.common.CommonFragment;
 import com.canvas.common.GlobalReferences;
+<<<<<<< Updated upstream
 import com.canvas.db.Pref;
+=======
+import com.canvas.controller.RealmController;
+>>>>>>> Stashed changes
 import com.canvas.fragment.AboutUsFragment;
 import com.canvas.fragment.BookMarkFragment;
 import com.canvas.fragment.CanvsMapFragment;
@@ -34,18 +38,20 @@ import java.util.ArrayList;
 public class MotherActivity extends BaseActivity {
     private MenuItem bookmarks, seen, fav, about;
 
-    private MaterialSearchView searchView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mother);
-        addFragmentWithBackStack(new CanvsMapFragment(), true);
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)findViewById(R.id.bottom_navigation);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
         bottomNavigationView.setSelectedItemId(-1);
         Menu menu = bottomNavigationView.getMenu();
         GlobalReferences.getInstance().baseActivity = this;
+        RealmController.with(this);
+        RealmController.getInstance().deleteAllMural();
+        Log.e("All mural deleted","ALl mural deleted");
         GlobalReferences.getInstance().toolbar = (Toolbar) findViewById(R.id.toolbar_top);
         GlobalReferences.getInstance().pref  = new Pref(this);
         GlobalReferences.getInstance().progresBar = (LinearLayout) findViewById(R.id.linlaHeaderProgress);
@@ -57,9 +63,30 @@ public class MotherActivity extends BaseActivity {
         seen.setCheckable(true);
         fav.setCheckable(true);
         about.setCheckable(true);
+        //RealmController.with(this).;
         String uid = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         Log.e("####uid",uid+"");
-
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                // updateTab(item.getItemId());
+                switch (item.getItemId()) {
+                    case R.id.bookmarks:
+                        ((BaseActivity) GlobalReferences.getInstance().baseActivity).addFragmentWithBackStack(new BookMarkFragment(), true);
+                        break;
+                    case R.id.seen:
+                        ((BaseActivity) GlobalReferences.getInstance().baseActivity).addFragmentWithBackStack(new SeenFragment(), true);
+                        break;
+                    case R.id.fav:
+                        ((BaseActivity) GlobalReferences.getInstance().baseActivity).addFragmentWithBackStack(new FavoritesFragment(), true);
+                        break;
+                    case R.id.about:
+                        ((BaseActivity) GlobalReferences.getInstance().baseActivity).addFragmentWithBackStack(new AboutUsFragment(), true);
+                        break;
+                }
+                return false;
+            }
+        });
         setSupportActionBar(GlobalReferences.getInstance().toolbar);
         //getSupportActionBar().setDisplayShowHomeEnabled(true);
         //getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -133,36 +160,41 @@ public class MotherActivity extends BaseActivity {
         });
 
 
-        searchView = (MaterialSearchView) findViewById(R.id.search_view);
-        searchView.setVoiceSearch(false);
-        searchView.setCursorDrawable(R.drawable.custom_cursor);
-        searchView.setEllipsize(true);
-       // searchView.setSuggestions(getResources().getStringArray(R.array.query_suggestions));
-        searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
+       GlobalReferences.getInstance().searchView = (SearchView) findViewById(R.id.search_view);
+        int id = GlobalReferences.getInstance().searchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
+       // TextView textView = (TextView) GlobalReferences.getInstance().searchView.findViewById(id);
+        //textView.setTextColor(Color.parseColor("#8B8A89"));
+//        searchView.setVoiceSearch(false);
+//        searchView.setCursorDrawable(R.drawable.custom_cursor);
+//        searchView.setEllipsize(true);
+//       // searchView.setSuggestions(getResources().getStringArray(R.array.query_suggestions));
+//        searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                //Do some magic
+//                return false;
+//            }
+//        });
+//
+//        searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
+//            @Override
+//            public void onSearchViewShown() {
+//                //Do some magic
+//            }
+//
+//            @Override
+//            public void onSearchViewClosed() {
+//                //Do some magic
+//            }
+//        });
 
-                return false;
-            }
+        addFragmentWithBackStack(new CanvsMapFragment(), true);
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                //Do some magic
-                return false;
-            }
-        });
-
-        searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
-            @Override
-            public void onSearchViewShown() {
-                //Do some magic
-            }
-
-            @Override
-            public void onSearchViewClosed() {
-                //Do some magic
-            }
-        });
     }
 
     @Override
@@ -179,9 +211,9 @@ public class MotherActivity extends BaseActivity {
             finish();
         } else {
             try {
-                if (searchView.isSearchOpen()) {
-                    searchView.closeSearch();
-                }
+               // if (searchView.isSearchOpen()) {
+                  //  searchView.closeSearch();
+                //}
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -208,7 +240,7 @@ public class MotherActivity extends BaseActivity {
                 about.setIcon(new IconDrawable(getApplicationContext(), FontAwesomeIcons.fa_info_circle)
                         .colorRes(R.color.grey)
                         .actionBarSize());
-                ((BaseActivity) GlobalReferences.getInstance().baseActivity).addFragmentWithBackStack(new BookMarkFragment(), true);
+                //((BaseActivity) GlobalReferences.getInstance().baseActivity).addFragmentWithBackStack(new BookMarkFragment(), true);
 
                 break;
             case R.id.seen:
@@ -224,7 +256,7 @@ public class MotherActivity extends BaseActivity {
                 about.setIcon(new IconDrawable(getApplicationContext(), FontAwesomeIcons.fa_info_circle)
                         .colorRes(R.color.grey)
                         .actionBarSize());
-                ((BaseActivity) GlobalReferences.getInstance().baseActivity).addFragmentWithBackStack(new SeenFragment(), true);
+               // ((BaseActivity) GlobalReferences.getInstance().baseActivity).addFragmentWithBackStack(new SeenFragment(), true);
 
                 break;
             case R.id.fav:
@@ -240,7 +272,7 @@ public class MotherActivity extends BaseActivity {
                 about.setIcon(new IconDrawable(getApplicationContext(), FontAwesomeIcons.fa_info_circle)
                         .colorRes(R.color.grey)
                         .actionBarSize());
-                ((BaseActivity) GlobalReferences.getInstance().baseActivity).addFragmentWithBackStack(new FavoritesFragment(), true);
+                //((BaseActivity) GlobalReferences.getInstance().baseActivity).addFragmentWithBackStack(new FavoritesFragment(), true);
 
                 break;
             case R.id.about:
@@ -256,7 +288,7 @@ public class MotherActivity extends BaseActivity {
                 fav.setIcon(new IconDrawable(getApplicationContext(), FontAwesomeIcons.fa_heart)
                         .colorRes(R.color.grey)
                         .actionBarSize());
-                ((BaseActivity) GlobalReferences.getInstance().baseActivity).addFragmentWithBackStack(new AboutUsFragment(), true);
+                //((BaseActivity) GlobalReferences.getInstance().baseActivity).addFragmentWithBackStack(new AboutUsFragment(), true);
 
                 break;
             default:
@@ -281,7 +313,7 @@ public class MotherActivity extends BaseActivity {
         getMenuInflater().inflate(R.menu.menu_search, menu);
 
         MenuItem item = menu.findItem(R.id.action_search);
-        searchView.setMenuItem(item);
+       // GlobalReferences.getInstance().searchView..setMenuItem(item);
 
         return true;
 
@@ -296,7 +328,7 @@ public class MotherActivity extends BaseActivity {
             if (matches != null && matches.size() > 0) {
                 String searchWrd = matches.get(0);
                 if (!TextUtils.isEmpty(searchWrd)) {
-                    searchView.setQuery(searchWrd, false);
+                    GlobalReferences.getInstance().searchView.setQuery(searchWrd, false);
                 }
             }
 

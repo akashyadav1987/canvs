@@ -25,14 +25,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
+            <com.canvas.widget.RobotoMediumTextView
                 android:textColor="@color/red_"
                 android:textSize="15sp"
                 android:text="@string/canvs_top_header_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <TextView
+            <com.canvas.widget.RobotoRegularTextView
                 android:layout_marginTop="10dp"
                 android:textColor="#666666"
                 android:textSize="13sp"
@@ -181,43 +181,43 @@
                     android:src="@drawable/instaa" />
             </LinearLayout>
 
-           <LinearLayout
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:orientation="horizontal"
-               android:layout_marginTop="20dp">
-               <ImageView
-                   android:padding="7dp"
-                   android:id="@+id/crux_share_feedback"
-                   android:layout_width="0dp"
-                   android:layout_weight="0.5"
-                   android:layout_height="wrap_content"
-                   android:adjustViewBounds="true"
-                   android:scaleType="centerCrop"
-                   android:src="@drawable/feedback" />
-               <LinearLayout
-                   android:layout_width="0dp"
-                   android:layout_height="wrap_content"
-                   android:layout_weight="3.5"
-                   android:orientation="vertical">
-                   <TextView
-                       android:layout_width="match_parent"
-                       android:layout_height="wrap_content"
-                       android:layout_weight="3.5"
-                       android:layout_gravity="center"
-                       android:gravity="center|center_vertical|start"
-                       android:textColor="@color/red"
-                       android:paddingTop="10dp"
-                       android:paddingBottom="10dp"
-                       android:text="Share your feedcack"/>
-                   <View
-                       android:layout_marginRight="5dp"
-                       android:background="@color/grey_"
-                       android:layout_width="match_parent"
-                       android:padding="10dp"
-                       android:layout_height="1dp"/>
-               </LinearLayout>
-           </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp">
+                <ImageView
+                    android:padding="7dp"
+                    android:id="@+id/crux_share_feedback"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/feedback" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3.5"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3.5"
+                        android:layout_gravity="center"
+                        android:gravity="center|center_vertical|start"
+                        android:textColor="@color/red"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="Share your feedcack"/>
+                    <View
+                        android:layout_marginRight="5dp"
+                        android:background="@color/grey_"
+                        android:layout_width="match_parent"
+                        android:padding="10dp"
+                        android:layout_height="1dp"/>
+                </LinearLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -321,7 +321,7 @@
                         android:layout_gravity="center"
                         android:gravity="center|center_vertical|start"
                         android:textColor="@color/red"
-                       android:paddingBottom="10dp"
+                        android:paddingBottom="10dp"
                         android:paddingTop="10dp"
                         android:text="Shout outs"/>
                     <View
@@ -360,7 +360,7 @@
                         android:layout_gravity="center"
                         android:gravity="center|center_vertical|start"
                         android:textColor="@color/red"
-                       android:paddingBottom="10dp"
+                        android:paddingBottom="10dp"
                         android:paddingTop="10dp"
 
                         android:text="Privacy"/>

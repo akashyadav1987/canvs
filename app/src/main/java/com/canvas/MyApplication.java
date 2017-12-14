@@ -24,6 +24,9 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+
 /**
  * Created by akashyadav on 11/27/17.
  */
@@ -44,6 +47,13 @@ public class MyApplication extends Application {
                 .with(new WeathericonsModule())
                 .with(new SimpleLineIconsModule())
                 .with(new IoniconsModule());
+        Realm.init(this);
+        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
+                .name(Realm.DEFAULT_REALM_NAME)
+                .schemaVersion(0)
+                .deleteRealmIfMigrationNeeded()
+                .build();
+        Realm.setDefaultConfiguration(realmConfiguration);
     }
     /**
      * Enables https connections

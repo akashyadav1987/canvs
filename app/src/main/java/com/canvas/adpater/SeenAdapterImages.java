@@ -1,25 +1,37 @@
 package com.canvas.adpater;
 
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.canvas.R;
 import com.canvas.common.GlobalReferences;
+import com.canvas.controller.RealmController;
+import com.canvas.fragment.SeenFragment;
+import com.canvas.model.Murals;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import io.realm.RealmResults;
 
 /**
  * Created by akashyadav on 12/3/17.
  */
 
 public class SeenAdapterImages extends RecyclerView.Adapter<SeenAdapterImages.MyViewHolder> {
-    private ArrayList<String> images;
+    private RealmResults<Murals> images;
+    private SeenFragment seenMurals;
+    private ArrayList<Murals> seen;
 
-    public SeenAdapterImages(ArrayList<String> images) {
+    public SeenAdapterImages(SeenFragment seenMurals, RealmResults<Murals> images) {
         this.images = images;
+        this.seenMurals = seenMurals;
+        seen = new ArrayList<>();
     }
 
     @Override
@@ -31,9 +43,25 @@ public class SeenAdapterImages extends RecyclerView.Adapter<SeenAdapterImages.My
     @Override
     public void onBindViewHolder(SeenAdapterImages.MyViewHolder holder, int position) {
         try {
-            String url = images.get(position);
+            Murals murals = images.get(position);
             try {
-                Picasso.with(GlobalReferences.getInstance().baseActivity).load(url).placeholder(R.color.grey_).error(R.color.grey_);
+                try {
+                    String image_url = "https://canvs.cruxcode.nyc/mural_thumb_" + murals.getImage_resource_id().toLowerCase() + ".jpg?size=thumb&requestType=image";
+                    Picasso.with(GlobalReferences.getInstance().baseActivity).load(image_url).placeholder(R.color.grey_).error(R.color.grey_).into(holder.imageView);
+                    if(RealmController.getInstance().isSeenMuralExist(murals.getId())){
+                     holder.imageView.setColorFilter(Color.parseColor("#50CFCECF"), PorterDuff.Mode.SRC_IN);
+                        seen.add(murals);
+                    }
+                    if(position==images.size()-1){
+                        try{
+                           // ((SeenMurals)seenMurals).seen(seen);
+                            Log.e("seen size",seen.size()+"");
+                        }catch (Exception e){
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -52,6 +80,7 @@ public class SeenAdapterImages extends RecyclerView.Adapter<SeenAdapterImages.My
 
         public MyViewHolder(View itemView) {
             super(itemView);
+            imageView = itemView.findViewById(R.id.images);
         }
     }
 }
