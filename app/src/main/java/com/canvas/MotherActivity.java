@@ -18,11 +18,9 @@ import android.widget.LinearLayout;
 
 import com.canvas.common.CommonFragment;
 import com.canvas.common.GlobalReferences;
-<<<<<<< Updated upstream
 import com.canvas.db.Pref;
-=======
 import com.canvas.controller.RealmController;
->>>>>>> Stashed changes
+
 import com.canvas.fragment.AboutUsFragment;
 import com.canvas.fragment.BookMarkFragment;
 import com.canvas.fragment.CanvsMapFragment;
