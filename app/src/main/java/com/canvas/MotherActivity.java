@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -18,9 +17,8 @@ import android.widget.LinearLayout;
 
 import com.canvas.common.CommonFragment;
 import com.canvas.common.GlobalReferences;
-import com.canvas.db.Pref;
 import com.canvas.controller.RealmController;
-
+import com.canvas.db.Pref;
 import com.canvas.fragment.AboutUsFragment;
 import com.canvas.fragment.BookMarkFragment;
 import com.canvas.fragment.CanvsMapFragment;
@@ -33,10 +31,9 @@ import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.util.ArrayList;
 
+
 public class MotherActivity extends BaseActivity {
     private MenuItem bookmarks, seen, fav, about;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +44,8 @@ public class MotherActivity extends BaseActivity {
         bottomNavigationView.setSelectedItemId(-1);
         Menu menu = bottomNavigationView.getMenu();
         GlobalReferences.getInstance().baseActivity = this;
+
+
         RealmController.with(this);
         RealmController.getInstance().deleteAllMural();
         Log.e("All mural deleted","ALl mural deleted");
@@ -86,8 +85,8 @@ public class MotherActivity extends BaseActivity {
             }
         });
         setSupportActionBar(GlobalReferences.getInstance().toolbar);
-        //getSupportActionBar().setDisplayShowHomeEnabled(true);
-        //getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             public void onBackStackChanged() {
@@ -158,7 +157,7 @@ public class MotherActivity extends BaseActivity {
         });
 
 
-       GlobalReferences.getInstance().searchView = (SearchView) findViewById(R.id.search_view);
+       GlobalReferences.getInstance().searchView = (MaterialSearchView) findViewById(R.id.search_view);
         int id = GlobalReferences.getInstance().searchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
        // TextView textView = (TextView) GlobalReferences.getInstance().searchView.findViewById(id);
         //textView.setTextColor(Color.parseColor("#8B8A89"));
@@ -311,7 +310,7 @@ public class MotherActivity extends BaseActivity {
         getMenuInflater().inflate(R.menu.menu_search, menu);
 
         MenuItem item = menu.findItem(R.id.action_search);
-       // GlobalReferences.getInstance().searchView..setMenuItem(item);
+        GlobalReferences.getInstance().searchView.setMenuItem(item);
 
         return true;
 

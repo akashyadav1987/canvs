@@ -11,100 +11,97 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:weightSum="1">
+        >
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar_top"
-            android:layout_width="wrap_content"
+        <FrameLayout
+            android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@drawable/toolbar_back"
             android:maxHeight="?attr/actionBarSize"
-            android:minHeight="?attr/actionBarSize"
-            app:theme="@style/Widget.AppCompat.Toolbar"
-           >
+            android:minHeight="?attr/actionBarSize">
 
-            <RelativeLayout
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar_top"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center|center_vertical">
+                android:contentInsetLeft="0dp"
+                android:contentInsetStart="0dp"
+                android:clipToPadding="true"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@drawable/toolbar_back"
+                android:maxHeight="?attr/actionBarSize"
+                android:minHeight="?attr/actionBarSize"
+                app:theme="@style/Widget.AppCompat.Toolbar">
 
-                <ImageView
-                    android:id="@+id/filter"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/equalizer" />
-
-
-                <FrameLayout
-                    android:layout_centerInParent="true"
-                    android:layout_centerVertical="true"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <com.canvas.widget.RobotoCondensedBoldTextView
-                        android:id="@+id/tool_bar_title"
-                        android:gravity="center_vertical|center"
-                        android:layout_gravity="center|center_vertical"
-                        android:layout_centerInParent="true"
-                        android:layout_centerVertical="true"
-                        android:layout_width="wrap_content"
-                        android:text="asxaasaxaxsaxa"
-                        android:textColor="@android:color/white"
-                        android:textSize="20sp"
-                        android:visibility="gone"
-                        android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:gravity="center|center_vertical">
 
                     <ImageView
-                        android:visibility="gone"
-                        android:id="@+id/toolbar_image"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
+                        android:id="@+id/filter"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginTop="10dp"
-                        android:gravity="center|center_vertical"
-                        android:src="@drawable/title_app" />
-                </FrameLayout>
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/filter" />
 
-                <com.joanzapata.iconify.widget.IconTextView
-                    android:id="@+id/search_box"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:gravity="center|center_vertical"
-                    android:paddingRight="10dp"
-                    android:shadowColor="#22000000"
-                    android:shadowDx="3"
-                    android:shadowDy="3"
-                    android:visibility="gone"
-                    android:shadowRadius="1"
-                    android:text="{fa-search}"
-                    android:textColor="#FFFFFF"
-                    android:textSize="18dp" />
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true">
 
-                <android.support.v7.widget.SearchView
-                    android:id="@+id/search_view"
-                    android:padding="5dp"
-                    android:visibility="gone"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:queryHint="Search murals, artist or tags"
-                    android:background="@drawable/search_view"
-                    android:layout_centerVertical="true"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:maxHeight="?attr/actionBarSize"
-                    android:minHeight="?attr/actionBarSize" />
-            </RelativeLayout>
-        </android.support.v7.widget.Toolbar>
+                        <TextView
+                            android:id="@+id/tool_bar_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_centerVertical="true"
+                            android:layout_gravity="center|center_vertical"
+                            android:gravity="center_vertical|center"
+                            android:text="asxaasaxaxsaxa"
+                            android:textColor="@android:color/white"
+                            android:textSize="20sp"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/toolbar_image"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_centerVertical="true"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginTop="10dp"
+                            android:gravity="center|center_vertical"
+                            android:src="@drawable/logo_action_bar"
+                            android:visibility="visible" />
+                    </FrameLayout>
+
+                    <!--<ImageView-->
+                    <!--android:layout_alignParentRight="true"-->
+                    <!--android:id="@+id/search_box"-->
+                    <!--android:layout_width="30dp"-->
+                    <!--android:layout_height="30dp"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:layout_marginRight="10dp"-->
+                    <!--android:gravity="right|center_vertical"-->
+                    <!--android:paddingRight="10dp"-->
+                    <!--android:src="@drawable/search"-->
+                    <!--android:visibility="visible" />-->
+
+                </RelativeLayout>
+            </android.support.v7.widget.Toolbar>
+
+            <com.miguelcatalan.materialsearchview.MaterialSearchView
+                android:id="@+id/search_view"
+                android:layout_height="?attr/actionBarSize"
+                style="@style/MaterialSearchViewStyle"
+                android:layout_width="match_parent"
+                android:maxHeight="?attr/actionBarSize"
+                android:minHeight="?attr/actionBarSize" />
+        </FrameLayout>
 
         <FrameLayout
             android:id="@+id/frame_container"
@@ -120,9 +117,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="5dp"
-            app:elevation="4dp"
             android:visibility="gone"
-
+            app:elevation="4dp"
             app:itemBackground="@android:color/white"
             app:itemIconTint="@color/grey"
             app:itemTextColor="@color/grey"

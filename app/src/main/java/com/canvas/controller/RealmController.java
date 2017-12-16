@@ -5,6 +5,7 @@ import android.app.Application;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
+import com.canvas.listener.SearchResultFound;
 import com.canvas.model.BookmarkedMural;
 import com.canvas.model.FavoriteMural;
 import com.canvas.model.Murals;
@@ -227,6 +228,23 @@ public class RealmController {
                     RealmResults<BookmarkedMural> rows = realm.where(BookmarkedMural.class).findAll();
                     rows.deleteAllFromRealm();
                     Log.e("record deleted book==",rows+"");
+                }
+            });
+        }catch (Exception e){
+
+        }
+    }
+    public void searchForMural(final String searchQuery, final SearchResultFound searchResultFound){
+        RealmResults<Murals> rowsAC =null;
+        try{
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmResults<Murals> rows = realm.where(Murals.class).contains("title",searchQuery.toLowerCase()).or().contains("author",searchQuery.toLowerCase()).or().contains("tags",searchQuery.toLowerCase()).findAll();
+                    rows.size();
+                    searchResultFound.onSearchResultFound(rows);
+
+
                 }
             });
         }catch (Exception e){

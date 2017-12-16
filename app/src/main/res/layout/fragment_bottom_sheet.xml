@@ -1,34 +1,38 @@
 <LinearLayout app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
     android:id="@+id/fragment_history_menu_bottom"
     android:layout_width="match_parent"
-    android:layout_height="400dp"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="#ffffff"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
+        android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:background="#e5e5e5"
         >
-        <TextView
+        <com.canvas.widget.RobotoCondensedTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="FILTERS"
+            android:layout_centerInParent="true"
             android:padding="12dp"
             android:textColor="#929292"
             android:gravity="center"
             android:layout_weight="3"/>
-        <TextView
+        <com.canvas.widget.RobotoRegularTextView
+            android:id="@+id/done"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="DONE"
+            android:layout_alignParentRight="true"
             android:gravity="center"
             android:textStyle="bold"
-            android:textColor="#ff403b"/>
+            android:textColor="#90ff403b"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -60,13 +64,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="6dp"
         android:padding="8dp">
         <android.support.v4.widget.Space
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.5"/>
         <ImageView
+            android:id="@+id/bookmarks"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/bookmark_sheet"/>
@@ -100,6 +105,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.8"/>
         <ImageView
+            android:id="@+id/seen_sheet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/seen_sheet"/>
@@ -129,6 +135,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.8"/>
         <ImageView
+            android:id="@+id/fav_sheet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/favorites_sheet"/>
@@ -168,36 +175,36 @@
         <android.support.v4.widget.Space
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.5"/>
-        <TextView
+            android:layout_weight="0.4"/>
+        <com.canvas.widget.RobotoMediumTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Bookmarks"
             android:gravity="center"
-            android:textColor="#000"/>
+            android:textColor="@color/grey"/>
         <android.support.v4.widget.Space
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.5"/>
-        <TextView
+        <com.canvas.widget.RobotoMediumTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Seen"
             android:gravity="center"
-            android:textColor="#000"/>
+            android:textColor="@color/grey"/>
         <android.support.v4.widget.Space
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.5"/>
-        <TextView
+        <com.canvas.widget.RobotoMediumTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Favorites"
             android:gravity="center"
-            android:textColor="#000"/>
+            android:textColor="@color/grey"/>
         <android.support.v4.widget.Space
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -219,6 +226,7 @@
             android:layout_weight="1.2"
             android:orientation="vertical">
             <ImageView
+                android:id="@+id/fresh_mural"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -246,15 +254,14 @@
                     android:layout_centerHorizontal="true">
                 </ImageView>
             </android.support.v7.widget.CardView>
-            <TextView
+            <com.canvas.widget.RobotoMediumTextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="Fresh murals"
                 android:layout_gravity="center"
-
                 android:layout_weight="1"
                 android:gravity="center"
-                android:textColor="#000"/>
+                android:textColor="@color/grey"/>
         </LinearLayout>
 
 
@@ -268,6 +275,7 @@
             android:layout_weight="1.2"
             android:orientation="vertical">
             <ImageView
+                android:id="@+id/near_by_murals"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -289,22 +297,20 @@
                 <ImageView
                     android:layout_height="36dp"
                     android:layout_width="match_parent"
-
                     app:srcCompat="@drawable/ic_bookmark"
                     android:scaleType="center"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true">
                 </ImageView>
             </android.support.v7.widget.CardView>
-            <TextView
+            <com.canvas.widget.RobotoMediumTextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="Nearby murals"
                 android:layout_weight="1"
                 android:layout_gravity="center"
-
                 android:gravity="center"
-                android:textColor="#000"/>
+                android:textColor="@color/grey"/>
         </LinearLayout>
 
 

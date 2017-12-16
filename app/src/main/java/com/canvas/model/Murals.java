@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import io.realm.RealmModel;
 import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
 import io.realm.annotations.PrimaryKey;
 
 /**
@@ -14,14 +15,45 @@ import io.realm.annotations.PrimaryKey;
 public class Murals  extends RealmObject implements RealmModel, Parcelable {
     @PrimaryKey
     private int id;
-   private  int active;
-   private int derelict;
-   private  String image_resource_id;
+    private  int active;
+    private int derelict;
+    private  String image_resource_id;
     private String location_text;
     private String tags;
     private String artist_text;
     private String additional_link_first;
     private String additional_link_second;
+    private String freshWhenAdded;
+
+    public double getDistanceInKms() {
+        return distanceInKms;
+    }
+
+    public void setDistanceInKms(double distanceInKms) {
+        this.distanceInKms = distanceInKms;
+    }
+
+    private double distanceInKms;
+
+    public boolean isNearBy() {
+        return isNearBy;
+    }
+
+    public void setNearBy(boolean nearBy) {
+        isNearBy = nearBy;
+    }
+
+    @Ignore
+
+    private boolean isNearBy;
+
+    public String getFreshWhenAdded() {
+        return freshWhenAdded;
+    }
+
+    public void setFreshWhenAdded(String freshWhenAdded) {
+        this.freshWhenAdded = freshWhenAdded;
+    }
 
     public Murals(){
 
@@ -44,6 +76,8 @@ public class Murals  extends RealmObject implements RealmModel, Parcelable {
         author = in.readString();
         image_path = in.readString();
         popularity = in.readInt();
+        freshWhenAdded = in.readString();
+        distanceInKms = in.readDouble();
     }
 
     public static final Creator<Murals> CREATOR = new Creator<Murals>() {
@@ -227,5 +261,7 @@ public class Murals  extends RealmObject implements RealmModel, Parcelable {
         parcel.writeString(author);
         parcel.writeString(image_path);
         parcel.writeInt(popularity);
+        parcel.writeString(freshWhenAdded);
+        parcel.writeDouble(distanceInKms);
     }
 }

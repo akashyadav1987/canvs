@@ -1,11 +1,11 @@
 package com.canvas.common;
 
 import android.app.Activity;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.widget.LinearLayout;
 
 import com.canvas.db.Pref;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import io.realm.Realm;
 
@@ -31,6 +31,6 @@ public class GlobalReferences {
     public Toolbar toolbar;
     public Pref pref;
     public Realm realm;
-    public SearchView searchView;
+    public MaterialSearchView searchView;
 
 }

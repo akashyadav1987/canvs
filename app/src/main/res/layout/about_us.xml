@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            android:src="@drawable/about" />
+            android:src="@drawable/about_img" />
 
         <LinearLayout
             android:layout_below="@id/parent_img"
