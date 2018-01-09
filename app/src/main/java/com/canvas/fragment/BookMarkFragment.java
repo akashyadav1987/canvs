@@ -5,6 +5,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -36,6 +38,7 @@ public class BookMarkFragment extends CommonFragment implements AppRequest {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View favoritesView = inflater.inflate(R.layout.bookmark_fragment,null);
+        setHasOptionsMenu(true);
         favorites_list = favoritesView.findViewById(R.id.favorites_list);
         no_con = favoritesView.findViewById(R.id.no_con);
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
@@ -96,5 +99,10 @@ public class BookMarkFragment extends CommonFragment implements AppRequest {
     @Override
     public void onRefresh() {
         super.onRefresh();
+    }
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.action_search);
+        item.setVisible(false);
     }
 }

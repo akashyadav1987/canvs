@@ -112,15 +112,45 @@
             android:layout_marginRight="20dp"
             />
 
-
-
-        <ImageView
-            android:id="@+id/iv_image_detail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <FrameLayout
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/iv_image_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                />
+            <android.support.v7.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:padding="10dp"
+                android:elevation="12dp"
+                android:visibility="gone"
+                android:id="@+id/fresh_mural_tag"
+                app:cardCornerRadius="0dp"
+                app:cardBackgroundColor="@color/red"
+                android:innerRadius="0dp"
+                android:shape="rectangle"
+                android:thicknessRatio="1.9">
+            <com.canvas.widget.RobotoCondensedBoldTextView
+                android:drawableLeft="@drawable/star"
+                android:text="FRESH MURAL"
+                android:drawablePadding="5dp"
+                android:padding="5dp"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:textColor="@color/white"
+                android:scaleType="center"
+                android:gravity="center_vertical"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true">
+                </com.canvas.widget.RobotoCondensedBoldTextView>
+            </android.support.v7.widget.CardView>
+        </FrameLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -165,13 +195,13 @@
                             android:layout_centerHorizontal="true">
                         </ImageView>
                     </android.support.v7.widget.CardView>
-                    <TextView
+                    <com.canvas.widget.RobotoCondensedTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Bookmarks"
                         android:gravity="center"
-                        android:textColor="#000"/>
+                        android:textColor="@color/grey"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -203,13 +233,13 @@
                             android:layout_centerHorizontal="true">
                         </ImageView>
                     </android.support.v7.widget.CardView>
-                    <TextView
+                    <com.canvas.widget.RobotoCondensedTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Seen"
                         android:gravity="center"
-                        android:textColor="#000"/>
+                        android:textColor="@color/grey"/>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="0dp"
@@ -242,27 +272,27 @@
                             android:layout_centerHorizontal="true">
                         </ImageView>
                     </android.support.v7.widget.CardView>
-                    <TextView
+                    <com.canvas.widget.RobotoCondensedTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Favorites"
                         android:gravity="center"
-                        android:textColor="#000"/>
+                        android:textColor="@color/grey"/>
                 </LinearLayout>
             </LinearLayout>
 
-            <TextView
+            <com.canvas.widget.RobotoCondensedTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#ff403b"
                 android:text="Location"
                 android:padding="8dp"/>
-            <TextView
+            <com.canvas.widget.RobotoRegularTextView
                 android:id="@+id/tv_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#000"
+                android:textColor="@color/grey"
                 android:padding="8dp"/>
 
         </LinearLayout>
@@ -273,7 +303,7 @@
             android:orientation="vertical"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp">
-            <TextView
+            <com.canvas.widget.RobotoMediumTextView
                 android:id="@+id/tv_get_direction"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -289,37 +319,37 @@
                 android:layout_height="1dp"
                 android:background="#d9d4d4"
                 />
-            <TextView
+            <com.canvas.widget.RobotoCondensedTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Completion Year"
                 android:textColor="@color/red_"
                 android:padding="8dp"/>
-            <TextView
+            <com.canvas.widget.RobotoRegularTextView
                 android:id="@+id/tv_completion_year"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="2014"
-                android:textColor="@android:color/black"
+                android:textColor="@color/grey"
                 android:padding="8dp"/>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#d9d4d4"
                 />
-            <TextView
+            <com.canvas.widget.RobotoCondensedTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="About this mural"
                 android:textColor="@color/red_"
                 android:layout_marginTop="12dp"
                 android:padding="8dp"/>
-            <TextView
+            <com.canvas.widget.RobotoRegularTextView
                 android:id="@+id/tv_about_mural"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="@android:color/black"
+                android:gravity="left"
+                android:textColor="@color/grey"
                 android:padding="8dp"
                 />
 
@@ -330,7 +360,7 @@
                 android:layout_marginTop="8dp"
                 />
 
-            <TextView
+            <com.canvas.widget.RobotoCondensedTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="About this artist"
@@ -338,12 +368,12 @@
                 android:layout_marginTop="12dp"
                 android:padding="8dp"/>
 
-            <TextView
+            <com.canvas.widget.RobotoRegularTextView
                 android:id="@+id/tv_about_artist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="@android:color/black"
+                android:gravity="left"
+                android:textColor="@color/grey"
                 android:padding="8dp"
                 />
 
@@ -353,7 +383,7 @@
                 android:background="#d9d4d4"
                 android:layout_marginTop="8dp"
                 />
-            <TextView
+            <com.canvas.widget.RobotoCondensedTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Tags"
@@ -374,7 +404,7 @@
                 android:background="#d9d4d4"
                 android:layout_marginTop="8dp"
                 />
-            <TextView
+            <com.canvas.widget.RobotoCondensedTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Additional link"
@@ -382,16 +412,16 @@
                 android:layout_marginTop="12dp"
                 android:padding="8dp"/>
 
-            <TextView
+            <com.canvas.widget.RobotoCondensedTextView
                 android:id="@+id/tv_add_link_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:paddingLeft="8dp"
-                android:textColor="@android:color/black"
+                android:textColor="@color/grey"
                 android:padding="8dp"
                 />
-            <TextView
+            <com.canvas.widget.RobotoCondensedTextView
                 android:id="@+id/tv_add_link_2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -400,13 +430,13 @@
                 android:textColor="@android:color/black"
                 android:padding="8dp"
                 />
-            <TextView
+            <com.canvas.widget.RobotoCondensedTextView
                 android:id="@+id/tv_add_link_3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:paddingLeft="8dp"
-                android:textColor="@android:color/black"
+                android:textColor="@color/grey"
                 android:padding="8dp"
                 />
             <View
@@ -431,7 +461,7 @@
                     android:layout_centerVertical="true"
                     app:srcCompat="@drawable/ic_flag"/>
 
-                <TextView
+                <com.canvas.widget.RobotoCondensedTextView
                     android:id="@+id/tv_flag_text"
                     android:layout_toRightOf="@id/iv_flag"
                     android:layout_width="match_parent"
@@ -441,7 +471,7 @@
                     android:textColor="@color/red_"
                     android:layout_marginTop="12dp"
                     />
-                <TextView
+                <com.canvas.widget.RobotoMediumTextView
                     android:id="@+id/tv_flag_detail"
                     android:layout_toRightOf="@id/iv_flag"
                     android:layout_below="@id/tv_flag_text"
@@ -449,7 +479,7 @@
                     android:layout_height="wrap_content"
                     android:text="Contact us if there is any incorrect info?"
                     android:layout_marginLeft="12dp"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/grey"
                     />
             </RelativeLayout>
         </LinearLayout>

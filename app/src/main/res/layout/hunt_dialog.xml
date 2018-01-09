@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:background="@android:color/white"
     android:padding="20dp">
-    <TextView
+    <com.canvas.widget.RobotoBoldTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="YOU HAVE ENTERED IN MURAL HUNT MODE"
@@ -13,22 +13,23 @@
         android:textColor="@color/red"
         android:layout_marginTop="20dp"
         android:textSize="20dp"/>
-    <TextView
+    <com.canvas.widget.RobotoRegularTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textColor="#605e5e"
+        android:textColor="@color/grey"
         android:padding="8dp"
         android:text="While in hunt mode,you'll be notified when a mural is within a 150 feet of your location! Hunt mode will be active even while other apps.So don't forget to turn it off when you're done.Happy hunting!"/>
 
-<TextView
+<com.canvas.widget.RobotoBoldTextView
     android:id="@+id/tv_ok"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:text="Ok"
+    android:textAllCaps="true"
     android:background="@color/green"
     android:gravity="center"
-    android:padding="12dp"
+    android:padding="14dp"
     />
     <CheckBox
         android:id="@+id/check_dont_show"
@@ -38,5 +39,5 @@
         android:button="@drawable/checkbox_bg"
         android:paddingLeft="12dp"
         android:text="Don't show me this message again"
-        android:textColor="#605e5e"/>
+        android:textColor="@color/grey"/>
 </LinearLayout>

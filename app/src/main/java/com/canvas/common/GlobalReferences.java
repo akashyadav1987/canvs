@@ -5,7 +5,6 @@ import android.support.v7.widget.Toolbar;
 import android.widget.LinearLayout;
 
 import com.canvas.db.Pref;
-import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import io.realm.Realm;
 
@@ -31,6 +30,6 @@ public class GlobalReferences {
     public Toolbar toolbar;
     public Pref pref;
     public Realm realm;
-    public MaterialSearchView searchView;
+    //public MaterialSearchView searchView;
 
 }

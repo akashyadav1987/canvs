@@ -29,6 +29,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="DONE"
+            android:focusableInTouchMode="true"
             android:layout_alignParentRight="true"
             android:gravity="center"
             android:textStyle="bold"
@@ -320,13 +321,14 @@
             android:layout_weight="0.7"/>
     </LinearLayout>
     <TextView
+        android:focusableInTouchMode="true"
+        android:id="@+id/clear_filters"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/button_with_border"
         android:textColor="#b2b2b2"
         android:text="Clear Filter"
         android:layout_marginBottom="10dp"
-
         android:paddingLeft="40dp"
         android:paddingRight="40dp"
         android:paddingTop="4dp"

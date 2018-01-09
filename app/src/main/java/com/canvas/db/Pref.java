@@ -16,6 +16,7 @@ public class Pref {
     private final String fav = "fav";
     private final String fresh = "fresh";
     private final String nearby = "nearby";
+    private final String dont_show_me_msg_again = "dont_show";
 
     public Pref(Context context) {
         this.context = context;
@@ -33,6 +34,16 @@ public class Pref {
         else return false;
     }
 
+    public void setDontShowThisMsg(boolean dontShowThisMsg) {
+        if (preferences != null)
+            preferences.edit().putBoolean(dont_show_me_msg_again, dontShowThisMsg).apply();
+    }
+
+    public boolean getDontShowThisMsg() {
+        if (preferences != null)
+            return preferences.getBoolean(dont_show_me_msg_again, false);
+        else return false;
+    }
     public void setBookmarkedFilter(boolean bookmarkedFilter) {
         if (preferences != null)
             preferences.edit().putBoolean(book_mark, bookmarkedFilter).apply();

@@ -40,14 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <Button
-                android:id="@+id/canvs_tutorials"
-                android:background="@color/green"
-                android:textAllCaps="true"
-                android:layout_marginTop="10dp"
-                android:text="VIEW THE CANVS TOTURIAL"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+        fee
             <View
                 android:layout_marginRight="5dp"
                 android:layout_marginLeft="5dp"
@@ -138,6 +131,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <Button
+                android:visibility="gone"
                 android:textColor="#b3b3b3"
                 android:id="@+id/crux_button"
                 android:background="@drawable/button_with_border"
@@ -147,6 +141,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <LinearLayout
+                android:visibility="gone"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal"
@@ -162,6 +157,7 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/twi" />
                 <ImageView
+                    android:visibility="gone"
                     android:padding="7dp"
                     android:id="@+id/crux_facebook"
                     android:layout_width="64dp"
@@ -171,6 +167,7 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/facebook" />
                 <ImageView
+                    android:visibility="gone"
                     android:padding="7dp"
                     android:id="@+id/crux_instagram"
                     android:layout_width="64dp"
@@ -196,6 +193,7 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/feedback" />
                 <LinearLayout
+                    android:id="@+id/share_your_feedback"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="3.5"
@@ -271,6 +269,7 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/instagram" />
                 <LinearLayout
+                    android:id="@+id/follow_on_insta"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="3.5"
@@ -362,7 +361,6 @@
                         android:textColor="@color/red"
                         android:paddingBottom="10dp"
                         android:paddingTop="10dp"
-
                         android:text="Privacy"/>
                     <View
                         android:layout_marginRight="5dp"

@@ -5,6 +5,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -43,8 +45,10 @@ public class SeenFragment extends CommonFragment implements AppRequest,SeenMural
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View favoritesView = inflater.inflate(R.layout.seen_fragment,null);
+        setHasOptionsMenu(true);
         seen_images_list = favoritesView.findViewById(R.id.seen_images_list);
         seen = new ArrayList<>();
+        setHasOptionsMenu(true);
         seek_bar = favoritesView.findViewById(R.id.seek_bar);
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
         seen_images_list.addItemDecoration(new GridInsetDecoration(getActivity()));
@@ -120,5 +124,12 @@ public class SeenFragment extends CommonFragment implements AppRequest,SeenMural
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.action_search);
+        item.setVisible(false);
     }
 }

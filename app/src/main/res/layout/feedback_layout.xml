@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/reach_out_text"
+        android:textColor="@color/grey"
+        android:textSize="15sp" />
+
+    <EditText
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/edit_text_with_border"
+        android:gravity="center_vertical"
+        android:hint="Name"
+        android:paddingLeft="5dp"
+        android:textColor="@color/grey_"
+        android:textColorHint="@color/grey_"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/email_address"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/edit_text_with_border"
+        android:gravity="center_vertical"
+        android:hint="Email Address"
+        android:paddingLeft="5dp"
+        android:textColor="@color/grey_"
+        android:textColorHint="@color/grey_"
+        android:textSize="14sp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/edit_text_with_border"
+        android:gravity="top"
+        android:hint="Your message here"
+        android:paddingTop="5dp"
+        android:paddingLeft="5dp"
+        android:textColor="@color/grey_"
+        android:textColorHint="@color/grey_"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/canvs_tutorials"
+        android:background="@color/green"
+        android:textAllCaps="true"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="20dp"
+        android:text="SUBMIT FEEDBACK"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+
+</LinearLayout>

@@ -13,6 +13,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -20,6 +22,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.canvas.R;
 import com.canvas.adpater.TagsAdapter;
 import com.canvas.common.CommonFragment;
@@ -55,12 +60,13 @@ String selected_flag;
     TextView tv_mural,tv_author;
     double lat,lon;
     private ImageView fav_img,book_img,seen_img;
-    private CardView favoriteCard,bookmarks_btn,seen_btn;
+    private CardView favoriteCard,bookmarks_btn,seen_btn,fresh_mural_tag;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View muralview = inflater.inflate(R.layout.fragment_mural_details,null);
+        setHasOptionsMenu(true);
         Bundle bundle=getArguments();
         final Murals muralsObject = bundle.getParcelable("mural");
         final String img_id=bundle.getString("image_id");
@@ -69,7 +75,7 @@ String selected_flag;
         bookmarks_btn  = muralview.findViewById(R.id.bookmarks_btn);
         seen_btn = muralview.findViewById(R.id.seen_btn);
         seen_img = muralview.findViewById(R.id.seen_img);
-
+        fresh_mural_tag = muralview.findViewById(R.id.fresh_mural_tag);
         fav_img = muralview.findViewById(R.id.fav_img);
         book_img = muralview.findViewById(R.id.book_img);
 
@@ -305,7 +311,24 @@ String selected_flag;
         Log.e(TAG, "onCreateView: "+image_url );
 
         Glide.with(GlobalReferences.getInstance().baseActivity).load(image_url)
-                .thumbnail(0.5f)
+                .thumbnail(0.5f).listener(new RequestListener<String, GlideDrawable>() {
+            @Override
+            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                if(muralsObject!=null){
+                    if(muralsObject.getFreshWhenAdded()!=null&&muralsObject.getFreshWhenAdded().equalsIgnoreCase("1")){
+                        fresh_mural_tag.setVisibility(View.VISIBLE);
+                    }else{
+                        fresh_mural_tag.setVisibility(View.GONE);
+                    }
+                }
+                return false;
+            }
+        })
 //                .placeholder(R.color.grey_)
 //                .error(R.color.grey_)
                 .into(imageView);
@@ -380,5 +403,10 @@ String selected_flag;
     @Override
     public void onResponse(JSONObject jsonObject) {
 
+    }
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.action_search);
+        item.setVisible(false);
     }
 }

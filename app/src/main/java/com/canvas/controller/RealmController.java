@@ -14,6 +14,8 @@ import com.canvas.model.SeenMural;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
+import static android.R.attr.id;
+
 /**
  * Created by akashyadav on 12/9/17.
  */
@@ -156,6 +158,17 @@ public class RealmController {
             e.printStackTrace();
         }
         return false;
+    }
+    public Murals findMuralByTitle(String title) {
+        try {
+            Log.e("id",id+"");
+            Murals murals = realm.where(Murals.class).equalTo("title", title).or().equalTo("artist_text",title).findFirst();
+            Log.e("Is exist or not =", murals + "");
+             return murals;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public boolean isSeenMuralExist(int id) {

@@ -2,16 +2,13 @@
     <string name="app_name">Canvs</string>
     <string name="google_maps_key">AIzaSyAleduZqpvrBp7q_S8U6ULpyMEJRoaVOVs</string>
     <string name="no_internet">No Internet Connection</string>
-    <string name="canvs_top_header_text">CANVS is designed to elevate street art experience and raise cultural awearness</string>
-    <string name="canvs_top_header_bottom_text">In 2013 ,the city of jersy City unveiled the jersey City Mural Arts Program-- a project that launched a city-wide display of commissioned murals as part of the city\'s aim to elevate the art community and raise cultural awareness.Since then the art scene in jersey City has been growing tremendously!Despite the overall sucess in rasing awareness,there is still an opportunity to take things further.
-
-    The CANVS app is built to engage the community through the appreciation of art.Providing the story behind each mural creates connects us with the art and spotlighting the artist behind them takes things ven further</string>
-    <string name="designed_by_mean_text">Mean Genius is an experience design network based in NJ?NY. WE create unique brands and amazing experience. Our method of doing so lies in product/content development, experimentation,guerilla campaigns and good ol\'fashion
-    story telling. Imagination,future-thinking &amp; disruption is what fuels our passion for creativity. In todays cluttered world,it takes a new wave of thinking to unfold the wrinkles of mediocrity and bring out the true genius in all of us. Reach out to us if you have any fresh ideas or interested in collaborations</string>
-<string name="designed_by_crux_text">Mean Genius is an experience design network based in NJ?NY. WE create unique brands and amazing experience. Our method of doing so lies in product/content development, experimentation,guerilla campaigns and good ol\'fashion
-    story telling. Imagination,future-thinking &amp; disruption is what fuels our passion for creativity. In todays cluttered world,it takes a new wave of thinking to unfold the wrinkles of mediocrity and bring out the true genius in all of us.</string>
+    <string name="canvs_top_header_text">Canvs is  an interactive guide for discovering your city\'s best street art and the artists behind them!</string>
+    <string name="canvs_top_header_bottom_text">we want to engage the community through the love of urban art in digital platform.Canvs is about sharing the stories behind the murals and the communities they\'re in.
+Most importantly, we want to give respect to the artists who breathe life into these cities.</string>
+    <string name="designed_by_mean_text">Mean Genius is a experience design collective from New Jersey-fueling big ideas through design, interactivity and collabration. our goal is to continue to break down creative barriers and lead a unique approach to imagination and innovation</string>
+    <string name="designed_by_crux_text">Cruxcode specializes in rich,dynamic content that brings mobile applications to life.With a strong background in video,animation,photography, and UI, we aim to bridge the gap between good design and rock-solid functionality, Contact us with any ideas or inquires!</string>
     <string name="no_bookmark">You haven\'t bookmarked any murals yet. What are you waiting for!</string>
     <string name="no_favorite">You don\'t have any favorite yet! Mark murals as favorite to see them here.</string>
     <string name="search_hint">Search murals ,artist or tags </string>
-
+    <string name="reach_out_text">Reach out to us with any comments, collabration opportunities, feedback or concerns. We\'d love to hear from you!</string>
 </resources>

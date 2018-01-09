@@ -118,7 +118,7 @@
 
                 <com.canvas.widget.RobotoCondensedTextView
                     android:id="@+id/tv_hunt_mode"
-                    android:layout_width="150dp"
+                    android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:maxLines="1"
@@ -129,13 +129,13 @@
                     android:layout_marginBottom="4dp"
                     android:layout_marginLeft="12dp"
                     android:layout_marginTop="20dp"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"
                     android:focusableInTouchMode="true"
                     android:background="@drawable/round_btn_"
                     android:text="HUNT MODE OFF"
                     android:textColor="@android:color/white"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
             <!--</android.support.design.widget.FloatingActionButton>-->
 
             <android.support.v7.widget.CardView
@@ -189,59 +189,95 @@
             app:cardElevation="4dp">
 
             <LinearLayout
+                android:layout_gravity="top"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-
-                <ImageView
-                    android:id="@+id/iv_map"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_margin="8dp"
-                    android:layout_weight="1.5"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/title_app" />
+                <android.support.v7.widget.CardView
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:elevation="12dp"
+                    android:layout_gravity="top"
+                    android:id="@+id/fresh_mural_tag"
+                    app:cardCornerRadius="0dp"
+                    app:cardBackgroundColor="@color/red"
+                    android:innerRadius="0dp"
+                    android:shape="rectangle"
+                    android:thicknessRatio="1.9">
+                    <com.canvas.widget.RobotoCondensedBoldTextView
+                        android:drawableLeft="@drawable/star"
+                        android:text="FRESH MURAL"
+                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:textColor="@color/white"
+                        android:textSize="10sp"
+                        android:paddingRight="5dp"
+                        android:paddingLeft="5dp"
+                        android:gravity="center_vertical"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true">
+                    </com.canvas.widget.RobotoCondensedBoldTextView>
+                </android.support.v7.widget.CardView>
 
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="8dp"
-                    android:layout_weight="2.5"
-                    android:orientation="vertical">
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-                    <com.canvas.widget.RobotoBoldTextView
-                        android:id="@+id/title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center|start"
-                        android:gravity="center|start"
-                        android:textColor="#db0046"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                    <ImageView
+                        android:id="@+id/iv_map"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_margin="8dp"
+                        android:layout_weight="1.5"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/title_app" />
 
-                    <com.canvas.widget.RobotoMediumTextView
-                        android:id="@+id/author"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:gravity="center|start|top"
-                        android:textColor="@color/grey"
-                        android:textSize="16sp" />
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="2.5"
+                        android:orientation="vertical">
 
-                    <com.canvas.widget.RobotoRegularTextView
-                        android:id="@+id/tv_more"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginRight="8dp"
-                        android:background="#33b7a5"
-                        android:gravity="center"
-                        android:padding="8dp"
-                        android:text="SEE MORE"
-                        android:textColor="@android:color/white" />
+                        <com.canvas.widget.RobotoBoldTextView
+                            android:id="@+id/title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center|start"
+                            android:gravity="center|start"
+                            android:textColor="#db0046"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
+                        <com.canvas.widget.RobotoMediumTextView
+                            android:id="@+id/author"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center|start|top"
+                            android:textColor="@color/grey"
+                            android:textSize="16sp" />
+
+                        <com.canvas.widget.RobotoRegularTextView
+                            android:id="@+id/tv_more"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:layout_marginBottom="8dp"
+                            android:layout_marginRight="8dp"
+                            android:background="#33b7a5"
+                            android:gravity="center"
+                            android:padding="8dp"
+                            android:text="SEE MORE"
+                            android:textColor="@android:color/white" />
+
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
+
+
         </android.support.v7.widget.CardView>
 
 

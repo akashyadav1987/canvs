@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.canvas.R;
 import com.canvas.fragment.CanvsMapFragment;
 import com.canvas.fragment.FragmentMuralDetail;
-import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 /**
  * Created by akashyadav on 11/27/17.
@@ -24,7 +23,6 @@ import com.miguelcatalan.materialsearchview.MaterialSearchView;
 public class CommonFragment extends Fragment {
     protected String screenTitle = "";
     protected ImageView toolbarImage, imageView_back;
-    private MaterialSearchView search_box;
 
     private TextView toolBarText;
     boolean isBookMarkedSelected =GlobalReferences.getInstance().pref.getBookmarkedFilter(),
@@ -65,13 +63,19 @@ public class CommonFragment extends Fragment {
                 imageView_back.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        BottomSheetDialog mBottomSheetDialog = new BottomSheetDialog(getActivity());
+                        isBookMarkedSelected =GlobalReferences.getInstance().pref.getBookmarkedFilter();
+                                isSeenSelected =GlobalReferences.getInstance().pref.getSeenFilter();
+                                isFavSheet = GlobalReferences.getInstance().pref.getFavFilter();
+                                isFreshMural = GlobalReferences.getInstance().pref.getFreshFilter();
+                                isNearBySelected = GlobalReferences.getInstance().pref.getNearbyFilter();
+                        final BottomSheetDialog mBottomSheetDialog = new BottomSheetDialog(getActivity());
                         View sheetView = getActivity().getLayoutInflater().inflate(R.layout.fragment_bottom_sheet, null);
                         final ImageView bookmarks = sheetView.findViewById(R.id.bookmarks);
                         final ImageView seen_sheet = sheetView.findViewById(R.id.seen_sheet);
                         final ImageView fav_sheet = sheetView.findViewById(R.id.fav_sheet);
                         final ImageView fresh_mural = sheetView.findViewById(R.id.fresh_mural);
                         final ImageView near_by_murals = sheetView.findViewById(R.id.near_by_murals);
+                        TextView clear_filters = sheetView.findViewById(R.id.clear_filters);
 
                         if(isBookMarkedSelected){
                             bookmarks.setImageResource(R.drawable.bookmark_sheet_selected);
@@ -87,9 +91,9 @@ public class CommonFragment extends Fragment {
                         }
 
                         if(isFavSheet){
-                            fav_sheet.setImageResource(R.drawable.favorites_sheet);
-                        }else{
                             fav_sheet.setImageResource(R.drawable.favorites_sheet_selected);
+                        }else{
+                            fav_sheet.setImageResource(R.drawable.favorites_sheet);
                         }
 
                         if(isFreshMural){
@@ -100,9 +104,9 @@ public class CommonFragment extends Fragment {
                         }
 
                         if(isNearBySelected){
-                            fresh_mural.setImageResource(R.drawable.nearby_murals_sheet_selected);
+                            near_by_murals.setImageResource(R.drawable.nearby_murals_sheet_selected);
                         }else{
-                            fresh_mural.setImageResource(R.drawable.nearby_murals_sheet);
+                            near_by_murals.setImageResource(R.drawable.nearby_murals_sheet);
 
                         }
 
@@ -177,9 +181,62 @@ public class CommonFragment extends Fragment {
                                 GlobalReferences.getInstance().pref.setFavFilter(isFavSheet);
                                 GlobalReferences.getInstance().pref.setFreshFilter(isFreshMural);
                                 GlobalReferences.getInstance().pref.setNearbyFilter(isNearBySelected);
+                                mBottomSheetDialog.hide();
+                                ((CanvsMapFragment)GlobalReferences.getInstance().mCommonFragment).onRefresh();
 
                             }
                         });
+
+                        clear_filters.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                GlobalReferences.getInstance().pref.setBookmarkedFilter(false);
+                                GlobalReferences.getInstance().pref.setSeenFilter(false);
+                                GlobalReferences.getInstance().pref.setFavFilter(false);
+                                GlobalReferences.getInstance().pref.setFreshFilter(false);
+                                GlobalReferences.getInstance().pref.setNearbyFilter(false);
+                                isBookMarkedSelected =GlobalReferences.getInstance().pref.getBookmarkedFilter();
+                                isSeenSelected =GlobalReferences.getInstance().pref.getSeenFilter();
+                                isFavSheet = GlobalReferences.getInstance().pref.getFavFilter();
+                                isFreshMural = GlobalReferences.getInstance().pref.getFreshFilter();
+                                isNearBySelected = GlobalReferences.getInstance().pref.getNearbyFilter();
+
+                                if(isBookMarkedSelected){
+                                    bookmarks.setImageResource(R.drawable.bookmark_sheet_selected);
+                                }else{
+                                    bookmarks.setImageResource(R.drawable.bookmark_sheet);
+                                }
+
+                                if(isSeenSelected){
+                                    seen_sheet.setImageResource(R.drawable.seen_sheet_selected);
+
+                                }else{
+                                    seen_sheet.setImageResource(R.drawable.seen_sheet);
+                                }
+
+                                if(isFavSheet){
+                                    fav_sheet.setImageResource(R.drawable.favorites_sheet_selected);
+                                }else{
+                                    fav_sheet.setImageResource(R.drawable.favorites_sheet);
+                                }
+
+                                if(isFreshMural){
+                                    fresh_mural.setImageResource(R.drawable.fresh_murals_sheet_selected);
+                                }else{
+                                    fresh_mural.setImageResource(R.drawable.fresh_murals_sheet);
+
+                                }
+
+                                if(isNearBySelected){
+                                    near_by_murals.setImageResource(R.drawable.nearby_murals_sheet_selected);
+                                }else{
+                                    near_by_murals.setImageResource(R.drawable.nearby_murals_sheet);
+
+                                }
+
+                            }
+                        });
+
                         mBottomSheetDialog.setContentView(sheetView);
                         mBottomSheetDialog.show();
                     }
