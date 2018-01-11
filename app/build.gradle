@@ -66,4 +66,5 @@ dependencies {
     // Realm
     //compile 'io.realm:realm-android:0.88.2'
     compile 'com.miguelcatalan:materialsearchview:1.4.0'
+    compile 'com.google.maps.android:android-maps-utils:0.5'
 }

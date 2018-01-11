@@ -74,7 +74,6 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.maps.android.clustering.ClusterManager;
@@ -306,6 +305,23 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
             // Building the GoogleApi client
             locationHelper.buildGoogleApiClient(this);
         }
+
+        if (list_murals != null) {
+            list_murals.clear();
+            if (mMap != null)
+                mMap.clear();
+        } else {
+            list_murals = new ArrayList<>();
+        }
+        marker_previous = null;
+        if (cardView_dialog != null) {
+           // cardView_dialog.setVisibility(View.GONE);
+        }
+        if (Utility.isNetworkAvailable(GlobalReferences.getInstance().baseActivity)) {
+            ApiRequests.getInstance().get_murals(GlobalReferences.getInstance().baseActivity, this);
+        } else {
+            Utility.showNoInternetConnectionToast();
+        }
         return mapViewLayout;
     }
 
@@ -319,6 +335,10 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
     public void onRefresh() {
         super.onRefresh();
         Log.e(TAG, "onAttach: " + "call");
+
+    }
+public void callApiAgain(){
+    try{
         if (list_murals != null) {
             list_murals.clear();
             if (mMap != null)
@@ -328,16 +348,17 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
         }
         marker_previous = null;
         if (cardView_dialog != null) {
-            cardView_dialog.setVisibility(View.GONE);
+             cardView_dialog.setVisibility(View.GONE);
         }
         if (Utility.isNetworkAvailable(GlobalReferences.getInstance().baseActivity)) {
             ApiRequests.getInstance().get_murals(GlobalReferences.getInstance().baseActivity, this);
         } else {
             Utility.showNoInternetConnectionToast();
         }
-
+    }catch (Exception e){
+        e.printStackTrace();
     }
-
+}
     public void updateTab(int selectedTab) {
 
         switch (selectedTab) {
@@ -857,7 +878,7 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
+        return true;
     }
 
     @Override
@@ -1177,12 +1198,12 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
                 BitmapDescriptor markerIcon = null;
                 if (Build.VERSION.SDK_INT >= 21) {
                     Drawable circleDrawable = getResources().getDrawable(R.drawable.murals, null);
-                    markerIcon = getMarkerIconFromDrawable(circleDrawable, false);
+                    markerIcon = getMarkerIconFromDrawable(circleDrawable, true);
                     myItem.setIcon(markerIcon);
 
                 } else {
                     Drawable circleDrawable = getResources().getDrawable(R.drawable.murals);
-                    markerIcon = getMarkerIconFromDrawable(circleDrawable, false);
+                    markerIcon = getMarkerIconFromDrawable(circleDrawable, true);
                     myItem.setIcon(markerIcon);
                 }
                 myItem_previous.setIcon(markerIcon);
@@ -1217,12 +1238,13 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
             if (Build.VERSION.SDK_INT >= 21) {
                 Drawable circleDrawable = getResources().getDrawable(R.drawable.murals, null);
                 BitmapDescriptor markerIcon = getMarkerIconFromDrawable(circleDrawable, true);
-                myItem.setIcon(markerIcon);
+               // myItem.setIcon(markerIcon);
+                myItem.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
 
             } else {
                 Drawable circleDrawable = getResources().getDrawable(R.drawable.murals);
                 BitmapDescriptor markerIcon = getMarkerIconFromDrawable(circleDrawable, true);
-                myItem.setIcon(markerIcon);
+                myItem.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
             }
         }
         try {
@@ -1281,7 +1303,7 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
 
 
 
-        return false;
+        return true;
     }
 }
 

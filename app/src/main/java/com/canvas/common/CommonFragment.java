@@ -22,7 +22,7 @@ import com.canvas.fragment.FragmentMuralDetail;
 
 public class CommonFragment extends Fragment {
     protected String screenTitle = "";
-    protected ImageView toolbarImage, imageView_back;
+    protected ImageView toolbarImage, imageView_back,imageview_share;
 
     private TextView toolBarText;
     boolean isBookMarkedSelected =GlobalReferences.getInstance().pref.getBookmarkedFilter(),
@@ -43,6 +43,7 @@ public class CommonFragment extends Fragment {
             imageView_back = GlobalReferences.getInstance().toolbar.findViewById(R.id.filter);
             toolbarImage = GlobalReferences.getInstance().toolbar.findViewById(R.id.toolbar_image);
             toolBarText = GlobalReferences.getInstance().toolbar.findViewById(R.id.tool_bar_title);
+            imageview_share = GlobalReferences.getInstance().baseActivity.findViewById(R.id.share_icon);
 //            search_box = GlobalReferences.getInstance().toolbar.findViewById(R.id.search_box);
 //            search_box.setOnClickListener(new View.OnClickListener() {
 //                @Override
@@ -55,6 +56,7 @@ public class CommonFragment extends Fragment {
 //                }
 //            });
             if (GlobalReferences.getInstance().mCommonFragment instanceof CanvsMapFragment) {
+                imageview_share.setVisibility(View.GONE);
                 toolbarImage.setVisibility(View.VISIBLE);
                 toolBarText.setVisibility(View.GONE);
                 imageView_back.setImageResource(R.drawable.filter);
@@ -182,7 +184,7 @@ public class CommonFragment extends Fragment {
                                 GlobalReferences.getInstance().pref.setFreshFilter(isFreshMural);
                                 GlobalReferences.getInstance().pref.setNearbyFilter(isNearBySelected);
                                 mBottomSheetDialog.hide();
-                                ((CanvsMapFragment)GlobalReferences.getInstance().mCommonFragment).onRefresh();
+                                ((CanvsMapFragment)GlobalReferences.getInstance().mCommonFragment).callApiAgain();
 
                             }
                         });
@@ -245,6 +247,17 @@ public class CommonFragment extends Fragment {
                 //search_box.bringToFront();
             } else if (GlobalReferences.getInstance().mCommonFragment instanceof FragmentMuralDetail) {
                 toolbarImage.setVisibility(View.VISIBLE);
+                toolbarImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try {
+                            ((FragmentMuralDetail) GlobalReferences.getInstance().mCommonFragment).shareIntent();
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                imageview_share.setVisibility(View.VISIBLE);
                 GlobalReferences.getInstance().progresBar.setVisibility(View.GONE);
                 toolBarText.setVisibility(View.GONE);
                 imageView_back.setImageDrawable(GlobalReferences.getInstance().baseActivity.getResources().getDrawable(R.drawable.ic_left_arrow));
@@ -257,6 +270,7 @@ public class CommonFragment extends Fragment {
                 // search_box.setVisibility(View.GONE);
 
             } else {
+                imageview_share.setVisibility(View.GONE);
                 GlobalReferences.getInstance().progresBar.setVisibility(View.GONE);
 
                 imageView_back.setImageDrawable(GlobalReferences.getInstance().baseActivity.getResources().getDrawable(R.drawable.ic_left_arrow));

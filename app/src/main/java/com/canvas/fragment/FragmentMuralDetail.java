@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -61,6 +62,7 @@ String selected_flag;
     double lat,lon;
     private ImageView fav_img,book_img,seen_img;
     private CardView favoriteCard,bookmarks_btn,seen_btn,fresh_mural_tag;
+     Murals muralsObject =null;
 
     @Nullable
     @Override
@@ -68,7 +70,7 @@ String selected_flag;
         View muralview = inflater.inflate(R.layout.fragment_mural_details,null);
         setHasOptionsMenu(true);
         Bundle bundle=getArguments();
-        final Murals muralsObject = bundle.getParcelable("mural");
+        muralsObject = bundle.getParcelable("mural");
         final String img_id=bundle.getString("image_id");
         final String image_url="https://canvs.cruxcode.nyc/mural_large_"+img_id+".jpg?size=large&requestType=image";
         favoriteCard = muralview.findViewById(R.id.favorite_btn);
@@ -181,10 +183,13 @@ String selected_flag;
                     Log.e("Record exist","Record Exist");
                     RealmController.getInstance().deleteFavoriteMural(favoriteMural.getId());
                     fav_img.setColorFilter(Color.parseColor("#908B8A89"), PorterDuff.Mode.SRC_IN);
+                    favoriteCard.setCardBackgroundColor(Color.parseColor("#408B8A89"));
                 }else{
                     Log.e("Record exist not ","Record Exist not");
                     RealmController.getInstance().addFavoriteMural(favoriteMural);
                     fav_img.setColorFilter(Color.parseColor("#5ab3a4"), PorterDuff.Mode.SRC_IN);
+                    favoriteCard.setCardBackgroundColor(Color.parseColor("#ffffff"));
+
                 }
             }
         });
@@ -211,10 +216,14 @@ String selected_flag;
                     Log.e("Record exist","Record Exist");
                     RealmController.getInstance().deleteSeenMarkedMural(favoriteMural.getId());
                     seen_img.setColorFilter(Color.parseColor("#908B8A89"), PorterDuff.Mode.SRC_IN);
+                    seen_btn.setCardBackgroundColor(Color.parseColor("#408B8A89"));
+
                 }else{
                     Log.e("Record exist not ","Record Exist not");
                     RealmController.getInstance().addSeenMural(favoriteMural);
                     seen_img.setColorFilter(Color.parseColor("#5ab3a4"), PorterDuff.Mode.SRC_IN);
+                    seen_btn.setCardBackgroundColor(Color.parseColor("#ffffff"));
+
                 }
             }
         });
@@ -240,10 +249,14 @@ String selected_flag;
                     Log.e("Record exist","Record Exist");
                     RealmController.getInstance().deleteBookMarkedMural(favoriteMural.getId());
                     book_img.setColorFilter(Color.parseColor("#908B8A89"), PorterDuff.Mode.SRC_IN);
+                    bookmarks_btn.setCardBackgroundColor(Color.parseColor("#408B8A89"));
+
                 }else{
                     Log.e("Record exist not ","Record Exist not");
                     RealmController.getInstance().addBookMarkedMural(favoriteMural);
                     book_img.setColorFilter(Color.parseColor("#5ab3a4"), PorterDuff.Mode.SRC_IN);
+                    bookmarks_btn.setCardBackgroundColor(Color.parseColor("#ffffff"));
+
                 }
             }
         });
@@ -408,5 +421,41 @@ String selected_flag;
     public void onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.action_search);
         item.setVisible(false);
+    }
+    public void shareIntent(){
+        try{
+            StringBuilder share_text = new StringBuilder();
+            if(muralsObject!=null){
+                share_text.append(muralsObject.getTitle());
+                share_text.append(" By");
+                share_text.append(" ");
+                share_text.append("Check out this mural ");
+                share_text.append(" ");
+                Double latitude = muralsObject.getLatitude();
+                Double longitude = muralsObject.getLongitude();
+
+                String uri = "http://maps.google.com/maps?saddr=" +latitude+","+longitude;
+
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                String ShareSub = share_text.toString()
+                        +" Here is the location";
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, ShareSub);
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, uri);
+                startActivity(Intent.createChooser(sharingIntent, "Share via"));
+
+            }else{
+                Toast.makeText(GlobalReferences.getInstance().baseActivity,"Mural Can't be shared",Toast.LENGTH_SHORT).show();
+                //share_text.append("I am sharing this mural details");
+            }
+//            Intent sendIntent = new Intent();
+//            sendIntent.setAction(Intent.ACTION_SEND);
+//            sendIntent.putExtra(Intent.EXTRA_TEXT,
+//                    share_text.toString());
+//            sendIntent.setType("text/plain");
+//            startActivity(sendIntent);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

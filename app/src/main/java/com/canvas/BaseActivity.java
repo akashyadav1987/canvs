@@ -48,7 +48,7 @@ public class BaseActivity extends AppCompatActivity {
 
                     FragmentTransaction ft = manager.beginTransaction();
                     //  ft.setCustomAnimations(R.anim.enter_from_right,R.anim.exit_to_left);
-                    ft.replace(R.id.frame_container, fragment, fragmentTag);
+                    ft.add(R.id.frame_container, fragment, fragmentTag);
 
                     // ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                     if (addToBackStack)
