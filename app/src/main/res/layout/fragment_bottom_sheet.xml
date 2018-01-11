@@ -327,7 +327,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/button_with_border"
         android:textColor="#b2b2b2"
-        android:text="Clear Filter"
+        android:text="Reset"
         android:layout_marginBottom="10dp"
         android:paddingLeft="40dp"
         android:paddingRight="40dp"
