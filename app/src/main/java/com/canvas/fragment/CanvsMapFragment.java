@@ -1167,7 +1167,8 @@ public void callApiAgain(){
     }
 
     @Override
-    public void onMapClick(LatLng latLng) {
+    public void onMapClick(LatLng latLng)
+    {
         cardView_dialog.setVisibility(View.GONE);
     }
 
