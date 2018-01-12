@@ -117,6 +117,8 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
     private ClusterManager<MyItem> mClusterManager;
     MyItem myItem_previous;
 OwnIconRendered ownIconRendered;
+MyItem previous_item;
+
 
     public CanvsMapFragment() {
 
@@ -1153,6 +1155,8 @@ public void callApiAgain(){
 
         if (murals != null) {
             Log.e("Setting mural on sad", murals + "");
+
+
             try {
                 if (cardView_dialog != null) {
                     cardView_dialog.setVisibility(View.GONE);
@@ -1179,19 +1183,24 @@ public void callApiAgain(){
     Marker marker=ownIconRendered.getMarker(myItem);
 
 
-
         if (marker_previous != null) {
-            Murals murals = (Murals) list_murals.get(myItem.getMarkerPosition());
+           // marker_previous.setIcon(previous_icon);
+
+            Murals murals = (Murals) list_murals.get(previous_item.getMarkerPosition());
             if (murals.isNearBy()) {
                 Bitmap markerIcon = null;
+                BitmapDescriptor icon = null;
+
                 if (Build.VERSION.SDK_INT >= 21) {
                     // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue,null);
                     markerIcon = drawNearByMurals(murals, String.valueOf((int) murals.getDistanceInKms()) + "", false);
-                } else {
+                }else {
                     // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue);
                     markerIcon = drawNearByMurals(murals, String.valueOf((int) murals.getDistanceInKms()) + "", false);
                 }
-                marker_previous.setIcon(BitmapDescriptorFactory.fromBitmap(markerIcon));
+                icon=BitmapDescriptorFactory.fromBitmap(markerIcon);
+
+                marker_previous.setIcon(icon);
 
             } else if (murals.getFreshWhenAdded().equalsIgnoreCase("1")) {
                 BitmapDescriptor markerIcon = null;
@@ -1219,11 +1228,13 @@ public void callApiAgain(){
             }
         }
         marker_previous = marker;
+        previous_item=myItem;
 
         final Murals murals = list_murals.get(myItem.getMarkerPosition());
 
         if (murals.isNearBy()) {
             Bitmap markerIcon = null;
+            BitmapDescriptor icon;
             if (Build.VERSION.SDK_INT >= 21) {
                 // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue,null);
                 markerIcon = drawNearByMurals(murals, 99 + "", true);
@@ -1231,7 +1242,8 @@ public void callApiAgain(){
                 // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue);
                 markerIcon = drawNearByMurals(murals, 99 + "", true);
             }
-            marker_previous.setIcon(BitmapDescriptorFactory.fromBitmap(markerIcon));
+            icon=BitmapDescriptorFactory.fromBitmap(markerIcon);
+            marker_previous.setIcon(icon);
 
         } else if (murals.getFreshWhenAdded().equalsIgnoreCase("1")) {
             BitmapDescriptor markerIcon = null;
@@ -1247,6 +1259,7 @@ public void callApiAgain(){
             if (Build.VERSION.SDK_INT >= 21) {
                 Drawable circleDrawable = getResources().getDrawable(R.drawable.murals, null);
                 BitmapDescriptor markerIcon = getMarkerIconFromDrawable(circleDrawable, true);
+
                 marker.setIcon(markerIcon);
 
             } else {
