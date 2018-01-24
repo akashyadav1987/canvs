@@ -83,20 +83,32 @@ String selected_flag;
 
         if (RealmController.getInstance().isFavoriteMuralExist(muralsObject.getId())) {
             fav_img.setColorFilter(Color.parseColor("#5ab3a4"), PorterDuff.Mode.SRC_IN);
+            favoriteCard.setCardBackgroundColor(Color.parseColor("#305ab3a4"));
+
         }else {
             fav_img.setColorFilter(Color.parseColor("#908B8A89"), PorterDuff.Mode.SRC_IN);
+            favoriteCard.setCardBackgroundColor(Color.parseColor("#ffffff"));
+
         }
 
         if (RealmController.getInstance().isBookMarhedMuralExist(muralsObject.getId())) {
             book_img.setColorFilter(Color.parseColor("#5ab3a4"), PorterDuff.Mode.SRC_IN);
+            bookmarks_btn.setCardBackgroundColor(Color.parseColor("#305ab3a4"));
+
         }else {
             book_img.setColorFilter(Color.parseColor("#908B8A89"), PorterDuff.Mode.SRC_IN);
+            bookmarks_btn.setCardBackgroundColor(Color.parseColor("#ffffff"));
+
         }
 
         if (RealmController.getInstance().isSeenMuralExist(muralsObject.getId())) {
             seen_img.setColorFilter(Color.parseColor("#5ab3a4"), PorterDuff.Mode.SRC_IN);
+            seen_btn.setCardBackgroundColor(Color.parseColor("#305ab3a4"));
+
         }else {
             seen_img.setColorFilter(Color.parseColor("#908B8A89"), PorterDuff.Mode.SRC_IN);
+            seen_btn.setCardBackgroundColor(Color.parseColor("#ffffff"));
+
         }
 
         String location=bundle.getString("location_text");
@@ -183,12 +195,12 @@ String selected_flag;
                     Log.e("Record exist","Record Exist");
                     RealmController.getInstance().deleteFavoriteMural(favoriteMural.getId());
                     fav_img.setColorFilter(Color.parseColor("#908B8A89"), PorterDuff.Mode.SRC_IN);
-                    favoriteCard.setCardBackgroundColor(Color.parseColor("#408B8A89"));
+                    favoriteCard.setCardBackgroundColor(Color.parseColor("#ffffff"));
                 }else{
                     Log.e("Record exist not ","Record Exist not");
                     RealmController.getInstance().addFavoriteMural(favoriteMural);
                     fav_img.setColorFilter(Color.parseColor("#5ab3a4"), PorterDuff.Mode.SRC_IN);
-                    favoriteCard.setCardBackgroundColor(Color.parseColor("#ffffff"));
+                    favoriteCard.setCardBackgroundColor(Color.parseColor("#305ab3a4"));
 
                 }
             }
@@ -216,13 +228,13 @@ String selected_flag;
                     Log.e("Record exist","Record Exist");
                     RealmController.getInstance().deleteSeenMarkedMural(favoriteMural.getId());
                     seen_img.setColorFilter(Color.parseColor("#908B8A89"), PorterDuff.Mode.SRC_IN);
-                    seen_btn.setCardBackgroundColor(Color.parseColor("#408B8A89"));
+                    seen_btn.setCardBackgroundColor(Color.parseColor("#ffffff"));
 
                 }else{
                     Log.e("Record exist not ","Record Exist not");
                     RealmController.getInstance().addSeenMural(favoriteMural);
                     seen_img.setColorFilter(Color.parseColor("#5ab3a4"), PorterDuff.Mode.SRC_IN);
-                    seen_btn.setCardBackgroundColor(Color.parseColor("#ffffff"));
+                    seen_btn.setCardBackgroundColor(Color.parseColor("#305ab3a4"));
 
                 }
             }
@@ -249,13 +261,13 @@ String selected_flag;
                     Log.e("Record exist","Record Exist");
                     RealmController.getInstance().deleteBookMarkedMural(favoriteMural.getId());
                     book_img.setColorFilter(Color.parseColor("#908B8A89"), PorterDuff.Mode.SRC_IN);
-                    bookmarks_btn.setCardBackgroundColor(Color.parseColor("#408B8A89"));
+                    bookmarks_btn.setCardBackgroundColor(Color.parseColor("#ffffff"));
 
                 }else{
                     Log.e("Record exist not ","Record Exist not");
                     RealmController.getInstance().addBookMarkedMural(favoriteMural);
                     book_img.setColorFilter(Color.parseColor("#5ab3a4"), PorterDuff.Mode.SRC_IN);
-                    bookmarks_btn.setCardBackgroundColor(Color.parseColor("#ffffff"));
+                    bookmarks_btn.setCardBackgroundColor(Color.parseColor("#305ab3a4"));
 
                 }
             }

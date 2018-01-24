@@ -246,8 +246,8 @@ public class CommonFragment extends Fragment {
                 //search_box.setVisibility(View.VISIBLE);
                 //search_box.bringToFront();
             } else if (GlobalReferences.getInstance().mCommonFragment instanceof FragmentMuralDetail) {
-                toolbarImage.setVisibility(View.VISIBLE);
-                toolbarImage.setOnClickListener(new View.OnClickListener() {
+                //toolbarImage.setVisibility(View.VISIBLE);
+                imageview_share.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         try {
