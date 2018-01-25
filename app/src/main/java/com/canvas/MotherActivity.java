@@ -26,6 +26,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 
 import com.canvas.common.CommonFragment;
@@ -207,6 +208,15 @@ public class MotherActivity extends BaseActivity {
         searchView.setVoiceSearch(true);
         searchView.setCursorDrawable(R.drawable.custom_cursor);
         searchView.setEllipsize(true);
+        searchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.e("asaaa","asa");
+
+            }
+        });
+
+        searchView.setSubmitOnClick(true);
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -258,6 +268,9 @@ public class MotherActivity extends BaseActivity {
                 //Do some magic
             }
         });
+
+
+
 
         addFragmentWithBackStack(new CanvsMapFragment(), true);
 

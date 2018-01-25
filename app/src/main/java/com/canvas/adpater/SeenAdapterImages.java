@@ -1,7 +1,5 @@
 package com.canvas.adpater;
 
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -49,8 +47,11 @@ public class SeenAdapterImages extends RecyclerView.Adapter<SeenAdapterImages.My
                     String image_url = "https://canvs.cruxcode.nyc/mural_thumb_" + murals.getImage_resource_id().toLowerCase() + ".jpg?size=thumb&requestType=image";
                     Picasso.with(GlobalReferences.getInstance().baseActivity).load(image_url).placeholder(R.color.grey_).error(R.color.grey_).into(holder.imageView);
                     if(RealmController.getInstance().isSeenMuralExist(murals.getId())){
-                     holder.imageView.setColorFilter(Color.parseColor("#50CFCECF"), PorterDuff.Mode.SRC_IN);
+                        holder.gray_color_img.setVisibility(View.VISIBLE);
+                     //holder.imageView.setColorFilter(Color.parseColor("#10CFCECF"), PorterDuff.Mode.SRC_IN);
                         seen.add(murals);
+                    }else {
+                        holder.gray_color_img.setVisibility(View.GONE);
                     }
                     if(position==images.size()-1){
                         try{
@@ -76,11 +77,12 @@ public class SeenAdapterImages extends RecyclerView.Adapter<SeenAdapterImages.My
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        private ImageView imageView;
+        private ImageView imageView,gray_color_img;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.images);
+            gray_color_img =itemView.findViewById(R.id.gray_color_img);
         }
     }
 }

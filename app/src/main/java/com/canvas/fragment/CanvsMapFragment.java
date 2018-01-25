@@ -398,6 +398,9 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
             } else {
                 list_murals = new ArrayList<>();
             }
+            if(mClusterManager!=null){
+                mClusterManager.clearItems();
+            }
             marker_previous = null;
             if (cardView_dialog != null) {
                 cardView_dialog.setVisibility(View.GONE);
@@ -478,7 +481,7 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
     @Override
     public <T> void onRequestCompleted(BaseTask<T> listener, Constants.RequestParam requestParam) {
         try {
-            //Log.e("response", listener.getJsonArrayResponse() + "");
+            Log.e("response", listener.getJsonArrayResponse() + "");
             GlobalReferences.getInstance().progresBar.setVisibility(View.GONE);
             Gson gson = new Gson();
             //Murals murals = gson.fromJson();
@@ -503,12 +506,15 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
                 murals.setLongitude(object.getDouble("longitude"));
                 murals.setImage_path(object.getString("additionalLink2"));
                 murals.setAuthor(object.getString("artistName"));
-                if(object.getString("muralTitle")==null){
-                    murals.setTitle(object.getString("Untitled"));
-                }else
-                murals.setTitle(object.getString("muralTitle"));
+                try {
+                    if (object.getString("muralTitle") == null || object.getString("muralTitle").equalsIgnoreCase("null")) {
+                        murals.setTitle("Untitled");
+                    } else
+                        murals.setTitle(object.getString("muralTitle"));
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
 
-                Log.e("mural title=",murals.getTitle()+"");
                 murals.setImage_resource_id(object.getString("imageResourceID"));
                 murals.setAbout_text(object.getString("aboutThisText"));
                 murals.setLocation_text(object.getString("locationText"));
@@ -517,16 +523,6 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
                 murals.setAdditional_link_first(object.getString("additionalLink1"));
                 murals.setAdditional_link_second(object.getString("additionalLink2"));
                 murals.setAdditional_link_third(object.getString("additionalLink3"));
-
-
-                if (location != null) {
-//                    ProgressBar   progressBar = new ProgressBar(youractivity.this,null,android.R.attr.progressBarStyleLarge);
-//                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100,100);
-//                    params.addRule(RelativeLayout.CENTER_IN_PARENT);
-//                    layout.addView(progressBar,params);
-//                    progressBar.setVisibility(View.VISIBLE);  //To show ProgressBar
-//                    progressBar.setVisibility(View.GONE);
-                }
 
                 double distanceInKms = 0.0;
                 if (location != null && murals.getLatitude() != 0.0 && murals.getLongitude() != 0.0) {
@@ -554,6 +550,7 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
                 if (isAnyFilterSelected) {
                     list_murals.add(murals);
                     if (freshMuralFilter) {
+                        Log.e("Inside fre mural","Inside fre mural");
                         if (murals.getFreshWhenAdded().equalsIgnoreCase("1")) {
                             BitmapDescriptor markerIcon = null;
                             if (Build.VERSION.SDK_INT >= 21) {
@@ -565,7 +562,7 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
                             }
                             MyItem offsetItem = new MyItem(object.getDouble("latitude"), object.getDouble("longitude"), markerIcon, i);
                             mClusterManager.addItem(offsetItem);
-
+                            Log.e("Inside fre mural ","Inside fre mural added");
 
                             // mMap.addMarker(new MarkerOptions().position(new LatLng(object.getDouble("latitude"), object.getDouble("longitude"))).icon(markerIcon)).setTag(i);
                             //list_murals.add(murals);
@@ -574,6 +571,8 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
                     }
 
                     if (favoriteMuralFilter) {
+                        Log.e("Inside fav mural","Inside fav mural");
+
                         if (RealmController.getInstance().isFavoriteMuralExist(murals.getId())) {
                             BitmapDescriptor markerIcon = null;
                             if (Build.VERSION.SDK_INT >= 21) {
@@ -587,6 +586,7 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
                             MyItem offsetItem = new MyItem(object.getDouble("latitude"), object.getDouble("longitude"), markerIcon, i);
                             mClusterManager.addItem(offsetItem);
 
+                            Log.e("Inside fav mural ","Inside fav mural added");
 
                             // mMap.addMarker(new MarkerOptions().position(new LatLng(object.getDouble("latitude"), object.getDouble("longitude"))).icon(markerIcon)).setTag(i);
                             //list_murals.add(murals);
@@ -595,6 +595,8 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
                     }
 
                     if (seenMuralFilter) {
+                        Log.e("Inside seen mural","Inside seen mural");
+
                         if (RealmController.getInstance().isSeenMuralExist(murals.getId())) {
                             BitmapDescriptor markerIcon = null;
                             if (Build.VERSION.SDK_INT >= 21) {
@@ -606,6 +608,7 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
                             }
                             MyItem offsetItem = new MyItem(object.getDouble("latitude"), object.getDouble("longitude"), markerIcon, i);
                             mClusterManager.addItem(offsetItem);
+                            Log.e("Inside seen mural ","Inside seen mural added");
 
                             // mMap.addMarker(new MarkerOptions().position(new LatLng(object.getDouble("latitude"), object.getDouble("longitude"))).icon(markerIcon)).setTag(i);
                             //list_murals.add(murals);
@@ -614,6 +617,8 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
                     }
 
                     if (bookmarkedFilter) {
+                        Log.e("Inside bookmarked mural","Inside bboke mural");
+
                         if (RealmController.getInstance().isBookMarhedMuralExist(murals.getId())) {
                             BitmapDescriptor markerIcon = null;
                             if (Build.VERSION.SDK_INT >= 21) {
@@ -627,6 +632,8 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
                             MyItem offsetItem = new MyItem(object.getDouble("latitude"), object.getDouble("longitude"), markerIcon, i);
 
                             mClusterManager.addItem(offsetItem);
+                            Log.e("Inside bookmarked mural","Inside bboke mural added");
+
                             //mMap.addMarker(new MarkerOptions().position(new LatLng(object.getDouble("latitude"), object.getDouble("longitude"))).icon(markerIcon)).setTag(i);
                             //list_murals.add(murals);
                             continue;
@@ -634,6 +641,8 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
                     }
 
                     if (nearByFilter) {
+                        Log.e("Inside disss mural","Inside diss mural");
+
                         if (distanceInKms > 0.0 && distanceInKms <= 500.00) {
                             BitmapDescriptor markerIcon = null;
                             if (Build.VERSION.SDK_INT >= 21) {
@@ -644,23 +653,23 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
                                 // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue);
                                 markerIcon = BitmapDescriptorFactory.fromBitmap(drawNearByMurals(murals, String.valueOf((int) distanceInKms), false));
                                 murals.setDistanceInKms(distanceInKms);
-
                             }
                             murals.setNearBy(true);
 
                             MyItem offsetItem = new MyItem(object.getDouble("latitude"), object.getDouble("longitude"), markerIcon, i);
 
                             mClusterManager.addItem(offsetItem);
+                            Log.e("Inside disss mural","Inside diss mural added");
 
                             // mMap.addMarker(new MarkerOptions().position(new LatLng(object.getDouble("latitude"), object.getDouble("longitude"))).icon(markerIcon)).setTag(i);
                             // list_murals.add(murals);
                             continue;
-
                         }
                     }
                 } else {
 
                     if (distanceInKms > 0.0 && distanceInKms <= 500.00) {
+                        Log.e("in else","in else");
                         BitmapDescriptor markerIcon = null;
                         if (Build.VERSION.SDK_INT >= 21) {
                             // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue,null);
