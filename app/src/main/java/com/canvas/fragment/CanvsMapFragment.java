@@ -16,8 +16,11 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
@@ -77,6 +80,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 
 import org.json.JSONArray;
@@ -85,6 +89,8 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
 
 import static android.content.ContentValues.TAG;
 import static com.canvas.R.drawable.murals;
@@ -121,6 +127,7 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
     OwnIconRendered ownIconRendered;
     MyItem previous_item;
     int current_pos = -1;
+    long mRequestStartTime;
 
     public CanvsMapFragment() {
 
@@ -202,14 +209,12 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
             @Override
             public void onMapReady(GoogleMap gmap) {
                 mMap = gmap;
-                mMap.getUiSettings().setScrollGesturesEnabled(true);
-                mMap.getUiSettings().setTiltGesturesEnabled(true);
-                mMap.getUiSettings().setScrollGesturesEnabled(true);
+                mMap.getUiSettings().setTiltGesturesEnabled(false);
                 mMap.getUiSettings().setCompassEnabled(false);
                 mMap.getUiSettings().setScrollGesturesEnabled(true);
                 mMap.getUiSettings().setZoomGesturesEnabled(true);
-                mMap.getUiSettings().setRotateGesturesEnabled(true);
-
+                mMap.getUiSettings().setRotateGesturesEnabled(false);
+                mMap.setBuildingsEnabled(false);
                 mMap.setOnMapClickListener(CanvsMapFragment.this);
 
                 mClusterManager = new ClusterManager<MyItem>(GlobalReferences.getInstance().baseActivity, mMap);
@@ -219,6 +224,17 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
                 mClusterManager.setOnClusterItemClickListener(CanvsMapFragment.this);
                 mMap.setOnCameraIdleListener(mClusterManager);
                 mMap.setOnMarkerClickListener(mClusterManager);
+
+
+                mClusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<MyItem>() {
+                            @Override
+                            public boolean onClusterClick(final Cluster<MyItem> cluster) {
+                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                                        cluster.getPosition(), (float) Math.floor(mMap.getCameraPosition().zoom + 1)), 300,
+                                        null);
+                                return true;
+                            }
+                        });
             }
         });
 
@@ -370,6 +386,7 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
         }
         if (Utility.isNetworkAvailable(GlobalReferences.getInstance().baseActivity)) {
             ApiRequests.getInstance().get_murals(GlobalReferences.getInstance().baseActivity, this);
+            mRequestStartTime = System.currentTimeMillis();
         } else {
             Utility.showNoInternetConnectionToast();
         }
@@ -483,7 +500,10 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
         try {
             Log.e("response", listener.getJsonArrayResponse() + "");
             GlobalReferences.getInstance().progresBar.setVisibility(View.GONE);
+            long totalRequestTime = System.currentTimeMillis() - mRequestStartTime;
+            Log.e(TAG, "onRequestCompleted: "+totalRequestTime );
             Gson gson = new Gson();
+            mClusterManager.clearItems();
             //Murals murals = gson.fromJson();
             List<MuralsArray> list = new ArrayList<MuralsArray>();
 
@@ -494,64 +514,497 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
 
             List<MuralsArray> fromJson = gson.fromJson(json, type);
             JSONArray jsonArray = listener.getJsonArrayResponse();
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject object = jsonArray.getJSONObject(i);
-                Murals murals = new Murals();
-                murals.setId(object.getInt("id"));
-                murals.setFreshWhenAdded(object.getString("freshWhenAdded"));
-                murals.setDerelict(object.getInt("derelict"));
-                murals.setActive(object.getInt("active"));
-                murals.setPopularity(object.getInt("popularity"));
-                murals.setLatitude(object.getDouble("latitude"));
-                murals.setLongitude(object.getDouble("longitude"));
-                murals.setImage_path(object.getString("additionalLink2"));
-                murals.setAuthor(object.getString("artistName"));
-                try {
-                    if (object.getString("muralTitle") == null || object.getString("muralTitle").equalsIgnoreCase("null")) {
-                        murals.setTitle("Untitled");
-                    } else
-                        murals.setTitle(object.getString("muralTitle"));
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
 
-                murals.setImage_resource_id(object.getString("imageResourceID"));
-                murals.setAbout_text(object.getString("aboutThisText"));
-                murals.setLocation_text(object.getString("locationText"));
-                murals.setArtist_text(object.getString("aboutArtistText"));
-                murals.setTags(object.getString("tags"));
-                murals.setAdditional_link_first(object.getString("additionalLink1"));
-                murals.setAdditional_link_second(object.getString("additionalLink2"));
-                murals.setAdditional_link_third(object.getString("additionalLink3"));
+//            for (int i = 0; i < jsonArray.length(); i++) {
+//                JSONObject object = jsonArray.getJSONObject(i);
+//                Murals murals = new Murals();
+//                murals.setId(object.getInt("id"));
+//                murals.setFreshWhenAdded(object.getString("freshWhenAdded"));
+//                murals.setDerelict(object.getInt("derelict"));
+//                murals.setActive(object.getInt("active"));
+//                murals.setPopularity(object.getInt("popularity"));
+//                murals.setLatitude(object.getDouble("latitude"));
+//                murals.setLongitude(object.getDouble("longitude"));
+//                murals.setImage_path(object.getString("additionalLink2"));
+//                murals.setAuthor(object.getString("artistName"));
+//                try {
+//                    if (object.getString("muralTitle") == null || object.getString("muralTitle").equalsIgnoreCase("null")) {
+//                        murals.setTitle("Untitled");
+//                    } else
+//                        murals.setTitle(object.getString("muralTitle"));
+//                }catch (Exception e){
+//                    e.printStackTrace();
+//                }
+//
+//                murals.setImage_resource_id(object.getString("imageResourceID"));
+//                murals.setAbout_text(object.getString("aboutThisText"));
+//                murals.setLocation_text(object.getString("locationText"));
+//                murals.setArtist_text(object.getString("aboutArtistText"));
+//                murals.setTags(object.getString("tags"));
+//                murals.setAdditional_link_first(object.getString("additionalLink1"));
+//                murals.setAdditional_link_second(object.getString("additionalLink2"));
+//                murals.setAdditional_link_third(object.getString("additionalLink3"));
+//
+//                double distanceInKms = 0.0;
+//                if (location != null && murals.getLatitude() != 0.0 && murals.getLongitude() != 0.0) {
+//                    distanceInKms = distance(location.getLatitude(), location.getLongitude(), murals.getLatitude(), murals.getLongitude());
+//                    //Log.e("distance in=", distanceInKms + "");
+//                }
 
-                double distanceInKms = 0.0;
-                if (location != null && murals.getLatitude() != 0.0 && murals.getLongitude() != 0.0) {
-                    distanceInKms = distance(location.getLatitude(), location.getLongitude(), murals.getLatitude(), murals.getLongitude());
-                    //Log.e("distance in=", distanceInKms + "");
-                }
+            new LoadData().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,jsonArray);
+//            for (int i = 0; i < jsonArray.length(); i++) {
+//                JSONObject object = jsonArray.getJSONObject(i);
+//                Murals murals = new Murals();
+//                murals.setId(object.getInt("id"));
+//                murals.setFreshWhenAdded(object.getString("freshWhenAdded"));
+//                murals.setDerelict(object.getInt("derelict"));
+//                murals.setActive(object.getInt("active"));
+//                murals.setPopularity(object.getInt("popularity"));
+//                murals.setLatitude(object.getDouble("latitude"));
+//                murals.setLongitude(object.getDouble("longitude"));
+//                murals.setImage_path(object.getString("additionalLink2"));
+//                murals.setAuthor(object.getString("artistName"));
+//                if (object.getString("muralTitle") == null) {
+//                    murals.setTitle(object.getString("Untitled"));
+//                } else
+//                    murals.setTitle(object.getString("muralTitle"));
+//
+//                Log.e("mural title=", murals.getTitle() + "");
+//                murals.setImage_resource_id(object.getString("imageResourceID"));
+//                murals.setAbout_text(object.getString("aboutThisText"));
+//                murals.setLocation_text(object.getString("locationText"));
+//                murals.setArtist_text(object.getString("aboutArtistText"));
+//                murals.setTags(object.getString("tags"));
+//                murals.setAdditional_link_first(object.getString("additionalLink1"));
+//                murals.setAdditional_link_second(object.getString("additionalLink2"));
+//                murals.setAdditional_link_third(object.getString("additionalLink3"));
+//
+//
+//                if (location != null) {
+////                    ProgressBar   progressBar = new ProgressBar(youractivity.this,null,android.R.attr.progressBarStyleLarge);
+////                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100,100);
+////                    params.addRule(RelativeLayout.CENTER_IN_PARENT);
+////                    layout.addView(progressBar,params);
+////                    progressBar.setVisibility(View.VISIBLE);  //To show ProgressBar
+////                    progressBar.setVisibility(View.GONE);
+//                }
+//
+//                double distanceInKms = 0.0;
+//                if (location != null && murals.getLatitude() != 0.0 && murals.getLongitude() != 0.0) {
+//                    distanceInKms = distance(location.getLatitude(), location.getLongitude(), murals.getLatitude(), murals.getLongitude());
+//                    //Log.e("distance in=", distanceInKms + "");
+//                }
+//
+//                RealmController.getInstance().addMural(murals);
+//
+//
+//                boolean freshMuralFilter = GlobalReferences.getInstance().pref.getFreshFilter();
+//                boolean favoriteMuralFilter = GlobalReferences.getInstance().pref.getFavFilter();
+//                boolean seenMuralFilter = GlobalReferences.getInstance().pref.getSeenFilter();
+//                boolean bookmarkedFilter = GlobalReferences.getInstance().pref.getBookmarkedFilter();
+//                boolean nearByFilter = GlobalReferences.getInstance().pref.getNearbyFilter();
+//
+//                boolean isAnyFilterSelected = false;
+//
+//                if (freshMuralFilter || favoriteMuralFilter || seenMuralFilter || bookmarkedFilter || nearByFilter) {
+//                    isAnyFilterSelected = true;
+//                } else {
+//                    isAnyFilterSelected = false;
+//                }
+//
+//                if (isAnyFilterSelected) {
+//                    list_murals.add(murals);
+//                    if (freshMuralFilter) {
+//                        if (murals.getFreshWhenAdded().equalsIgnoreCase("1")) {
+//                            BitmapDescriptor markerIcon = null;
+//                            if (Build.VERSION.SDK_INT >= 21) {
+//                                // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue,null);
+//                                markerIcon = getMarkerIconFromDrawableFeatured(getActivity().getResources().getDrawable(R.drawable.features, null), false);
+//                            } else {
+//                                // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue);
+//                                markerIcon = getMarkerIconFromDrawableFeatured(getActivity().getResources().getDrawable(R.drawable.features), false);
+//                            }
+//                            MyItem offsetItem = new MyItem(object.getDouble("latitude"), object.getDouble("longitude"), markerIcon, i);
+//                            mClusterManager.addItem(offsetItem);
+//
+//
+//                            // mMap.addMarker(new MarkerOptions().position(new LatLng(object.getDouble("latitude"), object.getDouble("longitude"))).icon(markerIcon)).setTag(i);
+//                            //list_murals.add(murals);
+//                            continue;
+//                        }
+//                    }
+//
+//                    if (favoriteMuralFilter) {
+//                        if (RealmController.getInstance().isFavoriteMuralExist(murals.getId())) {
+//                            BitmapDescriptor markerIcon = null;
+//                            if (Build.VERSION.SDK_INT >= 21) {
+//                                // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue,null);
+//                                markerIcon = getMarkerIconFromDrawable(getActivity().getResources().getDrawable(R.drawable.murals, null), false);
+//                            } else {
+//                                // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue);
+//                                markerIcon = getMarkerIconFromDrawable(getActivity().getResources().getDrawable(R.drawable.murals), false);
+//                            }
+//
+//                            MyItem offsetItem = new MyItem(object.getDouble("latitude"), object.getDouble("longitude"), markerIcon, i);
+//                            mClusterManager.addItem(offsetItem);
+//
+//
+//                            // mMap.addMarker(new MarkerOptions().position(new LatLng(object.getDouble("latitude"), object.getDouble("longitude"))).icon(markerIcon)).setTag(i);
+//                            //list_murals.add(murals);
+//                            continue;
+//                        }
+//                    }
+//
+//                    if (seenMuralFilter) {
+//                        if (RealmController.getInstance().isSeenMuralExist(murals.getId())) {
+//                            BitmapDescriptor markerIcon = null;
+//                            if (Build.VERSION.SDK_INT >= 21) {
+//                                // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue,null);
+//                                markerIcon = getMarkerIconFromDrawable(getActivity().getResources().getDrawable(R.drawable.murals, null), false);
+//                            } else {
+//                                // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue);
+//                                markerIcon = getMarkerIconFromDrawable(getActivity().getResources().getDrawable(R.drawable.murals), false);
+//                            }
+//                            MyItem offsetItem = new MyItem(object.getDouble("latitude"), object.getDouble("longitude"), markerIcon, i);
+//                            mClusterManager.addItem(offsetItem);
+//
+//                            // mMap.addMarker(new MarkerOptions().position(new LatLng(object.getDouble("latitude"), object.getDouble("longitude"))).icon(markerIcon)).setTag(i);
+//                            //list_murals.add(murals);
+//                            continue;
+//                        }
+//                    }
+//
+//                    if (bookmarkedFilter) {
+//                        if (RealmController.getInstance().isBookMarhedMuralExist(murals.getId())) {
+//                            BitmapDescriptor markerIcon = null;
+//                            if (Build.VERSION.SDK_INT >= 21) {
+//                                // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue,null);
+//                                markerIcon = getMarkerIconFromDrawable(getActivity().getResources().getDrawable(R.drawable.murals, null), false);
+//                            } else {
+//                                // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue);
+//                                markerIcon = getMarkerIconFromDrawable(getActivity().getResources().getDrawable(R.drawable.murals), false);
+//                            }
+//
+//                            MyItem offsetItem = new MyItem(object.getDouble("latitude"), object.getDouble("longitude"), markerIcon, i);
+//
+//                            mClusterManager.addItem(offsetItem);
+//                            //mMap.addMarker(new MarkerOptions().position(new LatLng(object.getDouble("latitude"), object.getDouble("longitude"))).icon(markerIcon)).setTag(i);
+//                            //list_murals.add(murals);
+//                            continue;
+//                        }
+//                    }
+//
+//                    if (nearByFilter) {
+//                        if (distanceInKms > 0.0 && distanceInKms <= 500.00) {
+//                            BitmapDescriptor markerIcon = null;
+//                            if (Build.VERSION.SDK_INT >= 21) {
+//                                // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue,null);
+//                                markerIcon = BitmapDescriptorFactory.fromBitmap(drawNearByMurals(murals, String.valueOf((int) distanceInKms), false));
+//                                murals.setDistanceInKms(distanceInKms);
+//                            } else {
+//                                // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue);
+//                                markerIcon = BitmapDescriptorFactory.fromBitmap(drawNearByMurals(murals, String.valueOf((int) distanceInKms), false));
+//                                murals.setDistanceInKms(distanceInKms);
+//
+//                            }
+//                            murals.setNearBy(true);
+//
+//                            MyItem offsetItem = new MyItem(object.getDouble("latitude"), object.getDouble("longitude"), markerIcon, i);
+//
+//                            mClusterManager.addItem(offsetItem);
+//
+//                            // mMap.addMarker(new MarkerOptions().position(new LatLng(object.getDouble("latitude"), object.getDouble("longitude"))).icon(markerIcon)).setTag(i);
+//                            // list_murals.add(murals);
+//                            continue;
+//
+//                        }
+//                    }
+//                } else {
+//
+//                    if (distanceInKms > 0.0 && distanceInKms <= 500.00) {
+//                        BitmapDescriptor markerIcon = null;
+//                        if (Build.VERSION.SDK_INT >= 21) {
+//                            // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue,null);
+//                            markerIcon = BitmapDescriptorFactory.fromBitmap(drawNearByMurals(murals, String.valueOf((int) distanceInKms), false));
+//                            murals.setDistanceInKms(distanceInKms);
+//                        } else {
+//                            // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue);
+//                            markerIcon = BitmapDescriptorFactory.fromBitmap(drawNearByMurals(murals, String.valueOf((int) distanceInKms), false));
+//                            murals.setDistanceInKms(distanceInKms);
+//
+//                        }
+//                        murals.setNearBy(true);
+//
+//                        MyItem offsetItem = new MyItem(object.getDouble("latitude"), object.getDouble("longitude"), markerIcon, i);
+//                        mClusterManager.addItem(offsetItem);
+//                        //mMap.addMarker(new MarkerOptions().position(new LatLng(object.getDouble("latitude"), object.getDouble("longitude"))).icon(markerIcon)).setTag(i);
+//
+//                    } else if (murals.getFreshWhenAdded().equalsIgnoreCase("1")) {
+//                        BitmapDescriptor markerIcon = null;
+//                        if (Build.VERSION.SDK_INT >= 21) {
+//                            // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue,null);
+//                            markerIcon = getMarkerIconFromDrawableFeatured(getActivity().getResources().getDrawable(R.drawable.features, null), false);
+//                        } else {
+//                            // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue);
+//                            markerIcon = getMarkerIconFromDrawableFeatured(getActivity().getResources().getDrawable(R.drawable.features), false);
+//                        }
+//
+//                        MyItem offsetItem = new MyItem(object.getDouble("latitude"), object.getDouble("longitude"), markerIcon, i);
+//                        mClusterManager.addItem(offsetItem);
+//                        // mMap.addMarker(new MarkerOptions().position(new LatLng(object.getDouble("latitude"), object.getDouble("longitude"))).icon(markerIcon)).setTag(i);
+//                    } else {
+//                        BitmapDescriptor markerIcon = null;
+//                        if (Build.VERSION.SDK_INT >= 21) {
+//                            // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue,null);
+//                            markerIcon = getMarkerIconFromDrawable(getActivity().getResources().getDrawable(R.drawable.murals, null), false);
+//                        } else {
+//                            // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue);
+//                            markerIcon = getMarkerIconFromDrawable(getActivity().getResources().getDrawable(R.drawable.murals), false);
+//                        }
+//
+//                        MyItem offsetItem = new MyItem(object.getDouble("latitude"), object.getDouble("longitude"), markerIcon, i);
+//                        mClusterManager.addItem(offsetItem);
+//                        // mMap.addMarker(new MarkerOptions().position(new LatLng(object.getDouble("latitude"), object.getDouble("longitude"))).icon(markerIcon)).setTag(i);
+//                    }
+//                    list_murals.add(murals);
+//                }
+//
+//                if (i == jsonArray.length() - 1) {
+//                    if (location != null) {
+//                        setCurrentLocation(new LatLng(location.getLatitude(), location.getLongitude()));
+//                    }
+//                }
+//                // builder.include(new LatLng(object.getDouble("latitude"),object.getDouble("longitude")));
+//
+//
+//               /*Check filters*/
+//
+//
+//            }
 
-                RealmController.getInstance().addMural(murals);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private class LoadData extends AsyncTask<JSONArray,Void,Void>{
+
+        Realm realm;
+
+        @Override
+        protected Void doInBackground(JSONArray... jsonArrays) {
+            Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+            try {
+              final  JSONArray jsonArray = jsonArrays[0];
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject object = jsonArray.getJSONObject(i);
+                    final Murals murals = new Murals();
+                    murals.setId(object.getInt("id"));
+                    murals.setFreshWhenAdded(object.getString("freshWhenAdded"));
+                    murals.setDerelict(object.getInt("derelict"));
+                    murals.setActive(object.getInt("active"));
+                    murals.setPopularity(object.getInt("popularity"));
+                    murals.setLatitude(object.getDouble("latitude"));
+                    murals.setLongitude(object.getDouble("longitude"));
+                    murals.setImage_path(object.getString("additionalLink2"));
+                    murals.setAuthor(object.getString("artistName"));
+                    try {
+                        if (object.getString("muralTitle") == null || object.getString("muralTitle").equalsIgnoreCase("null")) {
+                            murals.setTitle("Untitled");
+                        } else
+                            murals.setTitle(object.getString("muralTitle"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    murals.setImage_resource_id(object.getString("imageResourceID"));
+                    murals.setAbout_text(object.getString("aboutThisText"));
+                    murals.setLocation_text(object.getString("locationText"));
+                    murals.setArtist_text(object.getString("aboutArtistText"));
+                    murals.setTags(object.getString("tags"));
+                    murals.setAdditional_link_first(object.getString("additionalLink1"));
+                    murals.setAdditional_link_second(object.getString("additionalLink2"));
+                    murals.setAdditional_link_third(object.getString("additionalLink3"));
+
+                    double distanceInKms = 0.0;
+                    if (location != null && murals.getLatitude() != 0.0 && murals.getLongitude() != 0.0) {
+                        distanceInKms = distance(location.getLatitude(), location.getLongitude(), murals.getLatitude(), murals.getLongitude());
+                        //Log.e("distance in=", distanceInKms + "");
+                    }
+
+                   RealmController.getInstance().addMural(murals);
+
+//                    try {
+//                        realm.executeTransaction(new Realm.Transaction() {
+//                            @Override
+//                            public void execute(Realm realm) {
+//                                realm.copyToRealmOrUpdate(murals);
+//                            }
+//                        });
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                        Log.e(TAG, "doInBackground: "+e.getMessage() );
+//                    }
 
 
-                boolean freshMuralFilter = GlobalReferences.getInstance().pref.getFreshFilter();
-                boolean favoriteMuralFilter = GlobalReferences.getInstance().pref.getFavFilter();
-                boolean seenMuralFilter = GlobalReferences.getInstance().pref.getSeenFilter();
-                boolean bookmarkedFilter = GlobalReferences.getInstance().pref.getBookmarkedFilter();
-                boolean nearByFilter = GlobalReferences.getInstance().pref.getNearbyFilter();
 
-                boolean isAnyFilterSelected = false;
+                    boolean freshMuralFilter = GlobalReferences.getInstance().pref.getFreshFilter();
+                    boolean favoriteMuralFilter = GlobalReferences.getInstance().pref.getFavFilter();
+                    boolean seenMuralFilter = GlobalReferences.getInstance().pref.getSeenFilter();
+                    boolean bookmarkedFilter = GlobalReferences.getInstance().pref.getBookmarkedFilter();
+                    boolean nearByFilter = GlobalReferences.getInstance().pref.getNearbyFilter();
 
-                if (freshMuralFilter || favoriteMuralFilter || seenMuralFilter || bookmarkedFilter || nearByFilter) {
-                    isAnyFilterSelected = true;
-                } else {
-                    isAnyFilterSelected = false;
-                }
+                    boolean isAnyFilterSelected = false;
 
-                if (isAnyFilterSelected) {
-                    list_murals.add(murals);
-                    if (freshMuralFilter) {
-                        Log.e("Inside fre mural","Inside fre mural");
-                        if (murals.getFreshWhenAdded().equalsIgnoreCase("1")) {
+                    if (freshMuralFilter || favoriteMuralFilter || seenMuralFilter || bookmarkedFilter || nearByFilter) {
+                        isAnyFilterSelected = true;
+                    } else {
+                        isAnyFilterSelected = false;
+                    }
+
+                    if (isAnyFilterSelected) {
+                        list_murals.add(murals);
+                        if (freshMuralFilter) {
+                            Log.e("Inside fre mural", "Inside fre mural");
+                            if (murals.getFreshWhenAdded().equalsIgnoreCase("1")) {
+                                BitmapDescriptor markerIcon = null;
+                                if (Build.VERSION.SDK_INT >= 21) {
+                                    // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue,null);
+                                    markerIcon = getMarkerIconFromDrawableFeatured(getActivity().getResources().getDrawable(R.drawable.features, null), false);
+                                } else {
+                                    // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue);
+                                    markerIcon = getMarkerIconFromDrawableFeatured(getActivity().getResources().getDrawable(R.drawable.features), false);
+                                }
+                                MyItem offsetItem = new MyItem(object.getDouble("latitude"), object.getDouble("longitude"), markerIcon, i);
+                                mClusterManager.addItem(offsetItem);
+                                Log.e("Inside fre mural ", "Inside fre mural added");
+
+                                // mMap.addMarker(new MarkerOptions().position(new LatLng(object.getDouble("latitude"), object.getDouble("longitude"))).icon(markerIcon)).setTag(i);
+                                //list_murals.add(murals);
+                                continue;
+                            }
+                        }
+
+                        if (favoriteMuralFilter) {
+                            Log.e("Inside fav mural", "Inside fav mural");
+
+                            if (RealmController.getInstance().isFavoriteMuralExist(murals.getId())) {
+                                BitmapDescriptor markerIcon = null;
+                                if (Build.VERSION.SDK_INT >= 21) {
+                                    // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue,null);
+                                    markerIcon = getMarkerIconFromDrawable(getActivity().getResources().getDrawable(R.drawable.murals, null), false);
+                                } else {
+                                    // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue);
+                                    markerIcon = getMarkerIconFromDrawable(getActivity().getResources().getDrawable(R.drawable.murals), false);
+                                }
+
+                                MyItem offsetItem = new MyItem(object.getDouble("latitude"), object.getDouble("longitude"), markerIcon, i);
+                                mClusterManager.addItem(offsetItem);
+
+                                Log.e("Inside fav mural ", "Inside fav mural added");
+
+                                // mMap.addMarker(new MarkerOptions().position(new LatLng(object.getDouble("latitude"), object.getDouble("longitude"))).icon(markerIcon)).setTag(i);
+                                //list_murals.add(murals);
+                                continue;
+                            }
+                        }
+
+                        if (seenMuralFilter) {
+                            Log.e("Inside seen mural", "Inside seen mural");
+
+                            if (RealmController.getInstance().isSeenMuralExist(murals.getId())) {
+                                BitmapDescriptor markerIcon = null;
+                                if (Build.VERSION.SDK_INT >= 21) {
+                                    // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue,null);
+                                    markerIcon = getMarkerIconFromDrawable(getActivity().getResources().getDrawable(R.drawable.murals, null), false);
+                                } else {
+                                    // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue);
+                                    markerIcon = getMarkerIconFromDrawable(getActivity().getResources().getDrawable(R.drawable.murals), false);
+                                }
+                                MyItem offsetItem = new MyItem(object.getDouble("latitude"), object.getDouble("longitude"), markerIcon, i);
+                                mClusterManager.addItem(offsetItem);
+                                Log.e("Inside seen mural ", "Inside seen mural added");
+
+                                // mMap.addMarker(new MarkerOptions().position(new LatLng(object.getDouble("latitude"), object.getDouble("longitude"))).icon(markerIcon)).setTag(i);
+                                //list_murals.add(murals);
+                                continue;
+                            }
+                        }
+
+                        if (bookmarkedFilter) {
+                            Log.e("Inside bookmarked mural", "Inside bboke mural"+murals.getId());
+
+
+                            if (RealmController.getInstance().isBookMarhedMuralExist(murals.getId())) {
+                                BitmapDescriptor markerIcon = null;
+                                if (Build.VERSION.SDK_INT >= 21) {
+                                    // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue,null);
+                                    markerIcon = getMarkerIconFromDrawable(getActivity().getResources().getDrawable(R.drawable.murals, null), false);
+                                } else {
+                                    // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue);
+                                    markerIcon = getMarkerIconFromDrawable(getActivity().getResources().getDrawable(R.drawable.murals), false);
+                                }
+
+                                MyItem offsetItem = new MyItem(object.getDouble("latitude"), object.getDouble("longitude"), markerIcon, i);
+
+                                mClusterManager.addItem(offsetItem);
+                                Log.e("Inside bookmarked mural", "Inside bboke mural added");
+
+                                //mMap.addMarker(new MarkerOptions().position(new LatLng(object.getDouble("latitude"), object.getDouble("longitude"))).icon(markerIcon)).setTag(i);
+                                //list_murals.add(murals);
+                                continue;
+                            }
+                        }
+
+                        if (nearByFilter) {
+                            Log.e("Inside disss mural", "Inside diss mural");
+
+                            if (distanceInKms > 0.0 && distanceInKms <= 500.00) {
+                                BitmapDescriptor markerIcon = null;
+                                if (Build.VERSION.SDK_INT >= 21) {
+                                    // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue,null);
+                                    markerIcon = BitmapDescriptorFactory.fromBitmap(drawNearByMurals(murals, String.valueOf((int) distanceInKms), false));
+                                    murals.setDistanceInKms(distanceInKms);
+                                } else {
+                                    // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue);
+                                    markerIcon = BitmapDescriptorFactory.fromBitmap(drawNearByMurals(murals, String.valueOf((int) distanceInKms), false));
+                                    murals.setDistanceInKms(distanceInKms);
+                                }
+                                murals.setNearBy(true);
+
+                                MyItem offsetItem = new MyItem(object.getDouble("latitude"), object.getDouble("longitude"), markerIcon, i);
+
+                                mClusterManager.addItem(offsetItem);
+                                Log.e("Inside disss mural", "Inside diss mural added");
+
+                                // mMap.addMarker(new MarkerOptions().position(new LatLng(object.getDouble("latitude"), object.getDouble("longitude"))).icon(markerIcon)).setTag(i);
+                                // list_murals.add(murals);
+                                continue;
+                            }
+                        }
+                    } else {
+
+                        if (distanceInKms > 0.0 && distanceInKms <= 500.00) {
+                            Log.e("in else", "in else");
+                            BitmapDescriptor markerIcon = null;
+                            if (Build.VERSION.SDK_INT >= 21) {
+                                // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue,null);
+                                markerIcon = BitmapDescriptorFactory.fromBitmap(drawNearByMurals(murals, String.valueOf((int) distanceInKms), false));
+                                murals.setDistanceInKms(distanceInKms);
+                            } else {
+                                // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue);
+                                markerIcon = BitmapDescriptorFactory.fromBitmap(drawNearByMurals(murals, String.valueOf((int) distanceInKms), false));
+                                murals.setDistanceInKms(distanceInKms);
+
+                            }
+                            murals.setNearBy(true);
+
+                            MyItem offsetItem = new MyItem(object.getDouble("latitude"), object.getDouble("longitude"), markerIcon, i);
+                            mClusterManager.addItem(offsetItem);
+                            //mMap.addMarker(new MarkerOptions().position(new LatLng(object.getDouble("latitude"), object.getDouble("longitude"))).icon(markerIcon)).setTag(i);
+
+                        } else if (murals.getFreshWhenAdded().equalsIgnoreCase("1")) {
                             BitmapDescriptor markerIcon = null;
                             if (Build.VERSION.SDK_INT >= 21) {
                                 // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue,null);
@@ -560,179 +1013,51 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
                                 // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue);
                                 markerIcon = getMarkerIconFromDrawableFeatured(getActivity().getResources().getDrawable(R.drawable.features), false);
                             }
+
                             MyItem offsetItem = new MyItem(object.getDouble("latitude"), object.getDouble("longitude"), markerIcon, i);
                             mClusterManager.addItem(offsetItem);
-                            Log.e("Inside fre mural ","Inside fre mural added");
-
                             // mMap.addMarker(new MarkerOptions().position(new LatLng(object.getDouble("latitude"), object.getDouble("longitude"))).icon(markerIcon)).setTag(i);
-                            //list_murals.add(murals);
-                            continue;
-                        }
-                    }
-
-                    if (favoriteMuralFilter) {
-                        Log.e("Inside fav mural","Inside fav mural");
-
-                        if (RealmController.getInstance().isFavoriteMuralExist(murals.getId())) {
+                        } else {
                             BitmapDescriptor markerIcon = null;
                             if (Build.VERSION.SDK_INT >= 21) {
                                 // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue,null);
                                 markerIcon = getMarkerIconFromDrawable(getActivity().getResources().getDrawable(R.drawable.murals, null), false);
-                            } else {
+                            }else {
                                 // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue);
                                 markerIcon = getMarkerIconFromDrawable(getActivity().getResources().getDrawable(R.drawable.murals), false);
                             }
 
                             MyItem offsetItem = new MyItem(object.getDouble("latitude"), object.getDouble("longitude"), markerIcon, i);
                             mClusterManager.addItem(offsetItem);
-
-                            Log.e("Inside fav mural ","Inside fav mural added");
-
                             // mMap.addMarker(new MarkerOptions().position(new LatLng(object.getDouble("latitude"), object.getDouble("longitude"))).icon(markerIcon)).setTag(i);
-                            //list_murals.add(murals);
-                            continue;
                         }
+                        list_murals.add(murals);
                     }
 
-                    if (seenMuralFilter) {
-                        Log.e("Inside seen mural","Inside seen mural");
 
-                        if (RealmController.getInstance().isSeenMuralExist(murals.getId())) {
-                            BitmapDescriptor markerIcon = null;
-                            if (Build.VERSION.SDK_INT >= 21) {
-                                // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue,null);
-                                markerIcon = getMarkerIconFromDrawable(getActivity().getResources().getDrawable(R.drawable.murals, null), false);
-                            } else {
-                                // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue);
-                                markerIcon = getMarkerIconFromDrawable(getActivity().getResources().getDrawable(R.drawable.murals), false);
-                            }
-                            MyItem offsetItem = new MyItem(object.getDouble("latitude"), object.getDouble("longitude"), markerIcon, i);
-                            mClusterManager.addItem(offsetItem);
-                            Log.e("Inside seen mural ","Inside seen mural added");
 
-                            // mMap.addMarker(new MarkerOptions().position(new LatLng(object.getDouble("latitude"), object.getDouble("longitude"))).icon(markerIcon)).setTag(i);
-                            //list_murals.add(murals);
-                            continue;
-                        }
-                    }
-
-                    if (bookmarkedFilter) {
-                        Log.e("Inside bookmarked mural","Inside bboke mural");
-
-                        if (RealmController.getInstance().isBookMarhedMuralExist(murals.getId())) {
-                            BitmapDescriptor markerIcon = null;
-                            if (Build.VERSION.SDK_INT >= 21) {
-                                // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue,null);
-                                markerIcon = getMarkerIconFromDrawable(getActivity().getResources().getDrawable(R.drawable.murals, null), false);
-                            } else {
-                                // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue);
-                                markerIcon = getMarkerIconFromDrawable(getActivity().getResources().getDrawable(R.drawable.murals), false);
-                            }
-
-                            MyItem offsetItem = new MyItem(object.getDouble("latitude"), object.getDouble("longitude"), markerIcon, i);
-
-                            mClusterManager.addItem(offsetItem);
-                            Log.e("Inside bookmarked mural","Inside bboke mural added");
-
-                            //mMap.addMarker(new MarkerOptions().position(new LatLng(object.getDouble("latitude"), object.getDouble("longitude"))).icon(markerIcon)).setTag(i);
-                            //list_murals.add(murals);
-                            continue;
-                        }
-                    }
-
-                    if (nearByFilter) {
-                        Log.e("Inside disss mural","Inside diss mural");
-
-                        if (distanceInKms > 0.0 && distanceInKms <= 500.00) {
-                            BitmapDescriptor markerIcon = null;
-                            if (Build.VERSION.SDK_INT >= 21) {
-                                // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue,null);
-                                markerIcon = BitmapDescriptorFactory.fromBitmap(drawNearByMurals(murals, String.valueOf((int) distanceInKms), false));
-                                murals.setDistanceInKms(distanceInKms);
-                            } else {
-                                // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue);
-                                markerIcon = BitmapDescriptorFactory.fromBitmap(drawNearByMurals(murals, String.valueOf((int) distanceInKms), false));
-                                murals.setDistanceInKms(distanceInKms);
-                            }
-                            murals.setNearBy(true);
-
-                            MyItem offsetItem = new MyItem(object.getDouble("latitude"), object.getDouble("longitude"), markerIcon, i);
-
-                            mClusterManager.addItem(offsetItem);
-                            Log.e("Inside disss mural","Inside diss mural added");
-
-                            // mMap.addMarker(new MarkerOptions().position(new LatLng(object.getDouble("latitude"), object.getDouble("longitude"))).icon(markerIcon)).setTag(i);
-                            // list_murals.add(murals);
-                            continue;
-                        }
-                    }
-                } else {
-
-                    if (distanceInKms > 0.0 && distanceInKms <= 500.00) {
-                        Log.e("in else","in else");
-                        BitmapDescriptor markerIcon = null;
-                        if (Build.VERSION.SDK_INT >= 21) {
-                            // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue,null);
-                            markerIcon = BitmapDescriptorFactory.fromBitmap(drawNearByMurals(murals, String.valueOf((int) distanceInKms), false));
-                            murals.setDistanceInKms(distanceInKms);
-                        } else {
-                            // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue);
-                            markerIcon = BitmapDescriptorFactory.fromBitmap(drawNearByMurals(murals, String.valueOf((int) distanceInKms), false));
-                            murals.setDistanceInKms(distanceInKms);
-
-                        }
-                        murals.setNearBy(true);
-
-                        MyItem offsetItem = new MyItem(object.getDouble("latitude"), object.getDouble("longitude"), markerIcon, i);
-                        mClusterManager.addItem(offsetItem);
-                        //mMap.addMarker(new MarkerOptions().position(new LatLng(object.getDouble("latitude"), object.getDouble("longitude"))).icon(markerIcon)).setTag(i);
-
-                    } else if (murals.getFreshWhenAdded().equalsIgnoreCase("1")) {
-                        BitmapDescriptor markerIcon = null;
-                        if (Build.VERSION.SDK_INT >= 21) {
-                            // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue,null);
-                            markerIcon = getMarkerIconFromDrawableFeatured(getActivity().getResources().getDrawable(R.drawable.features, null), false);
-                        } else {
-                            // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue);
-                            markerIcon = getMarkerIconFromDrawableFeatured(getActivity().getResources().getDrawable(R.drawable.features), false);
-                        }
-
-                        MyItem offsetItem = new MyItem(object.getDouble("latitude"), object.getDouble("longitude"), markerIcon, i);
-                        mClusterManager.addItem(offsetItem);
-                        // mMap.addMarker(new MarkerOptions().position(new LatLng(object.getDouble("latitude"), object.getDouble("longitude"))).icon(markerIcon)).setTag(i);
-                    } else {
-                        BitmapDescriptor markerIcon = null;
-                        if (Build.VERSION.SDK_INT >= 21) {
-                            // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue,null);
-                            markerIcon = getMarkerIconFromDrawable(getActivity().getResources().getDrawable(R.drawable.murals, null), false);
-                        } else {
-                            // Drawable circleDrawable = getResources().getDrawable(R.drawable.circle_shape_blue);
-                            markerIcon = getMarkerIconFromDrawable(getActivity().getResources().getDrawable(R.drawable.murals), false);
-                        }
-
-                        MyItem offsetItem = new MyItem(object.getDouble("latitude"), object.getDouble("longitude"), markerIcon, i);
-                        mClusterManager.addItem(offsetItem);
-                        // mMap.addMarker(new MarkerOptions().position(new LatLng(object.getDouble("latitude"), object.getDouble("longitude"))).icon(markerIcon)).setTag(i);
-                    }
-                    list_murals.add(murals);
                 }
 
-                if (i == jsonArray.length() - 1) {
-                    if (location != null) {
-                        setCurrentLocation(new LatLng(location.getLatitude(), location.getLongitude()));
-                    }
-                }
-                // builder.include(new LatLng(object.getDouble("latitude"),object.getDouble("longitude")));
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                    if (location != null) {
+                                        setCurrentLocation(new LatLng(location.getLatitude(), location.getLongitude()));
+                                    }
 
-
-               /*Check filters*/
-
+                            }
+                        });
+            }catch (Exception ex){
+                Log.e(TAG, "doInBackground: "+ex.getMessage() );
 
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+
+
+            return null;
         }
     }
+
+
 
     public Bitmap drawNearByMurals(Murals murals, String distance, boolean isClick) {
         Bitmap bmp = null;
@@ -1236,10 +1561,11 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
     }
 
     @Override
-    public boolean onClusterItemClick(MyItem myItem) {
+    public boolean onClusterItemClick(final MyItem myItem) {
 
 
         Marker marker = ownIconRendered.getMarker(myItem);
+
 
 
         if (marker_previous != null) {
@@ -1283,7 +1609,9 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
                     markerIcon = getMarkerIconFromDrawable(circleDrawable, false);
                     marker.setIcon(markerIcon);
                 }
-                marker_previous.setIcon(markerIcon);
+                if (marker_previous!=null&&marker_previous.isVisible()) {
+                    marker_previous.setIcon(markerIcon);
+                }
             }
         }
         marker_previous = marker;
@@ -1361,6 +1689,8 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
                     bundle.putString("name", murals.getTitle());
                     bundle.putDouble("lat", murals.getLatitude());
                     bundle.putDouble("lon", murals.getLongitude());
+                    bundle.putInt("position",myItem.getMarkerPosition());
+                    bundle.putParcelableArrayList("list",list_murals);
                     fragmentMuralDetail.setArguments(bundle);
                     ((BaseActivity) GlobalReferences.getInstance().baseActivity).addFragmentWithBackStack(fragmentMuralDetail, true);
                     cardView_dialog.setVisibility(View.GONE);

@@ -1,6 +1,7 @@
 package com.canvas.io.http;
 
 import android.content.Context;
+import android.util.Base64;
 import android.util.Log;
 
 import com.android.volley.NetworkResponse;
@@ -16,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 
 public class ApiRequests {
@@ -54,6 +56,29 @@ public class ApiRequests {
             }
             requests.setTag(requestParam.getRequestTag());
             mRequestQueue.add(requests);
+            appRequest.onRequestStarted(requests, requestParam);
+        }
+    }
+
+
+    public void sendFeedback(Context context, AppRequest appRequest, JSONObject jsonObject) {
+        if (context != null) {
+
+            requestParam = Constants.RequestParam.SEND_FEEDBACK;
+            String url = "https://api.mailgun.net/v3/mg.cruxcode.nyc/messages";
+            String requestTag = "sign_up";
+
+            HttpRequestsJson requests = new HttpRequestsJson(Request.Method.POST, url, jsonObject, error, appRequest, mParams);
+            String auth = "Basic " + Base64.encodeToString(UUID.randomUUID().toString().getBytes(), Base64.DEFAULT);
+            requests.setHeaders("Authorization",auth );
+            error.setRequestLister(appRequest, requests, requestParam.getRequestTag());
+            if (mRequestQueue != null) {
+                mRequestQueue.cancelAll(requestParam.getRequestTag());
+            }
+            requests.setTag(requestParam.getRequestTag());
+            mRequestQueue.add(requests);
+
+
             appRequest.onRequestStarted(requests, requestParam);
         }
     }

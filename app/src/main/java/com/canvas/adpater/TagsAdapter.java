@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.canvas.R;
 
+import java.util.ArrayList;
+
 import static android.content.ContentValues.TAG;
 
 /**
@@ -19,7 +21,7 @@ import static android.content.ContentValues.TAG;
 
 public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.MyViewHolder> {
 
-    private String [] tagStringList;
+    private ArrayList<String> tagStringList;
     Context mContext;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -36,7 +38,7 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.MyViewHolder> 
     }
 
 
-    public TagsAdapter(String[] services, Context context) {
+    public TagsAdapter(ArrayList<String> services, Context context) {
         this.tagStringList = services;
         this.mContext = context;
     }
@@ -51,7 +53,7 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        String tag = tagStringList[position];
+        String tag = tagStringList.get(position);
 
         holder.textView_name.setText(tag);
 
@@ -64,7 +66,7 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.MyViewHolder> 
 
     @Override
     public int getItemCount() {
-        Log.e(TAG, "getItemCount: "+tagStringList.length );
-        return tagStringList.length;
+        Log.e(TAG, "getItemCount: "+tagStringList.size() );
+        return tagStringList.size();
     }
 }

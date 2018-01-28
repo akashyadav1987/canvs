@@ -41,12 +41,14 @@ import com.canvas.fragment.SeenFragment;
 import com.canvas.listener.SearchResultFound;
 import com.canvas.model.Murals;
 import com.canvas.utils.BottomNavigationViewHelper;
+import com.crashlytics.android.Crashlytics;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.util.ArrayList;
 
+import io.fabric.sdk.android.Fabric;
 import io.realm.RealmResults;
 
 
@@ -59,6 +61,7 @@ public class MotherActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_mother);
         BottomNavigationView bottomNavigationView = (BottomNavigationView)findViewById(R.id.bottom_navigation);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
@@ -67,6 +70,7 @@ public class MotherActivity extends BaseActivity {
         GlobalReferences.getInstance().baseActivity = this;
         RealmController.with(this);
         RealmController.getInstance().deleteAllMural();
+
         Log.e("All mural deleted","ALl mural deleted");
         GlobalReferences.getInstance().toolbar = (Toolbar) findViewById(R.id.toolbar_top);
         GlobalReferences.getInstance().pref  = new Pref(this);
@@ -268,8 +272,6 @@ public class MotherActivity extends BaseActivity {
                 //Do some magic
             }
         });
-
-
 
 
         addFragmentWithBackStack(new CanvsMapFragment(), true);

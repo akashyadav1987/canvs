@@ -7,7 +7,8 @@ public interface Constants {
     public static final boolean DEBUG = true; // true for test env, false for prod env.
     public static final String BASE_URL_PRODUCTION = "https://canvs.cruxcode.nyc/";
     public enum RequestParam {
-        GET_MURALS(1, Method.GET, "?requestType=sql&query=activeMurals", "get_murals");
+        GET_MURALS(1, Method.GET, "?requestType=sql&query=activeMurals", "get_murals"),
+        SEND_FEEDBACK(2, Method.POST, "https://api.mailgun.net/v3/mg.cruxcode.nyc/messages", "send_feedback");
         private int id;
         private int method;
         private String postFix;
