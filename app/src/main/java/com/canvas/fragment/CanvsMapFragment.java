@@ -1609,7 +1609,7 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
                     markerIcon = getMarkerIconFromDrawable(circleDrawable, false);
                     marker.setIcon(markerIcon);
                 }
-                if (marker_previous!=null&&marker_previous.isVisible()) {
+                if (marker_previous!=null&&marker_previous.isVisible())  {
                     marker_previous.setIcon(markerIcon);
                 }
             }
