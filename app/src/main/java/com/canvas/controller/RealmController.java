@@ -30,6 +30,10 @@ public class RealmController {
         realm = Realm.getDefaultInstance();
     }
 
+
+
+
+
     public static RealmController with(Fragment fragment) {
 
         if (instance == null) {

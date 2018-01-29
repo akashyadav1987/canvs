@@ -1621,6 +1621,9 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
         current_pos=myItem.getMarkerPosition();
 
         if (murals.isNearBy()) {
+
+
+
             Bitmap markerIcon = null;
             BitmapDescriptor icon;
             if (Build.VERSION.SDK_INT >= 21) {
