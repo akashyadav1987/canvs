@@ -89,6 +89,7 @@ public class RealmController {
 
     public void addMural(final Murals mural) {
         try {
+           // Realm realm=Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -138,7 +139,7 @@ public class RealmController {
     public boolean isFavoriteMuralExist(int id) {
         try {
             Log.e("id",id+"");
-            Realm realm=Realm.getDefaultInstance();
+           // Realm realm=Realm.getDefaultInstance();
             FavoriteMural favoriteMural = realm.where(FavoriteMural.class).equalTo("id", id).findFirst();
             Log.e("Is exist or not =", favoriteMural + "");
             if (favoriteMural != null) {
@@ -154,7 +155,9 @@ public class RealmController {
     public boolean isBookMarhedMuralExist(int id) {
         try {
             Log.e("id",id+"");
-            Realm realm=Realm.getDefaultInstance();
+           // Realm realm=Realm.getDefaultInstance();
+            RealmResults<BookmarkedMural> list=realm.where(BookmarkedMural.class).findAll();
+            Log.e(TAG, "isBookMarhedMuralExist: size"+list.size() );
             BookmarkedMural favoriteMural = realm.where(BookmarkedMural.class).equalTo("id", id).findFirst();
             Log.e("Is exist or not =", favoriteMural + "");
             if (favoriteMural != null) {
@@ -171,7 +174,7 @@ public class RealmController {
     public Murals findMuralByTitle(String title) {
         try {
             Log.e("id",id+"");
-            Realm realm=Realm.getDefaultInstance();
+
             Murals murals = realm.where(Murals.class).equalTo("title", title).or().equalTo("artist_text",title).findFirst();
             Log.e("Is exist or not =", murals + "");
              return murals;
@@ -184,7 +187,7 @@ public class RealmController {
     public boolean isSeenMuralExist(int id) {
         try {
             Log.e("id",id+"");
-            Realm realm=Realm.getDefaultInstance();
+           // Realm realm=Realm.getDefaultInstance();
             SeenMural seenMural = realm.where(SeenMural.class).equalTo("id", id).findFirst();
             Log.e("Is exist or not =", seenMural + "");
             if (seenMural != null) {
@@ -204,7 +207,7 @@ public class RealmController {
     }
     public void deleteFavoriteMural(final int id){
         try{
-            Realm realm=Realm.getDefaultInstance();
+           // Realm realm=Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -219,7 +222,7 @@ public class RealmController {
     }
     public void deleteBookMarkedMural(final int id){
         try{
-            Realm realm=Realm.getDefaultInstance();
+           // Realm realm=Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -235,7 +238,7 @@ public class RealmController {
 
     public void deleteSeenMarkedMural(final int id){
         try{
-            Realm realm=Realm.getDefaultInstance();
+           // Realm realm=Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -250,7 +253,7 @@ public class RealmController {
     }
     public void deleteAllMural(){
         try{
-            Realm realm=Realm.getDefaultInstance();
+            //Realm realm=Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -266,7 +269,7 @@ public class RealmController {
     public void searchForMural(final String searchQuery, final SearchResultFound searchResultFound){
         RealmResults<Murals> rowsAC =null;
         try{
-            Realm realm=Realm.getDefaultInstance();
+            //Realm realm=Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
