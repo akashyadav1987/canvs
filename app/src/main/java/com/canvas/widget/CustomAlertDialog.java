@@ -41,8 +41,8 @@ public class CustomAlertDialog extends Dialog implements android.view.View.OnCli
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.hunt_dialog);
-        TextView textView=findViewById(R.id.tv_ok);
-        CheckBox checkBox=findViewById(R.id.check_dont_show);
+        TextView textView= (TextView) findViewById(R.id.tv_ok);
+        CheckBox checkBox= (CheckBox) findViewById(R.id.check_dont_show);
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {

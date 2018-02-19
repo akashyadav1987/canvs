@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.canvas.R;
 import com.canvas.fragment.CanvsMapFragment;
-import com.canvas.fragment.FragmentMuralDetail;
+import com.canvas.fragment.FragmentMuralDetailsParent;
 
 /**
  * Created by akashyadav on 11/27/17.
@@ -40,10 +40,10 @@ public class CommonFragment extends Fragment {
 
     private void updateToolbarTitle() {
         try {
-            imageView_back = GlobalReferences.getInstance().toolbar.findViewById(R.id.filter);
-            toolbarImage = GlobalReferences.getInstance().toolbar.findViewById(R.id.toolbar_image);
-            toolBarText = GlobalReferences.getInstance().toolbar.findViewById(R.id.tool_bar_title);
-            imageview_share = GlobalReferences.getInstance().baseActivity.findViewById(R.id.share_icon);
+            imageView_back = (ImageView) GlobalReferences.getInstance().toolbar.findViewById(R.id.filter);
+            toolbarImage = (ImageView) GlobalReferences.getInstance().toolbar.findViewById(R.id.toolbar_image);
+            toolBarText = (TextView) GlobalReferences.getInstance().toolbar.findViewById(R.id.tool_bar_title);
+            imageview_share = (ImageView) GlobalReferences.getInstance().baseActivity.findViewById(R.id.share_icon);
 //            search_box = GlobalReferences.getInstance().toolbar.findViewById(R.id.search_box);
 //            search_box.setOnClickListener(new View.OnClickListener() {
 //                @Override
@@ -72,12 +72,12 @@ public class CommonFragment extends Fragment {
                                 isNearBySelected = GlobalReferences.getInstance().pref.getNearbyFilter();
                         final BottomSheetDialog mBottomSheetDialog = new BottomSheetDialog(getActivity());
                         View sheetView = getActivity().getLayoutInflater().inflate(R.layout.fragment_bottom_sheet, null);
-                        final ImageView bookmarks = sheetView.findViewById(R.id.bookmarks);
-                        final ImageView seen_sheet = sheetView.findViewById(R.id.seen_sheet);
-                        final ImageView fav_sheet = sheetView.findViewById(R.id.fav_sheet);
-                        final ImageView fresh_mural = sheetView.findViewById(R.id.fresh_mural);
-                        final ImageView near_by_murals = sheetView.findViewById(R.id.near_by_murals);
-                        TextView clear_filters = sheetView.findViewById(R.id.clear_filters);
+                        final ImageView bookmarks = (ImageView) sheetView.findViewById(R.id.bookmarks);
+                        final ImageView seen_sheet = (ImageView) sheetView.findViewById(R.id.seen_sheet);
+                        final ImageView fav_sheet = (ImageView) sheetView.findViewById(R.id.fav_sheet);
+                        final ImageView fresh_mural = (ImageView) sheetView.findViewById(R.id.fresh_mural);
+                        final ImageView near_by_murals = (ImageView) sheetView.findViewById(R.id.near_by_murals);
+                        TextView clear_filters = (TextView) sheetView.findViewById(R.id.clear_filters);
 
                         if(isBookMarkedSelected){
                             bookmarks.setImageResource(R.drawable.bookmark_sheet_selected);
@@ -174,7 +174,7 @@ public class CommonFragment extends Fragment {
                             }
                         });
 
-                        TextView done = sheetView.findViewById(R.id.done);
+                        TextView done = (TextView) sheetView.findViewById(R.id.done);
                         done.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -240,13 +240,13 @@ public class CommonFragment extends Fragment {
                 });
                 //search_box.setVisibility(View.VISIBLE);
                 //search_box.bringToFront();
-            } else if (GlobalReferences.getInstance().mCommonFragment instanceof FragmentMuralDetail) {
+            } else if (GlobalReferences.getInstance().mCommonFragment instanceof FragmentMuralDetailsParent) {
                 //toolbarImage.setVisibility(View.VISIBLE);
                 imageview_share.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         try {
-                            ((FragmentMuralDetail) GlobalReferences.getInstance().mCommonFragment).shareIntent();
+                            ((FragmentMuralDetailsParent) GlobalReferences.getInstance().mCommonFragment).shareIntent();
                         }catch (Exception e){
                             e.printStackTrace();
                         }

@@ -172,117 +172,23 @@
         </RelativeLayout>
     </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="vertical"
+        android:gravity="bottom"
+        android:layout_gravity="bottom"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
-        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/card_dialog"
-            android:layout_width="match_parent"
-            android:layout_height="130dp"
-            android:layout_above="@+id/navigation"
-            android:layout_margin="8dp"
-            android:background="@android:color/white"
-            android:orientation="horizontal"
+        <android.support.v4.view.ViewPager
             android:visibility="gone"
-            android:clickable="true"
-            app:cardBackgroundColor="@android:color/white"
-            app:cardElevation="4dp">
+            android:layout_alignParentBottom="true"
+            android:id="@+id/dialogue_view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="130dp">
 
-            <LinearLayout
-                android:layout_gravity="top"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <android.support.v7.widget.CardView
-                    android:visibility="gone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:elevation="12dp"
-                    android:layout_gravity="top"
-                    android:id="@+id/fresh_mural_tag"
-                    app:cardCornerRadius="0dp"
-                    app:cardBackgroundColor="@color/red"
-                    android:innerRadius="0dp"
-                    android:shape="rectangle"
-                    android:thicknessRatio="1.9">
-                    <com.canvas.widget.RobotoCondensedBoldTextView
-                        android:drawableLeft="@drawable/star"
-                        android:text="FRESH MURAL"
-                        android:layout_height="match_parent"
-                        android:layout_width="match_parent"
-                        android:textColor="@color/white"
-                        android:textSize="10sp"
-                        android:paddingRight="5dp"
-                        android:paddingLeft="5dp"
-                        android:gravity="center_vertical"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true">
-                    </com.canvas.widget.RobotoCondensedBoldTextView>
-                </android.support.v7.widget.CardView>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:id="@+id/iv_map"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_margin="8dp"
-                        android:layout_weight="1.5"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/title_app" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="8dp"
-                        android:layout_weight="2.5"
-                        android:orientation="vertical">
-
-                        <com.canvas.widget.RobotoBoldTextView
-                            android:id="@+id/title"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center|start"
-                            android:gravity="center|start"
-                            android:textColor="#db0046"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-
-                        <com.canvas.widget.RobotoMediumTextView
-                            android:id="@+id/author"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:gravity="center|start|top"
-                            android:textColor="@color/grey"
-                            android:textSize="16sp" />
-
-                        <com.canvas.widget.RobotoRegularTextView
-                            android:id="@+id/tv_more"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="bottom"
-                            android:layout_marginBottom="8dp"
-                            android:layout_marginRight="8dp"
-                            android:background="#33b7a5"
-                            android:gravity="center"
-                            android:padding="8dp"
-                            android:text="SEE MORE"
-                            android:textColor="@android:color/white" />
-
-                    </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
-
-
-        </android.support.v7.widget.CardView>
-
+        </android.support.v4.view.ViewPager>
 <LinearLayout
+    android:layout_marginTop="8dp"
     android:id="@+id/navigation"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
@@ -292,7 +198,6 @@
             android:id="@+id/bottom_navigation"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-
             app:elevation="4dp"
             app:itemBackground="@android:color/white"
             app:itemIconTint="@color/grey"
@@ -301,5 +206,5 @@
            android:layout_marginRight="8dp"
             android:layout_marginLeft="8dp"/>
 </LinearLayout>
-    </RelativeLayout>
+    </LinearLayout>
 </FrameLayout>

@@ -2,6 +2,7 @@ package com.canvas;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
+import android.support.multidex.MultiDex;
 
 import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.EntypoModule;
@@ -36,6 +37,7 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        MultiDex.install(this);
         handleSSLHandshake();
         Iconify
                 .with(new FontAwesomeModule())
@@ -54,6 +56,7 @@ public class MyApplication extends Application {
                 .deleteRealmIfMigrationNeeded()
                 .build();
         Realm.setDefaultConfiguration(realmConfiguration);
+
     }
     /**
      * Enables https connections

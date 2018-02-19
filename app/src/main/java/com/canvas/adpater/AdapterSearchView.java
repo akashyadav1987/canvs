@@ -60,7 +60,7 @@ public class AdapterSearchView extends BaseAdapter {
     public class ViewHolder {
         private RobotoCondensedTextView title;
         public ViewHolder(View view){
-            title = view.findViewById(R.id.searched_item);
+            title = (RobotoCondensedTextView) view.findViewById(R.id.searched_item);
         }
     }
 }

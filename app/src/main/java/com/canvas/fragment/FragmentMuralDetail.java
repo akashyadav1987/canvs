@@ -1,5 +1,6 @@
 package com.canvas.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -16,15 +17,12 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.util.Log;
 import android.view.GestureDetector;
-import android.view.GestureDetector.OnGestureListener;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -57,10 +55,8 @@ import com.canvas.model.BookmarkedMural;
 import com.canvas.model.FavoriteMural;
 import com.canvas.model.Murals;
 import com.canvas.model.SeenMural;
-import com.canvas.utils.OnSwipeTouchListener;
 import com.canvas.utils.Utility;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
@@ -68,7 +64,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import io.realm.RealmResults;
 
@@ -94,31 +89,37 @@ String selected_flag;
     private CardView favoriteCard,bookmarks_btn,seen_btn,fresh_mural_tag;
      Murals muralsObject =null;
     GestureDetector gestureDetector;
-    int position;
+    //int position;
     RealmResults<Murals> list_mural;
     ArrayList<String> tags_list;
-    ArrayList<Murals> list;
-
+    //ArrayList<Murals> list;
+    private  BottomSheetDialog mBottomSheetDialog;
+    public void setMural(Murals mural){
+        this.muralsObject =mural;
+    }
+    @SuppressLint("ClickableViewAccessibility")
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View muralview = inflater.inflate(R.layout.fragment_mural_details,null);
         setHasOptionsMenu(true);
         Bundle bundle=getArguments();
-        muralsObject = bundle.getParcelable("mural");
-        final String img_id=bundle.getString("image_id");
+        //position=bundle.getInt("position");
+        //muralsObject = bundle.getParcelable("mural");
+
+        final String img_id=muralsObject.getImage_resource_id().toLowerCase();
         final String image_url="https://canvs.cruxcode.nyc/mural_large_"+img_id+".jpg?size=large&requestType=image";
-        favoriteCard = muralview.findViewById(R.id.favorite_btn);
-        bookmarks_btn  = muralview.findViewById(R.id.bookmarks_btn);
+        favoriteCard = (CardView) muralview.findViewById(R.id.favorite_btn);
+        bookmarks_btn  = (CardView) muralview.findViewById(R.id.bookmarks_btn);
 
-        seen_btn = muralview.findViewById(R.id.seen_btn);
-        seen_img = muralview.findViewById(R.id.seen_img);
-        fresh_mural_tag = muralview.findViewById(R.id.fresh_mural_tag);
-        fav_img = muralview.findViewById(R.id.fav_img);
-        book_img = muralview.findViewById(R.id.book_img);
+        seen_btn = (CardView) muralview.findViewById(R.id.seen_btn);
+        seen_img = (ImageView) muralview.findViewById(R.id.seen_img);
+        fresh_mural_tag = (CardView) muralview.findViewById(R.id.fresh_mural_tag);
+        fav_img = (ImageView) muralview.findViewById(R.id.fav_img);
+        book_img = (ImageView) muralview.findViewById(R.id.book_img);
 
-        list_mural=RealmController.getInstance().getAllMurals();
-        list=bundle.getParcelableArrayList("list");
+        //list_mural=RealmController.getInstance().getAllMurals();
+        //list=bundle.getParcelableArrayList("list");
 
         if (RealmController.getInstance().isFavoriteMuralExist(muralsObject.getId())) {
             fav_img.setColorFilter(Color.parseColor("#5ab3a4"), PorterDuff.Mode.SRC_IN);
@@ -150,20 +151,20 @@ String selected_flag;
 
         }
 
-        String location=bundle.getString("location_text");
-        lat=bundle.getDouble("lat");
-        lon=bundle.getDouble("lon");
+        String location=muralsObject.getLocation_text()==null?"":muralsObject.getLocation_text();
+        lat=muralsObject.getLatitude();
+        lon=muralsObject.getLongitude();
         Log.e(TAG, "onCreateView: "+img_id );
         Log.e(TAG, "onCreateView: "+location );
-        imageView=muralview.findViewById(R.id.iv_image_detail);
-        relativeLayout_flag=muralview.findViewById(R.id.flag);
+        imageView= (ImageView) muralview.findViewById(R.id.iv_image_detail);
+        relativeLayout_flag= (RelativeLayout) muralview.findViewById(R.id.flag);
         relativeLayout_flag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final BottomSheetDialog mBottomSheetDialog = new BottomSheetDialog(getActivity());
+                 mBottomSheetDialog = new BottomSheetDialog(getActivity());
                 View sheetView = getActivity().getLayoutInflater().inflate(R.layout.flag_part_first, null);
 
-                TextView tv_cancel=sheetView.findViewById(R.id.tv_cancel);
+                TextView tv_cancel= (TextView) sheetView.findViewById(R.id.tv_cancel);
                 tv_cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -171,7 +172,7 @@ String selected_flag;
                     }
                 });
 
-                CardView cardView_wrong_info=sheetView.findViewById(R.id.flag_wrong_info);
+                CardView cardView_wrong_info= (CardView) sheetView.findViewById(R.id.flag_wrong_info);
                 cardView_wrong_info.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -179,7 +180,7 @@ String selected_flag;
                       showFlagPartSecond();
                     }
                 });
-                CardView cardView_inaccurate=sheetView.findViewById(R.id.inaccurate_info);
+                CardView cardView_inaccurate= (CardView) sheetView.findViewById(R.id.inaccurate_info);
                 cardView_inaccurate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -187,7 +188,7 @@ String selected_flag;
                       showFlagPartSecond();
                     }
                 });
-                CardView cardView_damaged=sheetView.findViewById(R.id.damaged_removed);
+                CardView cardView_damaged= (CardView) sheetView.findViewById(R.id.damaged_removed);
                 cardView_damaged.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -195,7 +196,7 @@ String selected_flag;
                       showFlagPartSecond();
                     }
                 });
-                CardView cardView_other=sheetView.findViewById(R.id.other);
+                CardView cardView_other= (CardView) sheetView.findViewById(R.id.other);
                 cardView_other.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -210,7 +211,7 @@ String selected_flag;
             }
         });
 
-        textView_location=muralview.findViewById(R.id.tv_location);
+        textView_location= (TextView) muralview.findViewById(R.id.tv_location);
         //seen_btn = muralview.findViewById(R.id.seen_btn);
         favoriteCard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -326,8 +327,8 @@ String selected_flag;
         });
 
 
-        tv_author=muralview.findViewById(R.id.tv_author);
-        textView_direction=muralview.findViewById(R.id.tv_get_direction);
+        tv_author= (TextView) muralview.findViewById(R.id.tv_author);
+        textView_direction= (TextView) muralview.findViewById(R.id.tv_get_direction);
         textView_direction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -337,48 +338,48 @@ String selected_flag;
                 startActivity(intent);
             }
         });
-        position=bundle.getInt("position");
-        tv_author.setText(bundle.getString("artist"));
-        tv_mural=muralview.findViewById(R.id.tv_mural);
-        tv_mural.setText(bundle.getString("name"));
-        textView_about_artist=muralview.findViewById(R.id.tv_about_artist);
-        textView_about_artist.setText(bundle.getString("artist_text"));
-        textView_about_mural=muralview.findViewById(R.id.tv_about_mural);
-        textView_about_mural.setText(bundle.getString("about_text"));
-        textView_add_link_first=muralview.findViewById(R.id.tv_add_link_1);
+
+        tv_author.setText(muralsObject.getArtist_text()+"");
+        tv_mural= (TextView) muralview.findViewById(R.id.tv_mural);
+        tv_mural.setText(muralsObject.getTitle()+"");
+        textView_about_artist= (TextView) muralview.findViewById(R.id.tv_about_artist);
+        textView_about_artist.setText(muralsObject.getArtist_text()+"");
+        textView_about_mural= (TextView) muralview.findViewById(R.id.tv_about_mural);
+        textView_about_mural.setText(muralsObject.getAbout_text()+"");
+        textView_add_link_first= (TextView) muralview.findViewById(R.id.tv_add_link_1);
         textView_add_link_first.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                             openLink(textView_add_link_first.getText().toString());
             }
         });
-        textView_add_link_second=muralview.findViewById(R.id.tv_add_link_2);
+        textView_add_link_second= (TextView) muralview.findViewById(R.id.tv_add_link_2);
         textView_add_link_second.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openLink(textView_add_link_second.getText().toString());
             }
         });
-        textView_add_link_third=muralview.findViewById(R.id.tv_add_link_3);
+        textView_add_link_third= (TextView) muralview.findViewById(R.id.tv_add_link_3);
         textView_add_link_third.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openLink(textView_add_link_third.getText().toString());
             }
         });
-        String add_link_1=bundle.getString("addlink1");
+        String add_link_1=muralsObject.getAdditional_link_first()+"";
         if(add_link_1!=null&&!add_link_1.equals("null")){
             textView_add_link_first.setText(add_link_1);
         }else{
             textView_add_link_first.setVisibility(View.GONE);
         }
-        String add_link_2=bundle.getString("addlink2");
+        String add_link_2=muralsObject.getAdditional_link_second()+"";
         if(add_link_2!=null&&!add_link_2.equals("null")){
             textView_add_link_second.setText(add_link_2);
         }else{
             textView_add_link_second.setVisibility(View.GONE);
         }
-        String add_link_3=bundle.getString("addlink3");
+        String add_link_3=muralsObject.getAdditional_limk_third()+"";
         if(add_link_3!=null&&!add_link_3.equals("null")){
             textView_add_link_second.setText(add_link_3);
         }else{
@@ -411,7 +412,7 @@ String selected_flag;
 //                .error(R.color.grey_)
                 .into(imageView);
         textView_location.setText(location);
-        String tags=bundle.getString("tags");
+        String tags=muralsObject.getTags();
         Log.e(TAG, "onCreateView: "+tags );
         tags_list=new ArrayList<>(new ArrayList<>(Arrays.asList(tags.split(","))));
 
@@ -419,62 +420,61 @@ String selected_flag;
 
         tagsAdapter=new TagsAdapter(tags_list,GlobalReferences.getInstance().baseActivity);
 
-        recyclerView_tags = muralview.findViewById(R.id.recycler_tags);
+        recyclerView_tags = (RecyclerView) muralview.findViewById(R.id.recycler_tags);
 
 
         recyclerView_tags.setItemAnimator(new DefaultItemAnimator());
         recyclerView_tags.setLayoutManager(new LinearLayoutManager(GlobalReferences.getInstance().baseActivity, LinearLayoutManager.HORIZONTAL, false));
         recyclerView_tags.setAdapter(tagsAdapter);
 
-        NestedScrollView scrollView=muralview.findViewById(R.id.scroll);
-
-        scrollView.setOnTouchListener(new OnSwipeTouchListener(GlobalReferences.getInstance().baseActivity) {
-            public void onSwipeTop() {
-                //Toast.makeText(GlobalReferences.getInstance().baseActivity, "top", Toast.LENGTH_SHORT).show();
-            }
-
-            public void onSwipeRight() {
-                position++;
-                if(position==list_mural.size()-1){
-                    position=0;
-                }
-                Log.e(TAG, "onSwipeRight: "+position+"list_position"+list_mural.size() );
-                try {
-                    Murals murals = list_mural.get(position);
-                    if(murals!=null){
-                       updateView(murals);
-
-                    }
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-
-
-                //Toast.makeText(GlobalReferences.getInstance().baseActivity, "right", Toast.LENGTH_SHORT).show();
-            }
-
-            public void onSwipeLeft() {
-                position--;
-                if(position==0){
-                    position=list_mural.size()-1;
-                }
-                Log.e(TAG, "onSwipeRight: "+position+"list_position"+list_mural.size() );
-                try {
-                    Murals murals = list_mural.get(position);
-                    if(murals!=null){
-                        updateView(murals);
-                    }
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-                //Toast.makeText(GlobalReferences.getInstance().baseActivity, "left", Toast.LENGTH_SHORT).show();
-            }
-
-            public void onSwipeBottom() {
-                //Toast.makeText(GlobalReferences.getInstance().baseActivity, "bottom", Toast.LENGTH_SHORT).show();
-            }
-
-        });
+        NestedScrollView scrollView= (NestedScrollView) muralview.findViewById(R.id.scroll);
+//        scrollView.setOnTouchListener(new OnSwipeTouchListener(GlobalReferences.getInstance().baseActivity) {
+//            public void onSwipeTop() {
+//                //Toast.makeText(GlobalReferences.getInstance().baseActivity, "top", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            public void onSwipeRight() {
+//                position++;
+//                if(position==list_mural.size()-1){
+//                    position=0;
+//                }
+//                Log.e(TAG, "onSwipeRight: "+position+"list_position"+list_mural.size() );
+//                try {
+//                    Murals murals = list_mural.get(position);
+//                    if(murals!=null){
+//                       updateView(murals);
+//
+//                    }
+//                }catch (Exception e){
+//                    e.printStackTrace();
+//                }
+//
+//
+//                //Toast.makeText(GlobalReferences.getInstance().baseActivity, "right", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            public void onSwipeLeft() {
+//                position--;
+//                if(position==0){
+//                    position=list_mural.size()-1;
+//                }
+//                Log.e(TAG, "onSwipeRight: "+position+"list_position"+list_mural.size() );
+//                try {
+//                    Murals murals = list_mural.get(position);
+//                    if(murals!=null){
+//                        updateView(murals);
+//                    }
+//                }catch (Exception e){
+//                    e.printStackTrace();
+//                }
+//                //Toast.makeText(GlobalReferences.getInstance().baseActivity, "left", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            public void onSwipeBottom() {
+//                //Toast.makeText(GlobalReferences.getInstance().baseActivity, "bottom", Toast.LENGTH_SHORT).show();
+//            }
+//
+//        });
 
 
 
@@ -485,7 +485,7 @@ String selected_flag;
 
     private void updateView(final Murals mural){
         Log.e(TAG, "updateView: "+mural.getImage_path() );
-muralsObject=mural;
+          muralsObject=mural;
 
         final String image_id = mural.getImage_resource_id().toLowerCase();
         String image_url = "https://canvs.cruxcode.nyc/mural_large_"+image_id+".jpg?size=large&requestType=image";
@@ -580,7 +580,7 @@ muralsObject=mural;
             seen_btn.setCardBackgroundColor(Color.parseColor("#ffffff"));
 
         }
-
+        updateView(muralsObject);
     }
 
 
@@ -589,9 +589,9 @@ muralsObject=mural;
     private void showFlagPartSecond(){
       final  BottomSheetDialog mBottomSheetDialog = new BottomSheetDialog(getActivity());
         View sheetView = getActivity().getLayoutInflater().inflate(R.layout.flag_part_second, null);
-        TextView tv_cancel=sheetView.findViewById(R.id.tv_cancel);
-        CardView send=sheetView.findViewById(R.id.btn_send);
-        final EditText feedback=sheetView.findViewById(R.id.et_feedback);
+        TextView tv_cancel= (TextView) sheetView.findViewById(R.id.tv_cancel);
+        CardView send= (CardView) sheetView.findViewById(R.id.btn_send);
+        final EditText feedback= (EditText) sheetView.findViewById(R.id.et_feedback);
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -607,7 +607,7 @@ muralsObject=mural;
                 mBottomSheetDialog.dismiss();
             }
         });
-        TextView textView=sheetView.findViewById(R.id.selected_flag);
+        TextView textView= (TextView) sheetView.findViewById(R.id.selected_flag);
         textView.setText(selected_flag);
         mBottomSheetDialog.setContentView(sheetView);
         mBottomSheetDialog.show();
@@ -731,8 +731,8 @@ muralsObject=mural;
                 RequestQueue requestQueue = Volley.newRequestQueue(GlobalReferences.getInstance().baseActivity);
                 String URL = "https://api.mailgun.net/v3/mg.cruxcode.nyc/messages";
                 JSONObject jsonBody = new JSONObject();
-                jsonBody.put("feedback", strings[0]);
-                final String requestBody = jsonBody.toString();
+                //jsonBody.put("feedback", );
+                final String requestBody = strings[0];
 
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
                     @Override
@@ -743,6 +743,11 @@ muralsObject=mural;
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e("VOLLEY", error.toString());
+                        try {
+                            mBottomSheetDialog.dismiss();
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
                         Utility.showToastMsg("Not able to send your feedback at this movement! please try again later");
 
                     }
@@ -768,6 +773,11 @@ muralsObject=mural;
                         if (response != null) {
                             responseString = String.valueOf(response.statusCode);
                             // can get more details such as response.headers
+                            try {
+                                mBottomSheetDialog.dismiss();
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
                         }
                         return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
                     }
@@ -775,12 +785,16 @@ muralsObject=mural;
                     @Override
                     public Map<String, String> getHeaders() throws AuthFailureError {
                         HashMap<String, String> params = new HashMap<String, String>();
-                        String auth = "Basic " + Base64.encodeToString(UUID.randomUUID().toString().getBytes(), Base64.DEFAULT);
+                        String user_name ="api";
+                        String password = "key-55b16ec1891ce21b42a45dbdaa1c2f6c";
+                        String loginString = user_name+":"+password;
+                        String base64EncodedString = Base64.encodeToString(loginString.getBytes(), Base64.NO_WRAP);
+                        String auth = "Basic " + base64EncodedString;
 
                         //params.put("Authorization", auth);
 
-                        params.put("username","api");
-                        params.put("password","key-55b16ec1891ce21b42a45dbdaa1c2f6c");
+                        params.put("Authorization",auth);
+
 //                        username: `api`
 //                        password: `key-55b16ec1891ce21b42a45dbdaa1c2f6c`
                             return params;
@@ -789,7 +803,7 @@ muralsObject=mural;
                 };
 
                 requestQueue.add(stringRequest);
-            } catch (JSONException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return null;

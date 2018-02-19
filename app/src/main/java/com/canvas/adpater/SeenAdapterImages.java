@@ -81,8 +81,8 @@ public class SeenAdapterImages extends RecyclerView.Adapter<SeenAdapterImages.My
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.images);
-            gray_color_img =itemView.findViewById(R.id.gray_color_img);
+            imageView = (ImageView) itemView.findViewById(R.id.images);
+            gray_color_img = (ImageView) itemView.findViewById(R.id.gray_color_img);
         }
     }
 }

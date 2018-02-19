@@ -31,7 +31,7 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.MyViewHolder> 
         public MyViewHolder(View view) {
             super(view);
 
-            textView_name=view.findViewById(R.id.tv_tag);
+            textView_name= (TextView) view.findViewById(R.id.tv_tag);
 
 
         }

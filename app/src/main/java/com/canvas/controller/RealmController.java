@@ -15,6 +15,7 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 
 import static android.R.attr.id;
+import static io.fabric.sdk.android.Fabric.TAG;
 
 /**
  * Created by akashyadav on 12/9/17.
@@ -23,6 +24,7 @@ import static android.R.attr.id;
 public class RealmController {
     private static RealmController instance;
     private final Realm realm;
+    int index=0;
 
     public RealmController(Application application) {
         realm = Realm.getDefaultInstance();
@@ -81,8 +83,34 @@ public class RealmController {
         }
     }
 
+    public int findIndexOf(final Murals mural) {
+
+        try {
+            RealmResults<Murals> rowsAC =null;
+
+            try{
+                //Realm realm=Realm.getDefaultInstance();
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmResults<Murals> rows = realm.where(Murals.class).equalTo("id",mural.getId()).findAll();
+                        index = rows.indexOf(rows.get(0));
+
+
+                    }
+                });
+            }catch (Exception e){
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return index;
+    }
+
     public void addMural(final Murals mural) {
         try {
+           // Realm realm=Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -132,6 +160,23 @@ public class RealmController {
     public boolean isFavoriteMuralExist(int id) {
         try {
             Log.e("id",id+"");
+           // Realm realm=Realm.getDefaultInstance();
+            FavoriteMural favoriteMural = realm.where(FavoriteMural.class).equalTo("id", id).findFirst();
+            Log.e("Is exist or not =", favoriteMural + "");
+            if (favoriteMural != null) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public boolean isFavoriteMuralExist(int id,Realm realm) {
+        try {
+            Log.e("id",id+"");
+            // Realm realm=Realm.getDefaultInstance();
             FavoriteMural favoriteMural = realm.where(FavoriteMural.class).equalTo("id", id).findFirst();
             Log.e("Is exist or not =", favoriteMural + "");
             if (favoriteMural != null) {
@@ -147,6 +192,9 @@ public class RealmController {
     public boolean isBookMarhedMuralExist(int id) {
         try {
             Log.e("id",id+"");
+           // Realm realm=Realm.getDefaultInstance();
+            RealmResults<BookmarkedMural> list=realm.where(BookmarkedMural.class).findAll();
+            Log.e(TAG, "isBookMarhedMuralExist: size"+list.size() );
             BookmarkedMural favoriteMural = realm.where(BookmarkedMural.class).equalTo("id", id).findFirst();
             Log.e("Is exist or not =", favoriteMural + "");
             if (favoriteMural != null) {
@@ -156,12 +204,33 @@ public class RealmController {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            Log.e(TAG, "isBookMarhedMuralExist: "+e.getMessage() );
+        }
+        return false;
+    }
+    public boolean isBookMarhedMuralExist(int id,Realm realm) {
+        try {
+            Log.e("id",id+"");
+            // Realm realm=Realm.getDefaultInstance();
+            RealmResults<BookmarkedMural> list=realm.where(BookmarkedMural.class).findAll();
+            Log.e(TAG, "isBookMarhedMuralExist: size"+list.size() );
+            BookmarkedMural favoriteMural = realm.where(BookmarkedMural.class).equalTo("id", id).findFirst();
+            Log.e("Is exist or not =", favoriteMural + "");
+            if (favoriteMural != null) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, "isBookMarhedMuralExist: "+e.getMessage() );
         }
         return false;
     }
     public Murals findMuralByTitle(String title) {
         try {
             Log.e("id",id+"");
+
             Murals murals = realm.where(Murals.class).equalTo("title", title).or().equalTo("artist_text",title).findFirst();
             Log.e("Is exist or not =", murals + "");
              return murals;
@@ -174,6 +243,7 @@ public class RealmController {
     public boolean isSeenMuralExist(int id) {
         try {
             Log.e("id",id+"");
+           // Realm realm=Realm.getDefaultInstance();
             SeenMural seenMural = realm.where(SeenMural.class).equalTo("id", id).findFirst();
             Log.e("Is exist or not =", seenMural + "");
             if (seenMural != null) {
@@ -183,6 +253,25 @@ public class RealmController {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            Log.e(TAG, "isSeenMuralExist: "+e.getMessage() );
+        }
+        return false;
+    }
+
+    public boolean isSeenMuralExist(int id,Realm realm) {
+        try {
+            Log.e("id",id+"");
+            // Realm realm=Realm.getDefaultInstance();
+            SeenMural seenMural = realm.where(SeenMural.class).equalTo("id", id).findFirst();
+            Log.e("Is exist or not =", seenMural + "");
+            if (seenMural != null) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, "isSeenMuralExist: "+e.getMessage() );
         }
         return false;
     }
@@ -192,6 +281,7 @@ public class RealmController {
     }
     public void deleteFavoriteMural(final int id){
         try{
+           // Realm realm=Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -206,6 +296,7 @@ public class RealmController {
     }
     public void deleteBookMarkedMural(final int id){
         try{
+           // Realm realm=Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -218,9 +309,9 @@ public class RealmController {
 
         }
     }
-
     public void deleteSeenMarkedMural(final int id){
         try{
+           // Realm realm=Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -235,6 +326,7 @@ public class RealmController {
     }
     public void deleteAllMural(){
         try{
+            //Realm realm=Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -250,6 +342,7 @@ public class RealmController {
     public void searchForMural(final String searchQuery, final SearchResultFound searchResultFound){
         RealmResults<Murals> rowsAC =null;
         try{
+            //Realm realm=Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {

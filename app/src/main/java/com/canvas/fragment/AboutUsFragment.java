@@ -31,14 +31,14 @@ public class AboutUsFragment extends CommonFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.about_us,null);
         setHasOptionsMenu(true);
-        follow_on_insta = view.findViewById(R.id.follow_on_insta);
-        twitter = view.findViewById(R.id.twitter);
-        facebook = view.findViewById(R.id.facebook);
-        instagram = view.findViewById(R.id.instagram);
-        crux_facebook = view.findViewById(R.id.crux_facebook);
-        crux_twitter = view.findViewById(R.id.crux_twitter);
-        crux_instagram = view.findViewById(R.id.crux_instagram);
-        share_your_feedback = view.findViewById(R.id.share_your_feedback);
+        follow_on_insta = (LinearLayout) view.findViewById(R.id.follow_on_insta);
+        twitter = (ImageView) view.findViewById(R.id.twitter);
+        facebook = (ImageView) view.findViewById(R.id.facebook);
+        instagram = (ImageView) view.findViewById(R.id.instagram);
+        crux_facebook = (ImageView) view.findViewById(R.id.crux_facebook);
+        crux_twitter = (ImageView) view.findViewById(R.id.crux_twitter);
+        crux_instagram = (ImageView) view.findViewById(R.id.crux_instagram);
+        share_your_feedback = (LinearLayout) view.findViewById(R.id.share_your_feedback);
 
         follow_on_insta.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,14 +93,14 @@ public class AboutUsFragment extends CommonFragment {
             }
         });
         screenTitle="ABOUT US";
-        button_mean=view.findViewById(R.id.mean_button);
+        button_mean= (Button) view.findViewById(R.id.mean_button);
         button_mean.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openLink("http://www.meangenius.com");
             }
         });
-        button_crux=view.findViewById(R.id.crux_button);
+        button_crux= (Button) view.findViewById(R.id.crux_button);
         button_crux.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

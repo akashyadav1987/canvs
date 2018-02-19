@@ -39,8 +39,8 @@ public class BookMarkFragment extends CommonFragment implements AppRequest {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View favoritesView = inflater.inflate(R.layout.bookmark_fragment,null);
         setHasOptionsMenu(true);
-        favorites_list = favoritesView.findViewById(R.id.favorites_list);
-        no_con = favoritesView.findViewById(R.id.no_con);
+        favorites_list = (RecyclerView) favoritesView.findViewById(R.id.favorites_list);
+        no_con = (TextView) favoritesView.findViewById(R.id.no_con);
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
         favorites_list.addItemDecoration(new GridInsetDecoration(getActivity()));
         screenTitle="BOOKMARKS";

@@ -2,6 +2,7 @@ package com.canvas.adpater;
 
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -10,7 +11,8 @@ import android.widget.TextView;
 import com.canvas.BaseActivity;
 import com.canvas.R;
 import com.canvas.common.GlobalReferences;
-import com.canvas.fragment.FragmentMuralDetail;
+import com.canvas.controller.RealmController;
+import com.canvas.fragment.FragmentMuralDetailsParent;
 import com.canvas.model.FavoriteMural;
 import com.canvas.model.Murals;
 import com.squareup.picasso.Picasso;
@@ -50,7 +52,7 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.MyVi
                 @Override
                 public void onClick(View view) {
 
-                    FragmentMuralDetail fragmentMuralDetail=new FragmentMuralDetail();
+                    FragmentMuralDetailsParent fragmentMuralDetail=new FragmentMuralDetailsParent();
                     Bundle bundle=new Bundle();
                     Murals murals = new Murals();
 
@@ -133,6 +135,19 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.MyVi
                         bundle.putString("name", favorite.getMuralTitle());
                         bundle.putDouble("lat", Double.parseDouble(favorite.getLatitude()));
                         bundle.putDouble("lon", Double.parseDouble(favorite.getLongitude()));
+                       // fragmentMuralDetail.setArguments(bundle);
+                        RealmResults<Murals> list_mural= RealmController.getInstance().getAllMurals();
+                        int pos = 0;
+                        for (int i=0;i<list_mural.size();i++){
+                            Murals murals1 = list_mural.get(i);
+                            if(murals.getId()==murals1.getId()){
+                                pos = i;
+                                break;
+                            }
+                        }
+                        bundle.putInt("position", pos);
+                        //int pos = RealmController.getInstance().findIndexOf(murals);
+                        Log.e("####pos",pos+"");
                         fragmentMuralDetail.setArguments(bundle);
                         ((BaseActivity) GlobalReferences.getInstance().baseActivity).addFragmentWithBackStack(fragmentMuralDetail, true);
                     }catch (Exception e){
@@ -157,10 +172,10 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.MyVi
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            mural_image = itemView.findViewById(R.id.mural_image);
-            title = itemView.findViewById(R.id.title);
-            artistName = itemView.findViewById(R.id.artistname);
-            right_ico = itemView.findViewById(R.id.right_ico);
+            mural_image = (ImageView) itemView.findViewById(R.id.mural_image);
+            title = (TextView) itemView.findViewById(R.id.title);
+            artistName = (TextView) itemView.findViewById(R.id.artistname);
+            right_ico = (ImageView) itemView.findViewById(R.id.right_ico);
         }
     }
 }

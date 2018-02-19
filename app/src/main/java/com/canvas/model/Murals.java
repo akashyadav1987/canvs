@@ -264,4 +264,29 @@ public class Murals  extends RealmObject implements RealmModel, Parcelable {
         parcel.writeString(freshWhenAdded);
         parcel.writeDouble(distanceInKms);
     }
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + id;
+        result = prime * result + ((String.valueOf(id) == null) ? 0 : String.valueOf(id).hashCode());
+        return result;
+    }
+
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Murals other = (Murals) obj;
+        if (id != other.id)
+            return false;
+        if (id == 0) {
+            if (other.id != 0)
+                return false;
+        } else if (!String.valueOf(id).equals(other.id))
+            return false;
+        return true;
+    }
 }

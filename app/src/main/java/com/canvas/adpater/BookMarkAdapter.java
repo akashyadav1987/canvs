@@ -2,6 +2,7 @@ package com.canvas.adpater;
 
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -10,7 +11,8 @@ import android.widget.TextView;
 import com.canvas.BaseActivity;
 import com.canvas.R;
 import com.canvas.common.GlobalReferences;
-import com.canvas.fragment.FragmentMuralDetail;
+import com.canvas.controller.RealmController;
+import com.canvas.fragment.FragmentMuralDetailsParent;
 import com.canvas.model.BookmarkedMural;
 import com.canvas.model.Murals;
 import com.squareup.picasso.Picasso;
@@ -51,9 +53,9 @@ public class BookMarkAdapter extends RecyclerView.Adapter<BookMarkAdapter.MyView
                 public void onClick(View view) {
                     Murals murals = null;
                     Bundle bundle=null;
-                    FragmentMuralDetail fragmentMuralDetail = null;
+                    FragmentMuralDetailsParent fragmentMuralDetail = null;
                    try {
-                        fragmentMuralDetail = new FragmentMuralDetail();
+                        fragmentMuralDetail = new FragmentMuralDetailsParent();
                         bundle = new Bundle();
                        bundle.putInt("type", 1);
                         murals = new Murals();
@@ -108,7 +110,20 @@ public class BookMarkAdapter extends RecyclerView.Adapter<BookMarkAdapter.MyView
                     bundle.putString("name",bookmarkedMural.getMuralTitle());
                     bundle.putDouble("lat",Double.parseDouble(bookmarkedMural.getLatitude()));
                     bundle.putDouble("lon",Double.parseDouble(bookmarkedMural.getLongitude()));
+                    RealmResults<Murals> list_mural= RealmController.getInstance().getAllMurals();
+                    int pos = 0;
+                    for (int i=0;i<list_mural.size();i++){
+                        Murals murals1 = list_mural.get(i);
+                        if(murals.getId()==murals1.getId()){
+                            pos = i;
+                            break;
+                        }
+                    }
+                    bundle.putInt("position", pos);
+                    //int pos = RealmController.getInstance().findIndexOf(murals);
+                    Log.e("####pos",pos+"");
                     fragmentMuralDetail.setArguments(bundle);
+                    //fragmentMuralDetail.setArguments(bundle);
                     ((BaseActivity) GlobalReferences.getInstance().baseActivity).addFragmentWithBackStack(fragmentMuralDetail, true);
                 }
             });
@@ -129,10 +144,10 @@ public class BookMarkAdapter extends RecyclerView.Adapter<BookMarkAdapter.MyView
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            mural_image = itemView.findViewById(R.id.mural_image);
-            title = itemView.findViewById(R.id.title);
-            artistName = itemView.findViewById(R.id.artistname);
-            right_ico = itemView.findViewById(R.id.right_ico);
+            mural_image = (ImageView) itemView.findViewById(R.id.mural_image);
+            title = (TextView) itemView.findViewById(R.id.title);
+            artistName = (TextView) itemView.findViewById(R.id.artistname);
+            right_ico = (ImageView) itemView.findViewById(R.id.right_ico);
         }
     }
 }

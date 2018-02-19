@@ -65,7 +65,7 @@ public class MotherActivity extends BaseActivity {
         setContentView(R.layout.activity_mother);
         BottomNavigationView bottomNavigationView = (BottomNavigationView)findViewById(R.id.bottom_navigation);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
-        bottomNavigationView.setSelectedItemId(-1);
+//        bottomNavigationView.setSelectedItemId(-1);
         Menu menu = bottomNavigationView.getMenu();
         GlobalReferences.getInstance().baseActivity = this;
         RealmController.with(this);
