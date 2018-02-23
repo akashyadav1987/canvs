@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 
 import com.canvas.fragment.FragmentMuralDetail;
 import com.canvas.model.Murals;
@@ -25,8 +26,10 @@ public class ViewPagerAdapterMuralDetails extends FragmentStatePagerAdapter
     @Override
     public Fragment getItem(int position) {
         FragmentMuralDetail fragmentMuralDetail =null;
+        Log.e("Adapter", "getItem: "+position );
         try {
             if (list_mural != null) {
+
                 Murals murals = list_mural.get(position);
                 fragmentMuralDetail = new FragmentMuralDetail();
                 fragmentMuralDetail.setMural(murals);

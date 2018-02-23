@@ -339,10 +339,11 @@ String selected_flag;
             }
         });
 
-        tv_author.setText(muralsObject.getArtist_text()+"");
+        tv_author.setText(muralsObject.getAuthor()+"");
         tv_mural= (TextView) muralview.findViewById(R.id.tv_mural);
         tv_mural.setText(muralsObject.getTitle()+"");
         textView_about_artist= (TextView) muralview.findViewById(R.id.tv_about_artist);
+        Log.e(TAG, "onCreateView:artist "+muralsObject.getArtist_text() +muralsObject.getTitle());
         textView_about_artist.setText(muralsObject.getArtist_text()+"");
         textView_about_mural= (TextView) muralview.findViewById(R.id.tv_about_mural);
         textView_about_mural.setText(muralsObject.getAbout_text()+"");

@@ -84,6 +84,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -286,10 +287,32 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
         //Call api here
 
 
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) mapViewLayout.findViewById(R.id.bottom_navigation);
-        BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
+//        BottomNavigationView bottomNavigationView = (BottomNavigationView) mapViewLayout.findViewById(R.id.bottom_navigation);
+//        BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
+
+
+        BottomNavigationViewEx bnve = (BottomNavigationViewEx) mapViewLayout.findViewById(R.id.bnve_no_animation);
+
+//        bnve.enableAnimation(false);
+//
+//        bnve.enableShiftingMode(false);
+//
+//        bnve.enableItemShiftingMode(false);
+        bnve.enableAnimation(false);
+        bnve.enableShiftingMode(false);
+        bnve.enableItemShiftingMode(false);
+        bnve.setActivated(true);
+
+
+        bnve.setIconSize(20, 20);
+
+        bnve.setTextSize(12);
+        bnve.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 //        bottomNavigationView.setSelectedItemId(-1);
-        Menu menu = bottomNavigationView.getMenu();
+       // Menu menu = bottomNavigationView.getMenu();
+         Menu menu = bnve.getMenu();
+
+
         menu.getItem(0).setCheckable(false);
 
         bookmarks = menu.findItem(R.id.bookmarks);
@@ -305,14 +328,21 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
         seen.setIcon(R.drawable.seen);
         fav.setIcon(R.drawable.favourites);
         about.setIcon(R.drawable.about);
-
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        bnve.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 updateTab(item.getItemId());
                 return false;
             }
         });
+
+//        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+//            @Override
+//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//                updateTab(item.getItemId());
+//                return false;
+//            }
+//        });
 
 
         textView_title = (RobotoBoldTextView) mapViewLayout.findViewById(R.id.title);
