@@ -149,6 +149,7 @@ public class MotherActivity extends BaseActivity {
                         }
                         else if (GlobalReferences.getInstance().mCommonFragment instanceof CanvsMapFragment) {
                             updateTab(-1);
+                           // searchView.setVisibility(View.VISIBLE);
                         }
                         else if (GlobalReferences.getInstance().mCommonFragment instanceof SeenFragment) {
                             updateTab(R.id.seen);
