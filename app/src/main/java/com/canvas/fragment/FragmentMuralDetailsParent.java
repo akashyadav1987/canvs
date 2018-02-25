@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -29,6 +31,7 @@ public class FragmentMuralDetailsParent extends CommonFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.view_pager_layout,null);
+        setHasOptionsMenu(true);
         if (getArguments()!=null){
             pos=getArguments().getInt("position");
         }
@@ -78,5 +81,10 @@ public class FragmentMuralDetailsParent extends CommonFragment {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.action_search);
+        item.setVisible(false);
     }
 }

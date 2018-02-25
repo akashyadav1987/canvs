@@ -58,7 +58,6 @@ import com.canvas.locationUtil.MyItem;
 import com.canvas.locationUtil.OwnIconRendered;
 import com.canvas.model.Murals;
 import com.canvas.model.MuralsArray;
-import com.canvas.utils.BottomNavigationViewHelper;
 import com.canvas.utils.Utility;
 import com.canvas.widget.CustomAlertDialog;
 import com.canvas.widget.RobotoBoldTextView;
@@ -143,13 +142,16 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         View mapViewLayout = inflater.inflate(R.layout.canvs_map_fragment, null);
-        locationHelper = new LocationHelper(getActivity());
-        locationHelper.checkpermission();
-        mapView = (MapView) mapViewLayout.findViewById(R.id.mapview);
-        //setHasOptionsMenu(false);
-        mapView.onCreate(savedInstanceState);
-        screenTitle = "BOOKMARKS";
-        builder = new LatLngBounds.Builder();
+
+        try {
+            setHasOptionsMenu(true);
+            locationHelper = new LocationHelper(getActivity());
+            locationHelper.checkpermission();
+            mapView = (MapView) mapViewLayout.findViewById(R.id.mapview);
+            //setHasOptionsMenu(false);
+            mapView.onCreate(savedInstanceState);
+            screenTitle = "BOOKMARKS";
+            builder = new LatLngBounds.Builder();
 //        GlobalReferences.getInstance().searchView.showVoice(true);
 //        GlobalReferences.getInstance().searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
 //            @Override
@@ -204,137 +206,138 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
 //        });
 
 
-        list_murals = new ArrayList<>();
-        try {
-            MapsInitializer.initialize(getActivity());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        mapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap gmap) {
-                mMap = gmap;
-                mMap.getUiSettings().setTiltGesturesEnabled(false);
-                mMap.getUiSettings().setCompassEnabled(false);
-                mMap.getUiSettings().setScrollGesturesEnabled(true);
-                mMap.getUiSettings().setZoomGesturesEnabled(true);
-                mMap.getUiSettings().setRotateGesturesEnabled(false);
-                mMap.setBuildingsEnabled(false);
-                mMap.setOnMapClickListener(CanvsMapFragment.this);
-
-                mClusterManager = new ClusterManager<MyItem>(GlobalReferences.getInstance().baseActivity, mMap);
-                ownIconRendered = new OwnIconRendered(GlobalReferences.getInstance().baseActivity.getApplicationContext(), mMap, mClusterManager);
-
-                mClusterManager.setRenderer(ownIconRendered);
-                mClusterManager.setOnClusterItemClickListener(CanvsMapFragment.this);
-                mMap.setOnCameraIdleListener(mClusterManager);
-                mMap.setOnMarkerClickListener(mClusterManager);
-
-
-                mClusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<MyItem>() {
-                            @Override
-                            public boolean onClusterClick(final Cluster<MyItem> cluster) {
-                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                                        cluster.getPosition(), (float) Math.floor(mMap.getCameraPosition().zoom + 1)), 300,
-                                        null);
-                                return true;
-                            }
-                        });
+            list_murals = new ArrayList<>();
+            try {
+                if (isAdded())
+                    MapsInitializer.initialize(getActivity());
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        });
+            mapView.getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(GoogleMap gmap) {
+                    mMap = gmap;
+                    mMap.getUiSettings().setTiltGesturesEnabled(false);
+                    mMap.getUiSettings().setCompassEnabled(false);
+                    mMap.getUiSettings().setScrollGesturesEnabled(true);
+                    mMap.getUiSettings().setZoomGesturesEnabled(true);
+                    mMap.getUiSettings().setRotateGesturesEnabled(false);
+                    mMap.setBuildingsEnabled(false);
+                    mMap.setOnMapClickListener(CanvsMapFragment.this);
+
+                    mClusterManager = new ClusterManager<MyItem>(GlobalReferences.getInstance().baseActivity, mMap);
+                    ownIconRendered = new OwnIconRendered(GlobalReferences.getInstance().baseActivity.getApplicationContext(), mMap, mClusterManager);
+
+                    mClusterManager.setRenderer(ownIconRendered);
+                    mClusterManager.setOnClusterItemClickListener(CanvsMapFragment.this);
+                    mMap.setOnCameraIdleListener(mClusterManager);
+                    mMap.setOnMarkerClickListener(mClusterManager);
 
 
-        cardView_my_location = (CardView) mapViewLayout.findViewById(R.id.my_location);
-        cardView_my_location.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (location != null) {
-                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 18);
-                    mMap.animateCamera(cameraUpdate);
+                    mClusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<MyItem>() {
+                        @Override
+                        public boolean onClusterClick(final Cluster<MyItem> cluster) {
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                                    cluster.getPosition(), (float) Math.floor(mMap.getCameraPosition().zoom + 1)), 300,
+                                    null);
+                            return true;
+                        }
+                    });
                 }
-            }
-        });
-        tv_hunt_mode = (TextView) mapViewLayout.findViewById(R.id.tv_hunt_mode);
-        huntState(GlobalReferences.getInstance().pref.getHuntMode());
-        tv_hunt_mode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!GlobalReferences.getInstance().pref.getHuntMode()) {
-                    if (GlobalReferences.getInstance().pref.getDontShowThisMsg()) {
-                        GlobalReferences.getInstance().pref.setHuntMode(true);
-                        huntState(true);
-                    } else {
-                        CustomAlertDialog customAlertDialog = new CustomAlertDialog(GlobalReferences.getInstance().baseActivity, CanvsMapFragment.this);
-                        customAlertDialog.show();
+            });
+
+
+            cardView_my_location = (CardView) mapViewLayout.findViewById(R.id.my_location);
+            cardView_my_location.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if (location != null) {
+                        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 18);
+                        mMap.animateCamera(cameraUpdate);
                     }
-                } else {
-                    GlobalReferences.getInstance().pref.setHuntMode(false);
-                    GlobalReferences.getInstance().pref.setHuntMode(false);
-                    huntState(false);
                 }
+            });
+            tv_hunt_mode = (TextView) mapViewLayout.findViewById(R.id.tv_hunt_mode);
+            huntState(GlobalReferences.getInstance().pref.getHuntMode());
+            tv_hunt_mode.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (!GlobalReferences.getInstance().pref.getHuntMode()) {
+                        if (GlobalReferences.getInstance().pref.getDontShowThisMsg()) {
+                            GlobalReferences.getInstance().pref.setHuntMode(true);
+                            huntState(true);
+                        } else {
+                            CustomAlertDialog customAlertDialog = new CustomAlertDialog(GlobalReferences.getInstance().baseActivity, CanvsMapFragment.this);
+                            customAlertDialog.show();
+                        }
+                    } else {
+                        GlobalReferences.getInstance().pref.setHuntMode(false);
+                        GlobalReferences.getInstance().pref.setHuntMode(false);
+                        huntState(false);
+                    }
+                }
+            });
+            boolean isHunton = GlobalReferences.getInstance().pref.getHuntMode();
+            if (isHunton) {
+                //cardView_hunt_mode.setBackgroundColor(GlobalReferences.getInstance().baseActivity.getResources().getColor(R.color.orange));
+                tv_hunt_mode.setText("HUNT MODE ON");
+            } else {
+                tv_hunt_mode.setText("HUNT MODE OFF");
+                //cardView_hunt_mode.setBackgroundColor(GlobalReferences.getInstance().baseActivity.getResources().getColor(R.color.grey));
             }
-        });
-        boolean isHunton = GlobalReferences.getInstance().pref.getHuntMode();
-        if (isHunton) {
-            //cardView_hunt_mode.setBackgroundColor(GlobalReferences.getInstance().baseActivity.getResources().getColor(R.color.orange));
-            tv_hunt_mode.setText("HUNT MODE ON");
-        } else {
-            tv_hunt_mode.setText("HUNT MODE OFF");
-            //cardView_hunt_mode.setBackgroundColor(GlobalReferences.getInstance().baseActivity.getResources().getColor(R.color.grey));
-        }
-        //Call api here
+            //Call api here
 
 
 //        BottomNavigationView bottomNavigationView = (BottomNavigationView) mapViewLayout.findViewById(R.id.bottom_navigation);
 //        BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
 
 
-        BottomNavigationViewEx bnve = (BottomNavigationViewEx) mapViewLayout.findViewById(R.id.bnve_no_animation);
+            BottomNavigationViewEx bnve = (BottomNavigationViewEx) mapViewLayout.findViewById(R.id.bnve_no_animation);
 
 //        bnve.enableAnimation(false);
 //
 //        bnve.enableShiftingMode(false);
 //
 //        bnve.enableItemShiftingMode(false);
-        bnve.enableAnimation(false);
-        bnve.enableShiftingMode(false);
-        bnve.enableItemShiftingMode(false);
-        bnve.setActivated(true);
+            bnve.enableAnimation(false);
+            bnve.enableShiftingMode(false);
+            bnve.enableItemShiftingMode(false);
+            bnve.setActivated(true);
 
 
-        bnve.setIconSize(20, 20);
+            bnve.setIconSize(20, 20);
 
-        bnve.setTextSize(12);
-        bnve.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            bnve.setTextSize(12);
+            bnve.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 //        bottomNavigationView.setSelectedItemId(-1);
-       // Menu menu = bottomNavigationView.getMenu();
-         Menu menu = bnve.getMenu();
+            // Menu menu = bottomNavigationView.getMenu();
+            Menu menu = bnve.getMenu();
 
 
-        menu.getItem(0).setCheckable(false);
+            menu.getItem(0).setCheckable(false);
 
-        bookmarks = menu.findItem(R.id.bookmarks);
-        seen = menu.findItem(R.id.seen);
-        fav = menu.findItem(R.id.fav);
-        about = menu.findItem(R.id.about);
-        bookmarks.setCheckable(true);
-        seen.setCheckable(true);
-        fav.setCheckable(true);
-        about.setCheckable(true);
+            bookmarks = menu.findItem(R.id.bookmarks);
+            seen = menu.findItem(R.id.seen);
+            fav = menu.findItem(R.id.fav);
+            about = menu.findItem(R.id.about);
+            bookmarks.setCheckable(true);
+            seen.setCheckable(true);
+            fav.setCheckable(true);
+            about.setCheckable(true);
 
-        bookmarks.setIcon(R.drawable.bookmarks);
-        seen.setIcon(R.drawable.seen);
-        fav.setIcon(R.drawable.favourites);
-        about.setIcon(R.drawable.about);
-        bnve.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                updateTab(item.getItemId());
-                return false;
-            }
-        });
+            bookmarks.setIcon(R.drawable.bookmarks);
+            seen.setIcon(R.drawable.seen);
+            fav.setIcon(R.drawable.favourites);
+            about.setIcon(R.drawable.about);
+            bnve.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    updateTab(item.getItemId());
+                    return false;
+                }
+            });
 
 //        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
 //            @Override
@@ -345,29 +348,29 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
 //        });
 
 
-        textView_title = (RobotoBoldTextView) mapViewLayout.findViewById(R.id.title);
-        imageView = (ImageView) mapViewLayout.findViewById(R.id.iv_map);
-        textView_author = (RobotoMediumTextView) mapViewLayout.findViewById(R.id.author);
-        textView_more = (RobotoRegularTextView) mapViewLayout.findViewById(R.id.tv_more);
-        fresh_mural_tag = (CardView) mapViewLayout.findViewById(R.id.fresh_mural_tag);
-        cardView_dialog = (ViewPager) mapViewLayout.findViewById(R.id.dialogue_view_pager);
+            textView_title = (RobotoBoldTextView) mapViewLayout.findViewById(R.id.title);
+            imageView = (ImageView) mapViewLayout.findViewById(R.id.iv_map);
+            textView_author = (RobotoMediumTextView) mapViewLayout.findViewById(R.id.author);
+            textView_more = (RobotoRegularTextView) mapViewLayout.findViewById(R.id.tv_more);
+            fresh_mural_tag = (CardView) mapViewLayout.findViewById(R.id.fresh_mural_tag);
+            cardView_dialog = (ViewPager) mapViewLayout.findViewById(R.id.dialogue_view_pager);
 
-        cardView_dialog.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            cardView_dialog.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-            }
+                }
 
-            @Override
-            public void onPageSelected(int position) {
+                @Override
+                public void onPageSelected(int position) {
 
-            }
+                }
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
+                @Override
+                public void onPageScrollStateChanged(int state) {
 
-            }
-        });
+                }
+            });
 //        cardView_dialog.addOnPageChangeListener(new ViewPager.OnPageChangeListener(GlobalReferences.getInstance().baseActivity) {
 //            public void onSwipeTop() {
 //                //Toast.makeText(GlobalReferences.getInstance().baseActivity, "top", Toast.LENGTH_SHORT).show();
@@ -412,34 +415,38 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
 //            }
 //
 //        });
-        //GlobalReferences.getInstance().toolbar = (Toolbar) mapViewLayout.findViewById(R.id.toolbar_top);
+            //GlobalReferences.getInstance().toolbar = (Toolbar) mapViewLayout.findViewById(R.id.toolbar_top);
 
 //        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 //            checkLocationPermission();
 //        }
-        // check availability of play services
-        if (locationHelper.checkPlayServices()) {
+            // check availability of play services
+            if (locationHelper.checkPlayServices()) {
 
-            // Building the GoogleApi client
-            locationHelper.buildGoogleApiClient(this);
-        }
+                // Building the GoogleApi client
+                locationHelper.buildGoogleApiClient(this);
+            }
 
-        if (list_murals != null) {
-            list_murals.clear();
-            if (mMap != null)
-                mMap.clear();
-        } else {
-            list_murals = new ArrayList<>();
-        }
-        marker_previous = null;
-        if (cardView_dialog != null) {
-            // cardView_dialog.setVisibility(View.GONE);
-        }
-        if (Utility.isNetworkAvailable(GlobalReferences.getInstance().baseActivity)) {
-            ApiRequests.getInstance().get_murals(GlobalReferences.getInstance().baseActivity, this);
-            mRequestStartTime = System.currentTimeMillis();
-        } else {
-            Utility.showNoInternetConnectionToast();
+            if (list_murals != null) {
+                list_murals.clear();
+                if (mMap != null)
+                    mMap.clear();
+            } else {
+                list_murals = new ArrayList<>();
+            }
+            marker_previous = null;
+            if (cardView_dialog != null) {
+                // cardView_dialog.setVisibility(View.GONE);
+            }
+            if (Utility.isNetworkAvailable(GlobalReferences.getInstance().baseActivity)) {
+                ApiRequests.getInstance().get_murals(GlobalReferences.getInstance().baseActivity, this);
+                mRequestStartTime = System.currentTimeMillis();
+            } else {
+                Utility.showNoInternetConnectionToast();
+            }
+
+        }catch (Exception e){
+
         }
         return mapViewLayout;
     }
@@ -1834,6 +1841,11 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.action_search);
+        item.setVisible(true);
     }
 }
 

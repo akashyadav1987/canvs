@@ -120,8 +120,6 @@
 
     </RelativeLayout>
 </FrameLayout>
-
-
             </android.support.v7.widget.Toolbar>
             <FrameLayout
                 android:id="@+id/view_search"

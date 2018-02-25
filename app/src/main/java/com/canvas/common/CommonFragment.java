@@ -1,26 +1,20 @@
 package com.canvas.common;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.canvas.R;
 import com.canvas.fragment.CanvsMapFragment;
 import com.canvas.fragment.FragmentMuralDetailsParent;
-import com.miguelcatalan.materialsearchview.MaterialSearchView;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by akashyadav on 11/27/17.
@@ -31,8 +25,6 @@ public class CommonFragment extends Fragment {
     protected ImageView toolbarImage, imageView_back,imageview_share;
 
     private TextView toolBarText;
-    MaterialSearchView materialSearchView;
-    FrameLayout frame_search;
     boolean isBookMarkedSelected =GlobalReferences.getInstance().pref.getBookmarkedFilter(),
             isSeenSelected =GlobalReferences.getInstance().pref.getSeenFilter(),
             isFavSheet = GlobalReferences.getInstance().pref.getFavFilter(),
@@ -52,9 +44,6 @@ public class CommonFragment extends Fragment {
             toolbarImage = (ImageView) GlobalReferences.getInstance().toolbar.findViewById(R.id.toolbar_image);
             toolBarText = (TextView) GlobalReferences.getInstance().toolbar.findViewById(R.id.tool_bar_title);
             imageview_share = (ImageView) GlobalReferences.getInstance().baseActivity.findViewById(R.id.share_icon);
-            materialSearchView= (MaterialSearchView) GlobalReferences.getInstance().baseActivity.findViewById(R.id.search_view);
-           // materialSearchView.postInvalidate();
-            //frame_search= (FrameLayout) GlobalReferences.getInstance().baseActivity.findViewById(R.id.view_search);
 //            search_box = GlobalReferences.getInstance().toolbar.findViewById(R.id.search_box);
 //            search_box.setOnClickListener(new View.OnClickListener() {
 //                @Override
@@ -67,18 +56,10 @@ public class CommonFragment extends Fragment {
 //                }
 //            });
             if (GlobalReferences.getInstance().mCommonFragment instanceof CanvsMapFragment) {
-                materialSearchView.setVisibility(View.VISIBLE);
-//                materialSearchView.invalidate();
-//                materialSearchView.refreshDrawableState();
-               materialSearchView.bringToFront();
-//                frame_search.bringChildToFront(materialSearchView);
-                frame_search.bringToFront();
                 imageview_share.setVisibility(View.GONE);
                 toolbarImage.setVisibility(View.VISIBLE);
                 toolBarText.setVisibility(View.GONE);
                 imageView_back.setImageResource(R.drawable.filter);
-
-                Log.e(TAG, "updateToolbarTitle: "+(materialSearchView.getVisibility()==View.VISIBLE ));
                 // ImageView imageView_filter = GlobalReferences.getInstance().toolbar.findViewById(R.id.filter);
                 imageView_back.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
                 imageView_back.setOnClickListener(new View.OnClickListener() {
@@ -303,14 +284,6 @@ public class CommonFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        updateToolbarTitle();
     }
 
     @Override

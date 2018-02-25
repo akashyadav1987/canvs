@@ -102,7 +102,7 @@ String selected_flag;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View muralview = inflater.inflate(R.layout.fragment_mural_details,null);
-        setHasOptionsMenu(true);
+        //setHasOptionsMenu(true);
         Bundle bundle=getArguments();
         //position=bundle.getInt("position");
         //muralsObject = bundle.getParcelable("mural");
