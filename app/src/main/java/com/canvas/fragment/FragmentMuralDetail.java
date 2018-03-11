@@ -508,6 +508,7 @@ public class FragmentMuralDetail extends CommonFragment implements AppRequest {
 
 
 
+
         return muralview;
     }
 
