@@ -180,7 +180,7 @@
         android:layout_height="wrap_content">
 
         <android.support.v4.view.ViewPager
-            android:visibility="gone"
+            android:visibility="visible"
             android:layout_alignParentBottom="true"
             android:id="@+id/dialogue_view_pager"
             android:layout_width="match_parent"

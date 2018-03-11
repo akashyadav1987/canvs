@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <FrameLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/mural_image_in_view"
+            android:scaleType="fitXY"
+            android:src="@drawable/title_app"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <android.support.v7.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:padding="10dp"
+            android:elevation="12dp"
+            android:visibility="gone"
+            android:id="@+id/fresh_mural_tag"
+            app:cardCornerRadius="0dp"
+            app:cardBackgroundColor="@color/red"
+            android:innerRadius="0dp"
+            android:shape="rectangle"
+            android:thicknessRatio="1.9">
+            <com.canvas.widget.RobotoCondensedBoldTextView
+                android:drawableLeft="@drawable/star"
+                android:text="FRESH MURAL"
+                android:drawablePadding="5dp"
+                android:padding="5dp"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:textColor="@color/white"
+                android:scaleType="center"
+                android:gravity="center_vertical"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true">
+            </com.canvas.widget.RobotoCondensedBoldTextView>
+        </android.support.v7.widget.CardView>
+    </FrameLayout>
+</RelativeLayout>
+
+

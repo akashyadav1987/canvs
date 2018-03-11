@@ -78,7 +78,7 @@ public class CardDIalougeFragment extends CommonFragment {
                 @Override
                 public void onClick(View v) {
 
-                      FragmentMuralDetailsParent fragmentMuralDetail = new FragmentMuralDetailsParent();
+                      FragmentMuralDetail fragmentMuralDetail = new FragmentMuralDetail();
                       Bundle bundle = new Bundle();
 //                    bundle.putParcelable("mural", murals);
 //                    bundle.putString("image_id", image_id);

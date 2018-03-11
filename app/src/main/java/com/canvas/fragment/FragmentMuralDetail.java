@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -38,12 +39,9 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.canvas.R;
 import com.canvas.adpater.TagsAdapter;
+import com.canvas.adpater.ViewPagerAdapterMuralDetails;
 import com.canvas.common.CommonFragment;
 import com.canvas.common.Constants;
 import com.canvas.common.GlobalReferences;
@@ -76,11 +74,11 @@ import static android.content.ContentValues.TAG;
 public class FragmentMuralDetail extends CommonFragment implements AppRequest {
 
 
-RelativeLayout relativeLayout_flag;
-String selected_flag;
+    RelativeLayout relativeLayout_flag;
+    String selected_flag;
     TextView textView_location,textView_about_mural,textView_about_artist,
         textView_direction,textView_add_link_first,textView_add_link_second,textView_add_link_third;
-    ImageView imageView;
+    //ImageView imageView;
     RecyclerView recyclerView_tags;
     TagsAdapter tagsAdapter;
     TextView tv_mural,tv_author;
@@ -97,6 +95,7 @@ String selected_flag;
     public void setMural(Murals mural){
         this.muralsObject =mural;
     }
+    private int pos =0;
     @SuppressLint("ClickableViewAccessibility")
     @Nullable
     @Override
@@ -105,7 +104,47 @@ String selected_flag;
         //setHasOptionsMenu(true);
         Bundle bundle=getArguments();
         //position=bundle.getInt("position");
-        //muralsObject = bundle.getParcelable("mural");
+        list_mural= RealmController.getInstance().getAllMurals();
+        setHasOptionsMenu(true);
+        if (getArguments()!=null){
+            pos=getArguments().getInt("position");
+        }
+        if(pos<list_mural.size())
+        muralsObject = list_mural.get(pos);
+
+        Log.e("FragmentMuralDsParent","pos = "+pos);
+
+        ViewPager mural_details_view_pager = (ViewPager) muralview.findViewById(R.id.mural_details_view_pager_in);
+
+
+        ViewPagerAdapterMuralDetails viewPagerAdapterMuralDetails = new ViewPagerAdapterMuralDetails(list_mural,getActivity().getSupportFragmentManager());
+        mural_details_view_pager.setAdapter(viewPagerAdapterMuralDetails);
+        mural_details_view_pager.setCurrentItem(pos,true);
+        mural_details_view_pager.setOffscreenPageLimit(2);
+
+
+        mural_details_view_pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+               pos = position;
+               if(list_mural!=null) {
+                   if (pos < list_mural.size()) {
+                        updateView(list_mural.get(pos));
+                   }
+               }
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         final String img_id=muralsObject.getImage_resource_id().toLowerCase();
         final String image_url="https://canvs.cruxcode.nyc/mural_large_"+img_id+".jpg?size=large&requestType=image";
@@ -156,7 +195,7 @@ String selected_flag;
         lon=muralsObject.getLongitude();
         Log.e(TAG, "onCreateView: "+img_id );
         Log.e(TAG, "onCreateView: "+location );
-        imageView= (ImageView) muralview.findViewById(R.id.iv_image_detail);
+       // imageView= (ImageView) muralview.findViewById(R.id.iv_image_detail);
         relativeLayout_flag= (RelativeLayout) muralview.findViewById(R.id.flag);
         relativeLayout_flag.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -288,10 +327,6 @@ String selected_flag;
                 Log.e(TAG, "onClick: "+muralsObject.getId() );
                 favoriteMural.setId(muralsObject.getId());
                 favoriteMural.setImageResourceID(img_id);
-
-
-
-
                 favoriteMural.setArtistName(muralsObject.getArtist_text()+"");
                 favoriteMural.setMuralTitle(muralsObject.getTitle()+"");
                 favoriteMural.setActive(muralsObject.getActive()+"");
@@ -304,10 +339,6 @@ String selected_flag;
                 favoriteMural.setLatitude(muralsObject.getLatitude()+"");
                 favoriteMural.setLongitude(muralsObject.getLongitude()+"");
 
-
-
-
-
                 if(RealmController.getInstance().isBookMarhedMuralExist(muralsObject.getId())){
                     Log.e("Record exist","Record Exist");
                     RealmController.getInstance().deleteBookMarkedMural(favoriteMural.getId());
@@ -315,8 +346,6 @@ String selected_flag;
                     bookmarks_btn.setCardBackgroundColor(Color.parseColor("#ffffff"));
 
                 }else{
-
-
                     Log.e("Record exist not   ","Record Exist not");
                     RealmController.getInstance().addBookMarkedMural(favoriteMural);
                     book_img.setColorFilter(Color.parseColor("#5ab3a4"), PorterDuff.Mode.SRC_IN);
@@ -325,7 +354,6 @@ String selected_flag;
                 }
             }
         });
-
 
         tv_author= (TextView) muralview.findViewById(R.id.tv_author);
         textView_direction= (TextView) muralview.findViewById(R.id.tv_get_direction);
@@ -389,29 +417,29 @@ String selected_flag;
 
 
         Log.e(TAG, "onCreateView: "+image_url );
-
-        Glide.with(GlobalReferences.getInstance().baseActivity).load(image_url)
-                .thumbnail(0.5f).listener(new RequestListener<String, GlideDrawable>() {
-            @Override
-            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                return false;
-            }
-
-            @Override
-            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                if(muralsObject!=null){
-                    if(muralsObject.getFreshWhenAdded()!=null&&muralsObject.getFreshWhenAdded().equalsIgnoreCase("1")){
-                        fresh_mural_tag.setVisibility(View.VISIBLE);
-                    }else{
-                        fresh_mural_tag.setVisibility(View.GONE);
-                    }
-                }
-                return false;
-            }
-        })
-//                .placeholder(R.color.grey_)
-//                .error(R.color.grey_)
-                .into(imageView);
+//
+//        Glide.with(GlobalReferences.getInstance().baseActivity).load(image_url)
+//                .thumbnail(0.5f).listener(new RequestListener<String, GlideDrawable>() {
+//            @Override
+//            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+//                if(muralsObject!=null){
+//                    if(muralsObject.getFreshWhenAdded()!=null&&muralsObject.getFreshWhenAdded().equalsIgnoreCase("1")){
+//                        fresh_mural_tag.setVisibility(View.VISIBLE);
+//                    }else{
+//                        fresh_mural_tag.setVisibility(View.GONE);
+//                    }
+//                }
+//                return false;
+//            }
+//        })
+////                .placeholder(R.color.grey_)
+////                .error(R.color.grey_)
+//                .into(imageView);
         textView_location.setText(location);
         String tags=muralsObject.getTags();
         Log.e(TAG, "onCreateView: "+tags );
@@ -491,28 +519,28 @@ String selected_flag;
         final String image_id = mural.getImage_resource_id().toLowerCase();
         String image_url = "https://canvs.cruxcode.nyc/mural_large_"+image_id+".jpg?size=large&requestType=image";
 
-        Glide.with(GlobalReferences.getInstance().baseActivity).load(image_url)
-                .thumbnail(0.5f).listener(new RequestListener<String, GlideDrawable>() {
-            @Override
-            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                return false;
-            }
-
-            @Override
-            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                if(mural!=null){
-                    if(mural.getFreshWhenAdded()!=null&&mural.getFreshWhenAdded().equalsIgnoreCase("1")){
-                        fresh_mural_tag.setVisibility(View.VISIBLE);
-                    }else{
-                        fresh_mural_tag.setVisibility(View.GONE);
-                    }
-                }
-                return false;
-            }
-        })
-//                .placeholder(R.color.grey_)
-//                .error(R.color.grey_)
-                .into(imageView);
+//        Glide.with(GlobalReferences.getInstance().baseActivity).load(image_url)
+//                .thumbnail(0.5f).listener(new RequestListener<String, GlideDrawable>() {
+//            @Override
+//            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+//                if(mural!=null){
+//                    if(mural.getFreshWhenAdded()!=null&&mural.getFreshWhenAdded().equalsIgnoreCase("1")){
+//                        fresh_mural_tag.setVisibility(View.VISIBLE);
+//                    }else{
+//                        fresh_mural_tag.setVisibility(View.GONE);
+//                    }
+//                }
+//                return false;
+//            }
+//        })
+////                .placeholder(R.color.grey_)
+////                .error(R.color.grey_)
+//                .into(imageView);
         tv_author.setText(mural.getAuthor());
 
         tv_mural.setText(mural.getTitle());

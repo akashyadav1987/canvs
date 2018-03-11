@@ -109,4 +109,6 @@ dependencies {
     compile 'com.google.maps.android:android-maps-utils:0.5'
     compile 'com.github.ittianyu:BottomNavigationViewEx:1.2.4'
     compile "com.android.support:design:25.+"
+    compile 'com.github.bumptech.glide:okhttp-integration:1.4.0'
+    compile 'com.squareup.okhttp:okhttp:2.2.0'
 }

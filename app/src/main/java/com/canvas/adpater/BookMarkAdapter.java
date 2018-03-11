@@ -12,7 +12,7 @@ import com.canvas.BaseActivity;
 import com.canvas.R;
 import com.canvas.common.GlobalReferences;
 import com.canvas.controller.RealmController;
-import com.canvas.fragment.FragmentMuralDetailsParent;
+import com.canvas.fragment.FragmentMuralDetail;
 import com.canvas.model.BookmarkedMural;
 import com.canvas.model.Murals;
 import com.squareup.picasso.Picasso;
@@ -53,11 +53,11 @@ public class BookMarkAdapter extends RecyclerView.Adapter<BookMarkAdapter.MyView
                 public void onClick(View view) {
                     Murals murals = null;
                     Bundle bundle=null;
-                    FragmentMuralDetailsParent fragmentMuralDetail = null;
+                    FragmentMuralDetail fragmentMuralDetail = null;
                    try {
-                        fragmentMuralDetail = new FragmentMuralDetailsParent();
+                        fragmentMuralDetail = new FragmentMuralDetail();
                         bundle = new Bundle();
-                       bundle.putInt("type", 1);
+                        bundle.putInt("type", 1);
                         murals = new Murals();
                        murals.setId(bookmarkedMural.getId());
                        murals.setTitle(bookmarkedMural.getMuralTitle());

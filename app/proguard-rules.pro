@@ -31,15 +31,19 @@
 -keep public class com.google.android.gms.* { public *; }
 -dontwarn com.google.android.gms.**
 -dontwarn com.squareup.okhttp.**
+-dontwarn android.support.design.widget.**
+
 
 -keepclassmembers enum * {
     public static **[] values();
     public static ** valueOf(java.lang.String);
 }
 -keep public class android.support.design.widget.BottomNavigationView { *; }
+-keep public class android.support.design.widget.BottomSheetDialog { *; }
 -keep public class android.support.design.internal.BottomNavigationMenuView { *; }
 -keep public class android.support.design.internal.BottomNavigationPresenter { *; }
 -keep public class android.support.design.internal.BottomNavigationItemView { *; }
+-keep public class android.support.design.widget.BottomSheetDialog { *; }
 -keep interface android.support.** { *; }
 -keep class android.support.** { *; }
 
@@ -53,3 +57,4 @@
 
 # Gson specific classes
 -keep class sun.misc.Unsafe { *; }
+-dontwarn android.webkit.WebSettings.**

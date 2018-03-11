@@ -12,7 +12,7 @@ import com.canvas.BaseActivity;
 import com.canvas.R;
 import com.canvas.common.GlobalReferences;
 import com.canvas.controller.RealmController;
-import com.canvas.fragment.FragmentMuralDetailsParent;
+import com.canvas.fragment.FragmentMuralDetail;
 import com.canvas.model.FavoriteMural;
 import com.canvas.model.Murals;
 import com.squareup.picasso.Picasso;
@@ -52,7 +52,7 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.MyVi
                 @Override
                 public void onClick(View view) {
 
-                    FragmentMuralDetailsParent fragmentMuralDetail=new FragmentMuralDetailsParent();
+                    FragmentMuralDetail fragmentMuralDetail=new FragmentMuralDetail();
                     Bundle bundle=new Bundle();
                     Murals murals = new Murals();
 

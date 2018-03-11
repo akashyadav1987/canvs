@@ -38,6 +38,11 @@
             android:name="io.fabric.ApiKey"
             android:value="c0e2ddd5b1c75b0f1320d648a1f431609daadd4c"
             />
+
+        <meta-data
+            android:name="com.canvas.Setup"
+            android:value="GlideModule" />
+
     </application>
 
 </manifest>

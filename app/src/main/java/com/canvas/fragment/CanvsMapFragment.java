@@ -35,10 +35,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.canvas.BaseActivity;
 import com.canvas.R;
 import com.canvas.adpater.ViewPagerLayoutOnMap;
@@ -354,6 +355,8 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
             textView_more = (RobotoRegularTextView) mapViewLayout.findViewById(R.id.tv_more);
             fresh_mural_tag = (CardView) mapViewLayout.findViewById(R.id.fresh_mural_tag);
             cardView_dialog = (ViewPager) mapViewLayout.findViewById(R.id.dialogue_view_pager);
+            cardView_dialog.setVisibility(View.GONE);
+            //slideDown(cardView_dialog);
 
             cardView_dialog.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
@@ -478,7 +481,8 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
             }
             marker_previous = null;
             if (cardView_dialog != null) {
-                cardView_dialog.setVisibility(View.GONE);
+                slideDown(cardView_dialog);
+                //cardView_dialog.setVisibility(View.GONE);
             }
             if (Utility.isNetworkAvailable(GlobalReferences.getInstance().baseActivity)) {
                 ApiRequests.getInstance().get_murals(GlobalReferences.getInstance().baseActivity, this);
@@ -848,7 +852,8 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
     @Override
     public void onSeeMoreButtonClicked() {
         if(cardView_dialog!=null){
-            cardView_dialog.setVisibility(View.GONE);
+            slideDown(cardView_dialog);
+            //cardView_dialog.setVisibility(View.GONE);
         }
     }
 
@@ -1641,7 +1646,8 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
 
             try {
                 if (cardView_dialog != null) {
-                    cardView_dialog.setVisibility(View.GONE);
+                    slideDown(cardView_dialog);
+                   // cardView_dialog.setVisibility(View.GONE);
                 }
                 setCurrentLocation(new LatLng(murals.getLatitude(), murals.getLongitude()));
 
@@ -1654,7 +1660,8 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
 
     @Override
     public void onMapClick(LatLng latLng) {
-        cardView_dialog.setVisibility(View.GONE);
+       // cardView_dialog.setVisibility(View.GONE);
+        slideDown(cardView_dialog);
     }
 
     @Override
@@ -1779,73 +1786,96 @@ public class CanvsMapFragment extends CommonFragment implements HuntListener, On
         }
         if(viewPagerLayoutOnMap!=null){
             viewPagerLayoutOnMap.notifyDataSetChanged();
-            cardView_dialog.setCurrentItem(myItem.getMarkerPosition());
+            cardView_dialog.setCurrentItem(myItem.getMarkerPosition(),false);
         }
-        cardView_dialog.setVisibility(View.VISIBLE);
 
+        //cardView_dialog.setVisibility(View.VISIBLE);
+        slideUp(cardView_dialog);
 
         return true;
     }
 
-    public void buildCardDialogue(final Murals murals){
-        try {
-            if (murals.getFreshWhenAdded().equalsIgnoreCase("1")) {
-                fresh_mural_tag.setVisibility(View.VISIBLE);
-            } else {
-                fresh_mural_tag.setVisibility(View.GONE);
-            }
-        } catch (Exception e) {
 
-        }
-        try {
-            cardView_dialog.setVisibility(View.VISIBLE);
-
-            final String image_id = murals.getImage_resource_id().toLowerCase();
-            String image_url = "https://canvs.cruxcode.nyc/mural_thumb_" + image_id.toLowerCase() + ".jpg?size=thumb&requestType=image";
-            textView_more.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    FragmentMuralDetail fragmentMuralDetail = new FragmentMuralDetail();
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable("mural", murals);
-                    bundle.putString("image_id", image_id);
-                    bundle.putString("location_text", murals.getLocation_text());
-
-                    bundle.putString("artist_text", murals.getArtist_text());
-                    bundle.putString("about_text", murals.getAbout_text());
-                    bundle.putString("tags", murals.getTags());
-                    bundle.putString("addlink1", murals.getAdditional_link_first());
-                    bundle.putString("addlink2", murals.getAdditional_link_second());
-                    bundle.putString("addlink3", murals.getAdditional_limk_third());
-                    bundle.putString("artist", murals.getAuthor());
-                    bundle.putString("name", murals.getTitle());
-                    bundle.putDouble("lat", murals.getLatitude());
-                    bundle.putDouble("lon", murals.getLongitude());
-                    fragmentMuralDetail.setArguments(bundle);
-                    ((BaseActivity) GlobalReferences.getInstance().baseActivity).addFragmentWithBackStack(fragmentMuralDetail, true);
-                    cardView_dialog.setVisibility(View.GONE);
-                }
-            });
-            textView_title.setText(murals.getTitle());
-
-            textView_author.setText(murals.getAuthor());
-
-            Log.e(TAG, "onCreate: " + image_url);
-            Glide.with(GlobalReferences.getInstance().baseActivity).load(image_url)
-                    .thumbnail(1)
-                    .placeholder(R.color.grey_)
-                    .error(R.color.grey_)
-                    .into(imageView);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.action_search);
         item.setVisible(true);
     }
+    // slide the view from below itself to the current position
+    public void slideUp(View view){
+        view.setVisibility(View.VISIBLE);
+        TranslateAnimation animate = new TranslateAnimation(
+                0,                 // fromXDelta
+                0,                 // toXDelta
+                view.getHeight(),  // fromYDelta
+                0);                // toYDelta
+        animate.setDuration(500);
+        animate.setFillAfter(true);
+        view.startAnimation(animate);
+        animate.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                try {
+                    cardView_dialog.setVisibility(View.VISIBLE);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+    }
+
+    // slide the view from its current position to below itself
+    public void slideDown(View view){
+        TranslateAnimation animate = new TranslateAnimation(
+                0,                 // fromXDelta
+                0,                 // toXDelta
+                0,                 // fromYDelta
+                view.getHeight()); // toYDelta
+        animate.setDuration(500);
+        animate.setFillAfter(true);
+        view.startAnimation(animate);
+        animate.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                try {
+                    cardView_dialog.setVisibility(View.GONE);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        //cardView_dialog.setVisibility(View.GONE);
+    }
+
+//    public void onSlideViewButtonClick(View view) {
+//        if (isUp) {
+//            slideDown(myView);
+//            myButton.setText("Slide up");
+//        } else {
+//            slideUp(myView);
+//            myButton.setText("Slide down");
+//        }
+//        isUp = !isUp;
+//    }
 }
 
